@@ -1,5 +1,6 @@
 @echo off
-REM make.bat - Windows alternative to Makefile
+REM make.bat - Flutter Clean Arch Unicorn
+REM https://github.com/ratingtesting/flutter-clean-arch-unicorn
 REM Usage: make.bat [command]
 
 setlocal enabledelayedexpansion
@@ -50,12 +51,12 @@ goto end
 
 :run-dev
 echo 🚀 Starting DEV environment...
-flutter run --flavor dev -t lib/main/main_dev.dart --dart-define=BASE_URL=https://api-dev.example.com
+flutter run -t lib/main/main_dev.dart --dart-define=BASE_URL=https://api-dev.example.com
 goto end
 
 :build-apk
 echo 📦 Building Android APK...
-flutter build apk --debug --flavor dev -t lib/main/main_dev.dart
+flutter build apk --debug -t lib/main/main_dev.dart
 echo ✅ APK built: build\app\outputs\flutter-apk\app-debug.apk
 goto end
 
@@ -67,7 +68,7 @@ echo ✅ Clean complete.
 goto end
 
 :help
-echo Flutter Template Riverpod 3 - Available commands:
+echo Flutter Clean Arch Unicorn - Available commands:
 echo.
 echo   setup      - Install dependencies
 echo   check      - Run analyze + test + format
@@ -78,6 +79,8 @@ echo   run-dev    - Run app in dev mode
 echo   build-apk  - Build Android APK
 echo   clean      - Clean build artifacts
 echo   help       - Show this help
+echo.
+echo GitHub: https://github.com/ratingtesting/flutter-clean-arch-unicorn
 echo.
 echo Example: make.bat setup ^&^& make.bat run-dev
 goto end
