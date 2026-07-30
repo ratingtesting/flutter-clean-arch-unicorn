@@ -1,0 +1,67 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IDE
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.lock
+
+# Generated code (freezed, json_serializable)
+*.g.dart
+*.freezed.dart
+
+# Android
+android/.project
+android/.settings/
+android/local.properties
+android/app/build/
+android/key.properties
+*.apk
+*.aab
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+
+# Web
+web/build/
+
+# FVM
+.fvm/
+
+# Secrets (template should prevent accidental secret commits)
+.env
+.env.*
+secrets/
+*.secret
+firebase_options.dart
+google-services.json
+GoogleService-Info.plist
+
+# Stale/backup files
+*.orig

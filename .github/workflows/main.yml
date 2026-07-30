@@ -1,0 +1,34 @@
+name: Flutter CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.8'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Static analysis
+        run: flutter analyze --fatal-infos lib/
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Android debug build
+        run: flutter build apk --debug

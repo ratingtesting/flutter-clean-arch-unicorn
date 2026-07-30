@@ -1,0 +1,21 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Keep the codebase uniform so reviews stay cheap as the team grows.
+    always_declare_return_types: true
+    avoid_dynamic_calls: true
+    avoid_print: true
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    sort_pub_dependencies: true
+    unawaited_futures: true
+    omit_local_variable_types: false
+    constant_identifier_names: false
+    non_constant_identifier_names: false
+
+analyzer:
+  exclude:
+    - build/
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"

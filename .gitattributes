@@ -1,0 +1,28 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Dart source
+*.dart text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Makefile
+Makefile text eol=lf
+
+# Batch files (Windows)
+*.bat text eol=crlf
+
+# Documentation
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# JSON
+*.json text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.ico binary
+*.keystore binary
