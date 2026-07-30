@@ -160,7 +160,7 @@ void main() {
   group('Dashboard Search state', () {
     test('Should fail when error occurs on fetch', () async {
       when(() => dashboardRepository.searchProducts(
-          skip: any(named: 'skip'), query: any(named: 'query')))
+              skip: any(named: 'skip'), query: any(named: 'query')))
           .thenAnswer((invocation) async => Left(ktestAppException));
       await notifier.searchProducts('');
       expect(history, [
@@ -182,7 +182,7 @@ void main() {
 
     test('Should load list of products on successful fetch', () async {
       when(() => dashboardRepository.searchProducts(
-          skip: any(named: 'skip'), query: any(named: 'query')))
+              skip: any(named: 'skip'), query: any(named: 'query')))
           .thenAnswer((invocation) async => Right(ktestPaginatedResponse()));
       await notifier.searchProducts('');
       expect(history, [
@@ -201,11 +201,11 @@ void main() {
         'Should reset productList on new search; error on second call shows failure state with new results',
         () async {
       when(() => dashboardRepository.searchProducts(
-          skip: any(named: 'skip'), query: any(named: 'query')))
+              skip: any(named: 'skip'), query: any(named: 'query')))
           .thenAnswer((invocation) async => Right(ktestPaginatedResponse()));
       await notifier.searchProducts('');
       when(() => dashboardRepository.searchProducts(
-          skip: any(named: 'skip'), query: any(named: 'query')))
+              skip: any(named: 'skip'), query: any(named: 'query')))
           .thenAnswer((invocation) async => Left(ktestAppException));
       await notifier.searchProducts('');
       expect(history.length, greaterThanOrEqualTo(4));
@@ -221,7 +221,7 @@ void main() {
       // searchProducts currently resets skip to 0 for new searches
       // This test verifies that searchProducts works correctly for initial search
       when(() => dashboardRepository.searchProducts(
-          skip: any(named: 'skip'), query: any(named: 'query')))
+              skip: any(named: 'skip'), query: any(named: 'query')))
           .thenAnswer((invocation) async => Right(ktestPaginatedResponse()));
       await notifier.searchProducts('');
       await notifier.searchProducts('');
@@ -232,14 +232,15 @@ void main() {
       expect(history[2].state, DashboardConcreteState.loading);
       expect(history[3].state, DashboardConcreteState.loaded);
       // Both calls return same data (skip:0), so productList length should be same
-      expect(history[3].productList.length, equals(history[1].productList.length));
+      expect(
+          history[3].productList.length, equals(history[1].productList.length));
     });
 
     test(
         'When the fetch is called while loading Should not load list of products when it is already loading while search',
         () async {
       when(() => dashboardRepository.searchProducts(
-          skip: any(named: 'skip'), query: any(named: 'query')))
+              skip: any(named: 'skip'), query: any(named: 'query')))
           .thenAnswer((invocation) async => Right(ktestPaginatedResponse()));
       await notifier.searchProducts('');
       await notifier.searchProducts('');

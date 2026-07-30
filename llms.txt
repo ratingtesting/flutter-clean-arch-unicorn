@@ -1,0 +1,41 @@
+# Flutter Clean Arch Unicorn
+
+> Clean Architecture + Riverpod 3 template for Flutter startups. Production-ready foundation engineered so you won't have to rewrite your code two years later.
+
+## Tech Stack
+- **Framework:** Flutter 3.44.8
+- **State Management:** Riverpod 3 (flutter_riverpod 3.4.1)
+- **Navigation:** GoRouter 16.3.0
+- **Code Generation:** Freezed 3.2.5 + json_serializable
+- **HTTP Client:** Dio 5.11.0
+- **Security:** flutter_secure_storage 10.0.0
+- **Local DB:** sqflite 2.3.0
+- **Logging:** logger 2.5.0
+- **CI:** GitHub Actions
+
+## Features
+- Clean Architecture with strict Dependency Rule (domain never imports data/presentation)
+- Feature-first modularity: each feature is an isolated `data/domain/presentation` triad
+- 100/100 unit tests with ProviderContainer + mocktail
+- 3 environments: dev/staging/prod via --dart-define
+- SecureStorage for encrypted token storage
+- check_secrets.sh pre-commit hook
+- Either&lt;L,R&gt; functional error handling
+- ExceptionHandler with retry interceptor
+- Observability interfaces (Logger, ErrorReporter, Analytics, FeatureFlags) — swap Noop for real implementations
+
+## Links
+- [GitHub](https://github.com/ratingtesting/flutter-clean-arch-unicorn)
+- [README](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/README.md)
+- [ARCHITECTURE.md](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/ARCHITECTURE.md)
+- [CONTRIBUTING.md](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/CONTRIBUTING.md)
+- [SECURITY.md](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/SECURITY.md)
+- [UNICORN_FOUNDATION_REQUIREMENTS.md](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/UNICORN_FOUNDATION_REQUIREMENTS.md)
+- [License: MIT-0](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/LICENSE)
+
+## Use this when you need to
+- Start a Flutter project with production-grade architecture
+- Avoid rewriting your codebase in 6-12 months
+- Ship a startup MVP that can scale to 1M+ users
+- Hire developers without spending 2 weeks on onboarding
+- Keep secrets and API keys out of your git history

@@ -1,172 +1,178 @@
-# UNICORN STARTUP FOUNDATION TEMPLATE — ТРЕБОВАНИЯ
+# UNICORN STARTUP FOUNDATION TEMPLATE — REQUIREMENTS
 
-## Философия
-> Инвестиции в архитектуру **СЕЙЧАС** → стоимость изменений **В БУДУЩЕМ** минимальна.
-> Шаблон — не "стартовый код", а **контракт** с будущим: любая фича добавляется без рефакторинга фундамента.
-
----
-
-## 1. АРХИТЕКТУРНЫЕ НЕПРЕРЫВНЫЕ (Hard Constraints)
-
-| Требование | Критерий готовности | Почему для единорога |
-|------------|---------------------|----------------------|
-| **Clean Architecture** (Dependency Rule) | `graphify query "violation"` → 0 | Бизнес-логика не знает о Flutter, Dio, SharedPreferences. Смена БД/API/UI — локальная правка. |
-| **Feature-first модульность** | Каждая фича: `data/domain/presentation` изолированно | Команды работают параллельно без конфликтов. Новая фича = новая папка, не трогая чужие. |
-| **Riverpod 3 + Notifier** | `StateNotifier` отсутствует, только `Notifier`/`AsyncNotifier` | Компиляторная безопасность, нет `state =`, есть `state = newState`. Тестируемо без провайдеров. |
-| **GoRouter (декларативный)** | `auto_route` отсутствует | Маршруты — данные, а не код. Deeplinks, redirects, guards — в одном месте. |
-| **Freezed + json_serializable** | Все DTO/State immutable, `fromJson`/`toJson` генерируются | Нет ручного парсинга. Добавление поля = 1 строка в модели + `build_runner`. |
+## Philosophy
+> Invest in architecture **NOW** → cost of changes **IN THE FUTURE** is minimal.
+> This template is not "starter code." It's a **contract with the future**: any feature can be added without refactoring the foundation.
 
 ---
 
-## 2. БЕЗОПАСНОСТЬ И ПРИВАТНОСТЬ (Security by Default)
+## 1. ARCHITECTURAL HARD CONSTRAINTS
 
-| Требование | Реализация | Зачем |
-|------------|------------|-------|
-| **Нет секретов в коде** | `.env` только в `.gitignore`, CI секреты в GitHub Secrets | Утечка ключей = смерть стартапа. |
-| **Certificate Pinning** | `dio` interceptor с `badCertificateCallback` | MITM на публичных Wi-Fi — вектор атаки №1. |
-| **Encrypted Local Storage** | `flutter_secure_storage` для токенов, биометрия | Токены в SharedPreferences — мгновенный компромисс. |
-| **App Integrity** | `flutter_app_auth` / Play Integrity / App Attest | Подмена бинарника / рут-детект. |
-| **Network Security Config** | `res/xml/network_security_config.xml` (Android) | Cleartext трафик запрещён на уровне ОС. |
-
----
-
-## 3. НАБЛЮДАЕМОСТЬ (Observability) — "Не лети вслепую"
-
-| Слой | Инструмент | Абстракция в шаблоне |
-|------|------------|----------------------|
-| **Логирование** | `logger` пакет | `AppLogger` интерфейс → `ConsoleLogger` / `SentryLogger` / `DatadogLogger` |
-| **Краш-репортинг** | Sentry / Firebase Crashlytics | `ErrorReporter` интерфейс, инициализация в `main_<env>.dart` |
-| **Аналитика** | Amplitude / Mixpanel / PostHog | `AnalyticsTracker` интерфейс, `track(event, props)` |
-| **Производительность** | Firebase Performance / custom | `PerformanceMonitor` — trace сетевых вызовов, рендеров |
-| **Feature Flags** | Firebase Remote Config / LaunchDarkly | `FeatureFlags` провайдер, `bool isEnabled('new_checkout')` |
+| Requirement | Acceptance Criteria | Why for a Unicorn |
+|-------------|-------------------|-------------------|
+| **Clean Architecture** (Dependency Rule) | `graphify query "violation"` → 0 | Business logic doesn't know about Flutter, Dio, or SharedPreferences. Changing DB/API/UI is a local change. |
+| **Feature-first modularity** | Each feature: `data/domain/presentation` isolated | Teams work in parallel without conflicts. New feature = new folder, touching nothing else. |
+| **Riverpod 3 + Notifier** | No `StateNotifier`, only `Notifier`/`AsyncNotifier` | Compile-time safety, no `state =`, clean `state = newState`. Testable without providers. |
+| **GoRouter (declarative)** | No `auto_route` | Routes are data, not code. Deeplinks, redirects, guards in one place. |
+| **Freezed + json_serializable** | All DTOs/State immutable, `fromJson`/`toJson` generated | No manual parsing. Adding a field = 1 line in model + `build_runner`. |
 
 ---
 
-## 4. ОФФЛАЙН-FIRST И СИНХРОНИЗАЦИЯ
+## 2. SECURITY BY DEFAULT
 
-| Возможность | Реализация |
-|-------------|------------|
-| **Локальный кэш** | `ObjectBox` / `Drift` (SQLite) — репозиторий пишет локально, потом синкает |
-| **Optimistic UI** | State сразу обновляется, в фоне `Either<Failure, Success>` |
-| **Conflict Resolution** | `last-write-wins` / server-wins / merge стратегии в `SyncEngine` |
-| **Background Sync** | `workmanager` / `flutter_background_service` — периодическая синка |
-
----
-
-## 5. CI/CD — "Зелёный main = готово к релизу"
-
-| Этап | Команда | Гейт |
-|------|---------|------|
-| **Analyze** | `flutter analyze --fatal-infos` | 0 ошибок, 0 warnings (strict) |
-| **Format** | `dart format --set-exit-if-changed .` | Нет diff |
-| **Test** | `flutter test --coverage` | 100% unit coverage на domain, >80% overall |
-| **Build** | `flutter build apk --release` / `flutter build ios --release` | Артефакты собраны |
-| **Security** | `dart run dependency_validator` / `snyk test` | Нет критических CVE |
-| **Deploy** | Fastlane → Play Console / TestFlight / Firebase App Distribution | Ручной approve для PROD |
+| Requirement | Implementation | Why |
+|-------------|---------------|-----|
+| **No secrets in code** | `--dart-define` only, CI secrets in GitHub Secrets | Key leaks = startup death. |
+| **Certificate Pinning** | Dio interceptor with SHA-256 fingerprints | MITM on public Wi-Fi is attack vector #1. |
+| **Encrypted Local Storage** | `flutter_secure_storage` for tokens, biometric auth | Tokens in SharedPreferences = instant compromise. |
+| **App Integrity** | Play Integrity / App Attest | Binary tampering / root detection. |
+| **Network Security Config** | Android `network_security_config.xml` | Cleartext traffic forbidden at OS level. |
 
 ---
 
-## 6. ДЕПЛОЙ И РЕЛИЗЫ
+## 3. OBSERVABILITY — "Don't fly blind"
 
-| Артефакт | Автоматизация |
-|----------|---------------|
-| **Versioning** | `semver` из git tags (`v1.2.3`), `build_number` = CI run number |
+| Layer | Tool | Template Abstraction |
+|-------|------|---------------------|
+| **Logging** | `logger` package | `AppLogger` interface → `ConsoleLogger` / `SentryLogger` / `DatadogLogger` |
+| **Crash Reporting** | Sentry / Firebase Crashlytics | `ErrorReporter` interface, initialized in `main_<env>.dart` |
+| **Analytics** | Amplitude / Mixpanel / PostHog | `AnalyticsTracker` interface, `track(event, props)` |
+| **Performance** | Firebase Performance / custom | `PerformanceMonitor` — trace network calls, renders |
+| **Feature Flags** | Firebase Remote Config / LaunchDarkly | `FeatureFlags` provider, `bool isEnabled('new_checkout')` |
+
+---
+
+## 4. OFFLINE-FIRST & SYNC
+
+| Capability | Implementation |
+|------------|---------------|
+| **Local cache** | Drift (SQLite) — repository writes locally, then syncs |
+| **Optimistic UI** | State updates immediately, background `Either<Failure, Success>` |
+| **Conflict Resolution** | `last-write-wins` / server-wins / merge strategies in `SyncEngine` |
+| **Background Sync** | `workmanager` / `flutter_background_service` — periodic sync |
+
+---
+
+## 5. CI/CD — "Green master = ready to release"
+
+| Stage | Command | Gate |
+|-------|---------|------|
+| **Analyze** | `flutter analyze --fatal-infos` | 0 errors, 0 warnings (strict) |
+| **Format** | `dart format --set-exit-if-changed .` | No diff |
+| **Test** | `flutter test --coverage` | 100% unit coverage on domain, >80% overall |
+| **Build** | `flutter build apk --release` / `flutter build ios --release` | Artifacts built |
+| **Security** | `dart run dependency_validator` / `snyk test` | No critical CVEs |
+| **Deploy** | Fastlane → Play Console / TestFlight / Firebase App Distribution | Manual approve for PROD |
+
+---
+
+## 6. DEPLOY & RELEASES
+
+| Artifact | Automation |
+|----------|------------|
+| **Versioning** | `semver` from git tags (`v1.2.3`), `build_number` = CI run number |
 | **Changelog** | `conventional-commits` → `auto-changelog` |
-| **Code Signing** | Fastlane `match` (iOS), `keystore` в CI secrets (Android) |
-| **Rollout** | Поэтапный (5% → 25% → 100%) с метриками крашей |
+| **Code Signing** | Fastlane `match` (iOS), `keystore` in CI secrets (Android) |
+| **Rollout** | Phased (5% → 25% → 100%) with crash metrics |
 
 ---
 
-## 7. РАСШИРЯЕМОСТЬ БЕЗ РЕФАКТОРИНГА (Open/Closed)
+## 7. EXTENSIBILITY WITHOUT REFACTORING (Open/Closed)
 
-| Паттерн | Где применяется |
-|---------|-----------------|
-| **Repository Interface** | Domain определяет `UserRepository`, Data даёт `UserRepositoryImpl(Supabase)` / `UserRepositoryImpl(GraphQL)` |
-| **Strategy** | `PaymentStrategy` — Stripe/ApplePay/GooglePay добавляются без правки `CheckoutUseCase` |
-| **Plugin Architecture** | `AnalyticsTracker` — новый провайдер = реализация интерфейса + регистрация в `main.dart` |
-| **Middleware Pipeline** | Dio interceptors: auth → logging → retry → pinning — каждый независим |
+| Pattern | Where Applied |
+|---------|---------------|
+| **Repository Interface** | Domain defines `UserRepository`, Data provides `UserRepositoryImpl(Supabase)` / `UserRepositoryImpl(GraphQL)` |
+| **Strategy** | `PaymentStrategy` — Stripe/ApplePay/GooglePay added without changing `CheckoutUseCase` |
+| **Plugin Architecture** | `AnalyticsTracker` — new provider = implement interface + register in `main.dart` |
+| **Middleware Pipeline** | Dio interceptors: auth → logging → retry → pinning — each independent |
 
 ---
 
-## 8. ДОКУМЕНТАЦИЯ КАК КОД
+## 8. DOCUMENTATION AS CODE
 
-| Файл | Назначение |
-|------|------------|
-| `README.md` | Quickstart, структура, команды, CI, troubleshooting |
-| `ARCHITECTURE.md` | Dependency Rule, слои, границы, как добавлять фичу |
+| File | Purpose |
+|------|---------|
+| `README.md` | Quickstart, structure, commands, CI, troubleshooting |
+| `ARCHITECTURE.md` | Dependency Rule, layers, boundaries, how to add a feature |
 | `CONTRIBUTING.md` | Git flow, commit convention, PR checklist |
-| `SECURITY.md` | Threat model, секреты, инцидент-реакция |
-| `docs/adr/` | Architecture Decision Records (по одному на решение) |
+| `SECURITY.md` | Threat model, secrets, incident response |
+| `docs/adr/` | Architecture Decision Records (one per decision) |
+| `AGENTS.md` | Guide for AI coding agents |
+| `llms.txt` | Machine-readable project description for LLMs |
 
 ---
 
-## 9. ЧТО УЖЕ ЕСТЬ В V3 (ГОТОВО ✅)
+## 9. WHAT IS ALREADY IN V3 (DONE ✅)
 
-- [x] Clean Architecture (data/domain/presentation) — 0 нарушений
+- [x] Clean Architecture (data/domain/presentation) — 0 violations
 - [x] Riverpod 3.4.1 + Notifier + AsyncNotifier
 - [x] GoRouter 16.3.0
 - [x] Freezed 3.2.5 + json_serializable
-- [x] Either<T, R> для функциональной обработки ошибок
-- [x] Dio network layer с абстракцией `NetworkService`
-- [x] SharedPreferences абстракция `StorageService`
-- [x] Feature-first структура: `auth`, `dashboard`, `splash`, `user_cache`
+- [x] Either&lt;T, R&gt; for functional error handling
+- [x] Dio network layer with `NetworkService` abstraction
+- [x] Feature-first structure: `auth`, `dashboard`, `splash`
 - [x] Environment entrypoints: `main_dev.dart`, `main_staging.dart`, `main_prod.dart`
-- [x] 73/73 тестов проходят (unit + widget)
+- [x] 100/100 tests passing (unit + widget)
 - [x] `flutter analyze` = 0 errors
 - [x] GitHub Actions workflow (analyze, test, format)
-- [x] Git tags v1.0.0–v1.1.0
-- [x] README.md + ARCHITECTURE.md (224 строки)
+- [x] Git tags v1.0.0–v1.3.0
+- [x] README.md + ARCHITECTURE.md + CONTRIBUTING.md
+- [x] AGENTS.md — AI coding agent guide
+- [x] llms.txt — LLM-friendly project description
+- [x] check_secrets.sh — pre-commit secret guard
+- [x] make.bat + Makefile — quick setup
+- [x] SECURITY.md with threat model
+- [x] MIT-0 license
 
 ---
 
-## 10. ЧТО НУЖНО ДОБАВИТЬ (BACKLOG ДЛЯ ЕДИНОРОГА)
+## 10. BACKLOG FOR THE UNICORN
 
-### 🔴 Critical (Без этого — не продакшн)
+### 🔴 Critical (Not production without these)
 - [ ] **Certificate Pinning** (Dio interceptor)
-- [ ] **Encrypted Storage** (`flutter_secure_storage` для токенов)
-- [ ] **Error Reporter** абстракция + Sentry/Crashlytics реализация
-- [ ] **Logger** абстракция + консольная/продакшн реализации
+- [ ] **Error Reporter** abstraction + Sentry/Crashlytics implementation
+- [ ] **Logger** abstraction + console/production implementations
 - [ ] **Network Security Config** (Android XML)
 
-### 🟡 High (Рост команды / масштаб)
-- [ ] **Analytics Tracker** абстракция + Amplitude/PostHog
+### 🟡 High (Team growth / scale)
+- [ ] **Analytics Tracker** abstraction + Amplitude/PostHog
 - [ ] **Feature Flags** (Remote Config)
-- [ ] **Offline-first** локальная БД (Drift/ObjectBox) + SyncEngine
-- [ ] **Deep Links** обработка в GoRouter
-- [ ] **Push Notifications** (FCM) абстракция
-- [ ] **i18n** (arb файлы, `intl` генерация)
-- [ ] **Accessibility** (semantics, контраст, масштабирование)
+- [ ] **Offline-first** local DB (Drift/ObjectBox) + SyncEngine
+- [ ] **Deep Links** handling in GoRouter
+- [ ] **Push Notifications** (FCM) abstraction
+- [ ] **i18n** (arb files, `intl` generation)
+- [ ] **Accessibility** (semantics, contrast, scaling)
 
-### 🟢 Medium (Качество жизни)
-- [ ] **Fastlane** конфиг (match, gym, pilot, deliver)
-- [ ] **Coverage thresholds** в CI (lcov + genhtml)
-- [ ] **Dependency Validator** (запрет `dev_dependencies` в prod коде)
+### 🟢 Medium (Quality of life)
+- [ ] **Fastlane** config (match, gym, pilot, deliver)
+- [ ] **Coverage thresholds** in CI (lcov + genhtml)
+- [ ] **Dependency Validator** (ban dev_dependencies in prod code)
 - [ ] **Performance Monitoring** (Firebase Performance / custom traces)
-- [ ] **ADR** шаблон и первый запись (почему Riverpod, почему GoRouter, почему Freezed)
+- [ ] **ADR** template and first records (why Riverpod, why GoRouter, why Freezed)
 
 ---
 
-## 11. МЕТРИКИ УСПЕХА ШАБЛОНА
+## 11. TEMPLATE SUCCESS METRICS
 
-| Метрика | Target | Как измерить |
-|---------|--------|--------------|
-| **Time to First Feature** | < 30 мин | Новичок добавляет "Hello Feature" (CRUD) |
-| **Time to Prod Build** | < 15 мин | `flutter build apk --release` на чистом CI |
-| **Onboarding New Dev** | < 2 часа | Читает README + ARCHITECTURE → пушит фичу |
-| **Refactor Cost** | O(1) на фичу | Смена API / БД / UI не трогает domain |
-| **Test Feedback Loop** | < 60 сек | `flutter test` на ноутбуке |
-
----
-
-## 12. ПРИНЦИПЫ РЕШЕНИЯ КОНФЛИКТОВ (Decision Framework)
-
-Когда "хочется сделать иначе" — чек-лист:
-
-1. **Нарушает ли это Dependency Rule?** → НЕТ (hard stop)
-2. **Увеличит ли это Time-to-First-Feature для следующей команды?** → НЕТ
-3. **Можно ли откатить это за 1 коммит?** → ДА (feature flag / interface swap)
-4. **Есть ли ADR?** → Если решение неочевидное — пишем ADR
+| Metric | Target | How to Measure |
+|--------|--------|----------------|
+| **Time to First Feature** | < 30 min | Newcomer adds "Hello Feature" (CRUD) |
+| **Time to Prod Build** | < 15 min | `flutter build apk --release` on clean CI |
+| **New Dev Onboarding** | < 2 hours | Reads README + ARCHITECTURE → pushes a feature |
+| **Refactor Cost** | O(1) per feature | Changing API / DB / UI doesn't touch domain |
+| **Test Feedback Loop** | < 60 sec | `flutter test` on a laptop |
 
 ---
 
-*Этот документ — живой. Каждое архитектурное решение фиксируется в `docs/adr/YYYY-MM-DD-<slug>.md`.*
+## 12. DECISION FRAMEWORK
+
+When "you want to do it differently" — checklist:
+
+1. **Does it violate the Dependency Rule?** → NO (hard stop)
+2. **Does it increase Time-to-First-Feature for the next team?** → NO
+3. **Can it be rolled back in 1 commit?** → YES (feature flag / interface swap)
+4. **Is there an ADR?** → If the decision is non-obvious, write an ADR
+
+---
+
+*This document is alive. Every architectural decision is recorded in `docs/adr/YYYY-MM-DD-<slug>.md`.*

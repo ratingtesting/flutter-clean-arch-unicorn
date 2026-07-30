@@ -18,7 +18,7 @@ class DashboardState extends Equatable {
   final bool hasData;
   final DashboardConcreteState state;
   final String message;
-  
+
   const DashboardState({
     this.productList = const [],
     this.hasData = false,
@@ -37,7 +37,9 @@ class DashboardState extends Equatable {
     this.message = '',
   });
 
-  bool get isLoading => state == DashboardConcreteState.loading || state == DashboardConcreteState.fetchingMore;
+  bool get isLoading =>
+      state == DashboardConcreteState.loading ||
+      state == DashboardConcreteState.fetchingMore;
 
   DashboardState copyWith({
     List<Product>? productList,

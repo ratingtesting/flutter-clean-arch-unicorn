@@ -1,81 +1,81 @@
-# Шаблон «Фундамент Стартапа Единорога»
+# Flutter Clean Arch Unicorn — Architecture
 
-> v1.2.0 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
+> v1.3.0 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
 
-## Для кого
+## Who is this for
 
-Солофаундер без программирования, который строит стартап с нуля.
-Шаблон создан так, чтобы **редактировать и содержать проект было дешевле**, чем при использовании других решений. Первоначальные затраты выше (архитектура, тесты, CI), но стоимость изменений в будущем — минимальна.
-
----
-
-## Требования к шаблону-фундаменту
-
-| # | Требование | Зачем | Реализация |
-|---|-----------|-------|-----------|
-| 1 | **Низкая стоимость изменений** | Новый фичер / правка не должны стоить дорого | Feature-first Clean Architecture: каждый фичер изолирован |
-| 2 | **Безопасность по умолчанию** | Секреты, ключи, конфиги — никогда в коде | `--dart-define`, SecureStorage, Certificate Pinning |
-| 3 | **Тестируемость** | Тесты ловят баги до продакшена | 100+ тестов (ProviderContainer + mock) |
-| 4 | **CI/CD из коробки** | Автоматические проверки на каждый PR | GitHub Actions: analyze + test + format |
-| 5 | **Масштабируемость** | Стартап растёт → добавляются фичи, команды | Feature-first: новый фичер = новая папка |
-| 6 | **Наблюдаемость** | Видеть крахи, аналитику, логи в продакшене | Logger, Crashlytics, Analytics, Remote Config |
-| 7 | **Оффлайн-first** | Работа без интернета, синк в фоне | sqflite локальная БД, optimistic UI |
-| 8 | **Быстрый онбординг** | Новый разработчик понимает за 30 минут | README, ARCHITECTURE.md,.folder_structure |
+Solo founders building a startup from scratch.
+This template is designed so that **editing and maintaining the project costs less** than using other solutions. Initial investment is higher (architecture, tests, CI), but the cost of future changes is minimal.
 
 ---
 
-## Архитектура: Feature-First Clean Architecture
+## Template Requirements
+
+| # | Requirement | Why | Implementation |
+|---|-------------|-----|----------------|
+| 1 | **Low change cost** | New features / fixes shouldn't be expensive | Feature-first Clean Architecture: each feature is isolated |
+| 2 | **Security by default** | Secrets, keys, configs — never in code | `--dart-define`, SecureStorage, Certificate Pinning |
+| 3 | **Testability** | Tests catch bugs before production | 100+ tests (ProviderContainer + mocktail) |
+| 4 | **CI/CD out of the box** | Automatic checks on every PR | GitHub Actions: analyze + test + format |
+| 5 | **Scalability** | Startup grows → more features, more teams | Feature-first: new feature = new folder |
+| 6 | **Observability** | See crashes, analytics, logs in production | Logger, Crashlytics, Analytics, Remote Config |
+| 7 | **Offline-first** | Work without internet, sync in background | sqflite local DB, optimistic UI |
+| 8 | **Fast onboarding** | New developer understands in 30 minutes | README, ARCHITECTURE.md, folder_structure.md |
+
+---
+
+## Architecture: Feature-First Clean Architecture
 
 ```
 lib/
-├── configs/                  # Глобальные конфиги (AppConfigs)
-├── features/                 # Изолированные фичи
-│   ├── authentication/       # Пример фичи
-│   │   ├── data/             # Реализации (API, DB, репозитории)
-│   │   ├── domain/           # Бизнес-логика (интерфейсы репозиториев, use cases)
-│   │   └── presentation/     # UI и провайдеры (screens, widgets, providers)
-│   ├── dashboard/            # Другая фича — та же структура
-│   └── splash/               # Экран загрузки
+├── configs/                  # Global app configs (AppConfigs)
+├── features/                 # Isolated feature modules
+│   ├── authentication/       # Example feature
+│   │   ├── data/             # Implementations (API, DB, repositories)
+│   │   ├── domain/           # Business logic (repository interfaces, use cases)
+│   │   └── presentation/     # UI and providers (screens, widgets, Riverpod)
+│   ├── dashboard/            # Another feature — same structure
+│   └── splash/               # Splash screen
 ├── main/                     # Entry points (main_dev, main_staging, main_prod)
-├── routes/                   # GoRouter конфигурация
+├── routes/                   # GoRouter configuration
 ├── services/
 │   ├── observability/        # Logger, ErrorReporter, Analytics
 │   ├── security/             # SecureStorage, CertificatePinning
 │   ├── network/              # Interceptors (retry, auth, logging)
 │   └── database/             # Local SQLite cache
-└── shared/                   # Общий код (models, theme, exceptions, widgets)
+└── shared/                   # Shared code (models, theme, exceptions, widgets)
 ```
 
-### Правило зависимостей (Dependency Rule)
+### Dependency Rule
 
-Зависимости направлены **внутрь**:
+Dependencies point **inward**:
 ```
 presentation → domain ← data
      ↓            ↑        ↓
-  провайдеры   бизнес-   репозитории
-  (Riverpod)   логика    (реализации)
+  providers    business   repository
+  (Riverpod)   logic      (implementations)
 ```
 
-- **domain** НЕ знает про data и presentation
-- **data** реализует интерфейсы из domain
-- **presentation** использует провайдеры и бизнес-модели
+- **domain** does NOT know about data or presentation
+- **data** implements interfaces from domain
+- **presentation** uses providers and business models
 
 ---
 
-## Сервисы наблюдаемости (Observability)
+## Observability Services
 
-| Сервис | Интерфейс | Реализация (prod) | Реализация (dev/test) |
-|--------|-----------|-------------------|----------------------|
-| Логирование | `AppLogger` | `ConsoleLogger` | `NoopLogger` |
-| Краш-репортинг | `ErrorReporter` | `CrashlyticsReporter` | `NoopErrorReporter` |
-| Аналитика | `AnalyticsTracker` | `FirebaseAnalyticsTracker` | `NoopAnalyticsTracker` |
+| Service | Interface | Implementation (prod) | Implementation (dev/test) |
+|---------|-----------|----------------------|---------------------------|
+| Logging | `AppLogger` | `ConsoleLogger` | `NoopLogger` |
+| Crash Reporting | `ErrorReporter` | `CrashlyticsReporter` | `NoopErrorReporter` |
+| Analytics | `AnalyticsTracker` | `FirebaseAnalyticsTracker` | `NoopAnalyticsTracker` |
 | Feature Flags | `FeatureFlags` | `RemoteConfigFeatureFlags` | `StaticFeatureFlags` |
 | Secure Storage | `SecureStorage` | `SecureStorageImpl` (encrypted) | `SecureStorageFake` |
 
-### Использование
+### Usage
 
 ```dart
-// В любом провайдере/нотификаторе:
+// In any provider/notifier:
 final logger = ref.watch(loggerProvider);
 logger.info('User logged in', data: {'userId': user.id});
 
@@ -90,50 +90,50 @@ await analytics.track('purchase_completed', properties: {'amount': 99.99});
 // Feature flags:
 final flags = ref.watch(featureFlagsProvider);
 if (flags.isEnabled('new_checkout_flow')) {
-  // показать новый чекаут
+  // show new checkout
 }
 ```
 
 ---
 
-## Безопасность (Security)
+## Security
 
-| Компонент | Защита |
-|-----------|--------|
-| **Токены** | `flutter_secure_storage` (iOS Keychain / Android EncryptedSharedPreferences) |
-| **API ключи** | `--dart-define=API_KEY=...` — никогда в коде |
+| Component | Protection |
+|-----------|------------|
+| **Tokens** | `flutter_secure_storage` (iOS Keychain / Android EncryptedSharedPreferences) |
+| **API keys** | `--dart-define=API_KEY=...` — never in code |
 | **Network** | Certificate Pinning + Network Security Config (Android XML) |
-| **Cleartext** | HTTP запрещён (cleartextTrafficPermitted=false) |
-| **MITM** | SHA-256 fingerprints проверяются на каждом запросе |
+| **Cleartext** | HTTP forbidden (cleartextTrafficPermitted=false) |
+| **MITM** | SHA-256 fingerprints verified on each request |
 
 ---
 
-## Стек технологий (актуальные версии)
+## Tech Stack
 
-| Компонент | Пакет | Версия | Зачем |
-|----------|-------|--------|-------|
-| Framework | flutter | 3.44.8 | Мультиплатформа |
+| Component | Package | Version | Purpose |
+|-----------|---------|---------|---------|
+| Framework | flutter | 3.44.8 | Cross-platform |
 | State Management | flutter_riverpod | 3.4.1 | Compile-time safe DI |
-| Navigation | go_router | 16.3.0 | Декларативная, deep links |
-| Code Generation | freezed | 3.2.5 | Immutable модели |
-| HTTP | dio | 5.11.0 | Сетевые запросы |
+| Navigation | go_router | 16.3.0 | Declarative, deep links |
+| Code Generation | freezed | 3.2.5 | Immutable models |
+| HTTP | dio | 5.11.0 | Network requests |
 | Security | flutter_secure_storage | 10.0.0 | Encrypted token storage |
-| Observability | firebase_crashlytics | 4.0.0 | Краш-репортинг |
-| Analytics | firebase_analytics | 11.0.0 | Событийная аналитика |
-| Feature Flags | firebase_remote_config | 5.0.0 | A/B тесты, роллаут |
-| Local DB | sqflite | 2.3.0 | Оффлайн кэш |
-| Logging | logger | 2.5.0 | Структурированные логи |
+| Observability | firebase_crashlytics | 4.0.0 | Crash reporting |
+| Analytics | firebase_analytics | 11.0.0 | Event analytics |
+| Feature Flags | firebase_remote_config | 5.0.0 | A/B tests, rollout |
+| Local DB | sqflite | 2.3.0 | Offline cache |
+| Logging | logger | 2.5.0 | Structured logging |
 
 ---
 
-## Тесты
+## Tests
 
 ```bash
-flutter test                      # все тесты (100+)
-flutter test --coverage           # с покрытием
+flutter test                      # all tests (100+)
+flutter test --coverage           # with coverage
 ```
 
-### Паттерн тестирования
+### Testing Pattern
 
 ```dart
 test('should load data', () async {
@@ -142,10 +142,10 @@ test('should load data', () async {
     repositoryProvider.overrideWithValue(repo),
   ]);
   final notifier = container.read(myProvider.notifier);
-  
+
   when(() => repo.fetchData()).thenAnswer((_) async => Right(testData));
   await notifier.fetch();
-  
+
   expect(notifier.state.data, testData);
 });
 ```
@@ -154,36 +154,37 @@ test('should load data', () async {
 
 ## CI/CD (GitHub Actions)
 
-На каждый PR и push в main:
-1. `flutter pub get` — зависимости
-2. `dart format --set-exit-if-changed .` — форматирование
-3. `flutter analyze lib/` — статический анализ (0 errors)
-4. `flutter test` — все тесты
+On every PR and push to master:
+1. `flutter pub get` — dependencies
+2. `dart format --set-exit-if-changed .` — formatting
+3. `flutter analyze lib/` — static analysis (0 errors)
+4. `flutter test` — all tests
 
-При нарушении — PR не мержится. Качество гарантировано.
-
----
-
-## Философия
-
-> **Тратим больше времени СЕЙЧАС, чтобы тратить меньше В БУДУЩЕМ.**
-
-Чистая архитектура, тесты, CI — это не «избыточность». Это инвестиция.
-Стартап, который экономит на архитектуре, платит за это потом — медленными релизами, багами в продакшене, страхом менять код.
-
-Шаблон «Фундамент Единорога» — это основа, где **каждое изменение стоит дешевле**, потому что:
-- Структура понятна новому разработчику за 30 минут
-- Тесты ловят баги до продакшена
-- CI не даёт сломать main
-- Добавление фичи = создание папки, не переписывание системы
-- Секреты никогда не попадают в git
-- Крахи видны мгновенно (Crashlytics)
-- A/B тесты запускаются без деплоя (Remote Config)
-
-**Потенциал для масштабирования**: от соло-проекта до команды из 5-10 разработчиков — структура выдерживает без переписывания.
+Failure blocks the PR. Quality is guaranteed.
 
 ---
 
-## Дополнительные документы
+## Philosophy
 
-- [UNICORN_FOUNDATION_REQUIREMENTS.md](./UNICORN_FOUNDATION_REQUIREMENTS.md) — полное описание требований
+> **Invest more time NOW to spend less IN THE FUTURE.**
+
+Clean Architecture, tests, CI — these are not "overhead." They are an investment.
+A startup that skimps on architecture pays later — with slow releases, production bugs, and fear of changing code.
+
+This template is a foundation where **every change costs less** because:
+- Structure is clear to a new developer in 30 minutes
+- Tests catch bugs before production
+- CI prevents breaking main
+- Adding a feature = creating a folder, not rewriting the system
+- Secrets never enter git
+- Crashes are visible instantly (Crashlytics)
+- A/B tests launch without deployment (Remote Config)
+
+**Growth potential:** from solo project to a team of 5-10 developers — the structure scales without rewriting.
+
+---
+
+## Related Documents
+
+- [UNICORN_FOUNDATION_REQUIREMENTS.md](./UNICORN_FOUNDATION_REQUIREMENTS.md) — full requirements specification
+- [docs/adr/](./docs/adr/) — Architecture Decision Records

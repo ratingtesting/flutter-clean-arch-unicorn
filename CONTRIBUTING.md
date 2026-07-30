@@ -1,24 +1,24 @@
-# Contributing to Unicorn Foundation Template
+# Contributing to Flutter Clean Arch Unicorn
 
-Спасибо, что хотите улучшить этот шаблон! 🦄
+Thank you for wanting to improve this template! 🦄
 
-## Быстрый старт
+## Quick Start
 
 ```bash
-git clone https://github.com/your-org/flutter_clean_arch_unicorn.git
+git clone https://github.com/ratingtesting/flutter-clean-arch-unicorn.git
 cd flutter_clean_arch_unicorn
 flutter pub get
-flutter test           # должно быть 96/100 passing (4 known edge-case failures in dashboard search)
+flutter test           # should be 100/100 passing
 flutter analyze lib/   # 0 errors, 0 warnings
 ```
 
 ## Git Flow
 
-- `main` — стабильная ветка, только теги релизов (`v1.2.0`, `v1.3.0`...)
-- Feature branches: `feat/<short-description>` (например, `feat/offline-sync`)
-- Bugfix branches: `fix/<short-description>` (например, `fix/pagination-edge-case`)
-- PR в `main` → обязательный CI (analyze, format, test)
-- После мержа — новый git tag: `v<major>.<minor>.<patch>`
+- `master` — stable branch, release tags only (`v1.2.0`, `v1.3.0`...)
+- Feature branches: `feat/<short-description>` (e.g., `feat/offline-sync`)
+- Bugfix branches: `fix/<short-description>` (e.g., `fix/pagination-edge-case`)
+- PR into `master` → mandatory CI (analyze, format, test)
+- After merge → new git tag: `v<major>.<minor>.<patch>`
 
 ## Conventional Commits
 
@@ -31,13 +31,13 @@ flutter analyze lib/   # 0 errors, 0 warnings
 ```
 
 Types:
-- `feat` — новая фича для пользователя шаблона
-- `fix` — баг в шаблоне
-- `docs` — только документация
-- `refactor` — рефакторинг без изменения поведения
-- `test` — добавление/исправление тестов
+- `feat` — new feature for template users
+- `fix` — bug in the template
+- `docs` — documentation only
+- `refactor` — refactoring without behavior change
+- `test` — adding/fixing tests
 - `chore` — CI, deps, tooling
-- `style` — форматирование, переносы строк
+- `style` — formatting, line breaks
 
 Scopes (examples): `auth`, `dashboard`, `network`, `security`, `ci`, `docs`, `deps`.
 
@@ -55,34 +55,34 @@ chore(ci): pin flutter 3.44.8 in workflow
 
 - [ ] `flutter analyze lib/` — 0 errors, 0 warnings
 - [ ] `dart format --set-exit-if-changed .` — no diff
-- [ ] `flutter test` — все тесты проходят (известные 4 фейла в dashboard search — documented, не блокируют)
-- [ ] Тесты добавлены для новой логики (domain layer — обязательно)
-- [ ] Документация обновлена (README, ARCHITECTURE.md, CHANGELOG.md если нужно)
-- [ ] Нет hardcoded secrets / API keys / доменов
-- [ ] Clean Architecture Dependency Rule не нарушена (domain не зависит от data/presentation)
+- [ ] `flutter test` — all tests pass (100/100)
+- [ ] Tests added for new logic (domain layer required)
+- [ ] Documentation updated (README, ARCHITECTURE.md, CHANGELOG.md if needed)
+- [ ] No hardcoded secrets / API keys / domains
+- [ ] Clean Architecture Dependency Rule not violated (domain does not depend on data/presentation)
 
 ## Adding a New Feature
 
-1. Создайте папку `lib/features/<feature_name>/` с подпапками `data/`, `domain/`, `presentation/`
-2. Domain: интерфейсы (Repository, UseCase), модели (Freezed), Either для ошибок
-3. Data: реализация RepositoryImpl, DataSource (Remote/Local), DTO с json_serializable
-4. Presentation: Notifier/AsyncNotifier (Riverpod 3), UI виджеты, GoRouter route
-5. Тесты: unit для domain, widget для presentation
-6. Зарегистрируйте провайдеры в `lib/features/<feature_name>/presentation/providers/`
-7. Добавьте route в `lib/routes/app_router.dart`
+1. Create folder `lib/features/<feature_name>/` with `data/`, `domain/`, `presentation/` subdirectories
+2. Domain: interfaces (Repository, UseCase), models (Freezed), Either for errors
+3. Data: RepositoryImpl, DataSource (Remote/Local), DTOs with json_serializable
+4. Presentation: Notifier/AsyncNotifier (Riverpod 3), UI widgets, GoRouter route
+5. Tests: unit for domain, widget for presentation
+6. Register providers in `lib/features/<feature_name>/presentation/providers/`
+7. Add route in `lib/routes/app_router.dart`
 
 ## Code Style
 
-- **Dart formatter** — единственный источник истины (`dart format .`)
-- **Lint** — `flutter analyze` с `analysis_options.yaml` проекта
-- **Naming**: `PascalCase` типы, `camelCase` переменные/функции, `snake_case` файлы
-- **Imports**: `package:` сначала, потом `dart:`, потом относительные; сортировка по алфавиту внутри групп
+- **Dart formatter** — single source of truth (`dart format .`)
+- **Lint** — `flutter analyze` with project `analysis_options.yaml`
+- **Naming**: `PascalCase` types, `camelCase` variables/functions, `snake_case` files
+- **Imports**: `package:` first, then `dart:`, then relative; alphabetical within groups
 
 ## Reporting Issues
 
-- **Bug**: шаги воспроизведения, ожидаемое/фактическое поведение, `flutter --version`, OS
-- **Feature Request**: use-case, почему это в шаблоне, а не в приложении пользователя
-- **Security**: приватно в `SECURITY.md` контакты
+- **Bug**: reproduction steps, expected/actual behavior, `flutter --version`, OS
+- **Feature Request**: use-case, why it belongs in the template (not the user's app)
+- **Security**: privately via contacts in `SECURITY.md`
 
 ## License
 
