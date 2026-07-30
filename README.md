@@ -58,7 +58,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 
 ## 🤖 AI-Agent Ready
 
-This repo is optimized for AI coding agents (Claude Code, Copilot, Cursor, Gemini, Codex, Jules):
+This repo is optimized for AI coding agents (Hermes Agent, Claude Code, Copilot, Cursor, Gemini, Codex, Jules):
 
 | File | Purpose |
 |------|---------|
