@@ -56,6 +56,22 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 
 ---
 
+## 🤖 AI-Agent Ready
+
+This repo is optimized for AI coding agents (Claude Code, Copilot, Cursor, Gemini, Codex, Jules):
+
+| File | Purpose |
+|------|---------|
+| [`AGENTS.md`](AGENTS.md) | Full agent guide: structure, rules, commands ([agents.md](https://agents.md) standard) |
+| [`llms.txt`](llms.txt) | Machine-readable project summary ([llmstxt.org](https://llmstxt.org) standard) |
+| [`CLAUDE.md`](CLAUDE.md) / [`GEMINI.md`](GEMINI.md) | Entry points for Claude Code / Gemini CLI |
+| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | GitHub Copilot instructions |
+| [`.cursor/rules/`](.cursor/rules/) | Cursor project rules |
+
+Point any agent at this repo — it will understand the architecture, run the tests, and follow the Dependency Rule without extra prompting.
+
+---
+
 ## Stack
 
 | Component | Package | Version |
