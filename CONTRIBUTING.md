@@ -8,13 +8,13 @@ Thank you for wanting to improve this template! 🦄
 git clone https://github.com/ratingtesting/flutter-clean-arch-unicorn.git
 cd flutter_clean_arch_unicorn
 flutter pub get
-flutter test           # should be 100/100 passing
-flutter analyze lib/   # 0 errors, 0 warnings
+flutter test           # should be 119 passing
+flutter analyze lib/ test/   # 0 issues (--fatal-infos)
 ```
 
 ## Git Flow
 
-- `master` — stable branch, release tags only (`v1.2.0`, `v1.3.0`...)
+- `master` — stable branch, release tags only (`v1.0.0`, `v1.1.0`...)
 - Feature branches: `feat/<short-description>` (e.g., `feat/offline-sync`)
 - Bugfix branches: `fix/<short-description>` (e.g., `fix/pagination-edge-case`)
 - PR into `master` → mandatory CI (analyze, format, test)
@@ -53,9 +53,9 @@ chore(ci): pin flutter 3.44.8 in workflow
 
 ## PR Checklist
 
-- [ ] `flutter analyze lib/` — 0 errors, 0 warnings
+- [ ] `flutter analyze lib/ test/ --fatal-infos` — 0 issues
 - [ ] `dart format --set-exit-if-changed .` — no diff
-- [ ] `flutter test` — all tests pass (100/100)
+- [ ] `flutter test` — all tests pass (119)
 - [ ] Tests added for new logic (domain layer required)
 - [ ] Documentation updated (README, ARCHITECTURE.md, CHANGELOG.md if needed)
 - [ ] No hardcoded secrets / API keys / domains
@@ -67,7 +67,7 @@ chore(ci): pin flutter 3.44.8 in workflow
 2. Domain: interfaces (Repository, UseCase), models (Freezed), Either for errors
 3. Data: RepositoryImpl, DataSource (Remote/Local), DTOs with json_serializable
 4. Presentation: Notifier/AsyncNotifier (Riverpod 3), UI widgets, GoRouter route
-5. Tests: unit for domain, widget for presentation
+5. Tests: unit for domain/data, provider tests for presentation
 6. Register providers in `lib/features/<feature_name>/presentation/providers/`
 7. Add route in `lib/routes/app_router.dart`
 

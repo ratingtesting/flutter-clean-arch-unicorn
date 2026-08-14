@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 100% tests · v1.3.0**
+> **Clean Architecture · Riverpod 3 · 119 unit tests · v1.0.0**
 
 **The foundation for a startup that will become a unicorn.**
 
@@ -16,7 +16,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 - `make.bat setup` — install dependencies
 - `make.bat run-dev` — launch dev environment
 - Feature-first structure: `features/{name}/{data,domain,presentation}` — intuitive navigation
-- 100 tests verify nothing is broken
+- 119 unit tests verify nothing is broken
 
 ### 🔒 Secure
 **Secrets never leak into git. Tokens are encrypted.**
@@ -27,12 +27,12 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 - `Either<L,R>` — errors are handled, not thrown as exceptions
 
 ### 🛡️ Reliable
-**100% test coverage. CI/CD. Monitoring ready.**
+**119 unit tests. CI/CD. Monitoring ready.**
 
-- **100/100 unit tests** — zero failures
+- **119 unit tests** — 0 failures
 - **GitHub Actions** — format → analyze → test → build in 2 minutes per PR
 - `ExceptionHandler` — centralized network error handling (Socket, Dio, timeouts)
-- `ErrorReporter` and `Analytics` interfaces — ready for Crashlytics / Sentry
+- `ErrorReporter` and `Analytics` interfaces — ready for Crashlytics / Sentry (not bundled)
 
 ### 💰 Cheap
 **One codebase — two platforms. Free CI.**
@@ -45,7 +45,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 ### 📈 Scalable
 **Clean Architecture. Branch-ready for 1M+ users.**
 
-- **Clean Architecture (0 violations)** — `domain` layer never imports `data`/`presentation`. Swap DB, API, or UI — business logic stays intact
+- **Clean Architecture** — `domain` layer never imports `data`/`presentation`. Swap DB, API, or UI — business logic stays intact
 - **Riverpod 3 (compile-time DI)** — if a provider import is wrong, the code won't compile. Errors caught before deployment
 - **3 built-in environments** — dev/staging/prod via `--dart-define`
 - **Roadmap to Unicorn** — step-by-step plan: from 0 to 1,000,000 users without rewriting
@@ -82,9 +82,11 @@ Point any agent at this repo — it will understand the architecture, run the te
 | Code Generation | freezed | 3.2.5 |
 | HTTP Client | dio | 5.11.0 |
 | Security | flutter_secure_storage | 10.0.0 |
-| Observability | firebase_crashlytics, firebase_analytics, firebase_remote_config |
-| Local DB | sqflite | 2.3.0 |
+| Local DB | drift | 2.34.3 |
 | Logging | logger | 2.5.0 |
+| Observability | Noop interfaces (Logger, ErrorReporter, Analytics, FeatureFlags) | — |
+
+> **Note:** This template ships **Noop implementations** for observability (Crashlytics, Analytics, Remote Config). The interfaces are ready — drop in Firebase (or Sentry) when you need it. No `firebase_*` packages are bundled by default.
 
 ## Structure
 
@@ -99,9 +101,11 @@ lib/
 ├── routes/               # GoRouter (app_router.dart)
 ├── services/
 │   ├── observability/    # Logger, ErrorReporter, Analytics
-│   ├── security/         # SecureStorage, CertificatePinning
+│   ├── security/         # SecureStorage, interceptors
 │   ├── network/          # Interceptors (retry, auth, logging)
-│   └── database/         # Local SQLite cache
+│   └── user_cache_service/ # Local user cache (SharedPreferences + SecureStorage)
+├── core/
+│   └── database/         # Drift local relational DB (typed tables, migrations)
 └── shared/               # Models, theme, exceptions, widgets
 ```
 
@@ -131,15 +135,16 @@ flutter run --dart-define=BASE_URL=https://my-api.com
 
 | Entry point | Purpose |
 |-------------|---------|
-| `lib/main.dart` | Development (default) |
 | `lib/main/main_dev.dart` | Dev build |
 | `lib/main/main_staging.dart` | Staging |
 | `lib/main/main_prod.dart` | Production |
 
+> Default `flutter run` uses `lib/main.dart` → `mainCommon(AppEnvironment.DEV)`.
+
 ## Testing
 
 ```bash
-flutter test              # all tests
+flutter test              # all tests (119)
 flutter test --coverage   # with coverage
 ```
 
@@ -150,7 +155,7 @@ Pattern: `ProviderContainer` + `mocktail`, each provider tested in isolation.
 GitHub Actions on every PR:
 1. `flutter pub get`
 2. `dart format --set-exit-if-changed .`
-3. `flutter analyze lib/` (0 errors)
+3. `flutter analyze lib/ test/ --fatal-infos` (0 issues)
 4. `flutter test`
 
 ## Requirements
@@ -161,7 +166,7 @@ GitHub Actions on every PR:
 
 ## Versioning
 
-Semantic tags (`v1.0.0`, `v1.1.0`). Every change is a commit + tag.
+Semantic tags (`v1.0.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.0.0**.
 
 ---
 

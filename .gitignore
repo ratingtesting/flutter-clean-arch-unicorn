@@ -65,3 +65,8 @@ GoogleService-Info.plist
 
 # Stale/backup files
 *.orig
+
+# Keelwright local tracking files (agent memory between chats — do NOT commit)
+PROGRESS.md
+autoresearch-lessons.md
+phoenix-log.md

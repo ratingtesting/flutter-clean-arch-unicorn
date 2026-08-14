@@ -1,6 +1,6 @@
 # Flutter Clean Arch Unicorn — Architecture
 
-> v1.3.0 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
+> v1.0.0 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
 
 ## Who is this for
 
@@ -14,12 +14,12 @@ This template is designed so that **editing and maintaining the project costs le
 | # | Requirement | Why | Implementation |
 |---|-------------|-----|----------------|
 | 1 | **Low change cost** | New features / fixes shouldn't be expensive | Feature-first Clean Architecture: each feature is isolated |
-| 2 | **Security by default** | Secrets, keys, configs — never in code | `--dart-define`, SecureStorage, Certificate Pinning |
-| 3 | **Testability** | Tests catch bugs before production | 100+ tests (ProviderContainer + mocktail) |
+| 2 | **Security by default** | Secrets, keys, configs — never in code | `--dart-define`, SecureStorage, interceptors |
+| 3 | **Testability** | Tests catch bugs before production | 119 tests (ProviderContainer + mocktail) |
 | 4 | **CI/CD out of the box** | Automatic checks on every PR | GitHub Actions: analyze + test + format |
 | 5 | **Scalability** | Startup grows → more features, more teams | Feature-first: new feature = new folder |
-| 6 | **Observability** | See crashes, analytics, logs in production | Logger, Crashlytics, Analytics, Remote Config |
-| 7 | **Offline-first** | Work without internet, sync in background | sqflite local DB, optimistic UI |
+| 6 | **Observability** | See crashes, analytics, logs in production | Logger, ErrorReporter, Analytics, FeatureFlags (Noop by default) |
+| 7 | **Offline-first ready** | Work without internet, sync in background | Drift local DB (typed tables) |
 | 8 | **Fast onboarding** | New developer understands in 30 minutes | README, ARCHITECTURE.md, folder_structure.md |
 
 ---
@@ -40,9 +40,11 @@ lib/
 ├── routes/                   # GoRouter configuration
 ├── services/
 │   ├── observability/        # Logger, ErrorReporter, Analytics
-│   ├── security/             # SecureStorage, CertificatePinning
+│   ├── security/             # SecureStorage, interceptors
 │   ├── network/              # Interceptors (retry, auth, logging)
-│   └── database/             # Local SQLite cache
+│   └── user_cache_service/   # Local user cache (SharedPreferences + SecureStorage)
+├── core/
+│   └── database/             # Drift local relational DB (typed tables, migrations)
 └── shared/                   # Shared code (models, theme, exceptions, widgets)
 ```
 
@@ -67,9 +69,9 @@ presentation → domain ← data
 | Service | Interface | Implementation (prod) | Implementation (dev/test) |
 |---------|-----------|----------------------|---------------------------|
 | Logging | `AppLogger` | `ConsoleLogger` | `NoopLogger` |
-| Crash Reporting | `ErrorReporter` | `CrashlyticsReporter` | `NoopErrorReporter` |
-| Analytics | `AnalyticsTracker` | `FirebaseAnalyticsTracker` | `NoopAnalyticsTracker` |
-| Feature Flags | `FeatureFlags` | `RemoteConfigFeatureFlags` | `StaticFeatureFlags` |
+| Crash Reporting | `ErrorReporter` | **NoopErrorReporter** (swap for Crashlytics/Sentry) | `NoopErrorReporter` |
+| Analytics | `AnalyticsTracker` | **NoopAnalyticsTracker** (swap for Firebase) | `NoopAnalyticsTracker` |
+| Feature Flags | `FeatureFlags` | `StaticFeatureFlags` (swap for Remote Config) | `StaticFeatureFlags` |
 | Secure Storage | `SecureStorage` | `SecureStorageImpl` (encrypted) | `SecureStorageFake` |
 
 ### Usage
@@ -102,9 +104,9 @@ if (flags.isEnabled('new_checkout_flow')) {
 |-----------|------------|
 | **Tokens** | `flutter_secure_storage` (iOS Keychain / Android EncryptedSharedPreferences) |
 | **API keys** | `--dart-define=API_KEY=...` — never in code |
-| **Network** | Certificate Pinning + Network Security Config (Android XML) |
+| **Network** | Retry + auth + logging interceptors; cleartext disabled |
 | **Cleartext** | HTTP forbidden (cleartextTrafficPermitted=false) |
-| **MITM** | SHA-256 fingerprints verified on each request |
+| **MITM** | Certificate Pinning — *optional, not bundled* (add `CertificatePinningInterceptor` + Network Security Config when needed) |
 
 ---
 
@@ -118,10 +120,8 @@ if (flags.isEnabled('new_checkout_flow')) {
 | Code Generation | freezed | 3.2.5 | Immutable models |
 | HTTP | dio | 5.11.0 | Network requests |
 | Security | flutter_secure_storage | 10.0.0 | Encrypted token storage |
-| Observability | firebase_crashlytics | 4.0.0 | Crash reporting |
-| Analytics | firebase_analytics | 11.0.0 | Event analytics |
-| Feature Flags | firebase_remote_config | 5.0.0 | A/B tests, rollout |
-| Local DB | sqflite | 2.3.0 | Offline cache |
+| Observability | Noop interfaces (Logger, ErrorReporter, Analytics, FeatureFlags) | — | Swap for Firebase/Sentry later |
+| Local DB | drift | 2.34.3 | Offline cache (typed tables) |
 | Logging | logger | 2.5.0 | Structured logging |
 
 ---
@@ -129,7 +129,7 @@ if (flags.isEnabled('new_checkout_flow')) {
 ## Tests
 
 ```bash
-flutter test                      # all tests (100+)
+flutter test                      # all tests (119)
 flutter test --coverage           # with coverage
 ```
 

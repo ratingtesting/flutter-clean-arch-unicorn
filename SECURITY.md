@@ -6,8 +6,8 @@ Only the latest tagged release receives security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| v1.2.x  | ✅ Yes             |
-| < v1.2  | ❌ No              |
+| v1.0.x  | ✅ Yes             |
+| < v1.0  | ❌ No              |
 
 ## Reporting a Vulnerability
 
@@ -29,7 +29,7 @@ We aim to acknowledge within 48 hours and provide a fix timeline within 7 days.
 
 | Threat | Mitigation in Template |
 |--------|------------------------|
-| **S**poofing | Certificate Pinning (Dio interceptor), App Integrity checks |
+| **S**poofing | SecureStorage for tokens, auth interceptor injects token |
 | **T**ampering | Network Security Config (cleartext blocked), signed builds |
 | **R**epudiation | Structured audit logs (AppLogger), immutable events |
 | **I**nformation Disclosure | Secrets in `--dart-define` / CI Secrets, SecureStorage for tokens |
@@ -54,9 +54,8 @@ We aim to acknowledge within 48 hours and provide a fix timeline within 7 days.
 
 ### Network Security
 
-- **Certificate Pinning**: SHA-256 pins in `CertificatePinningInterceptor` — configure per environment
-- **Network Security Config**: `android/app/src/main/res/xml/network_security_config.xml` — cleartext disabled, pins enforced
-- **HSTS**: Preload list for production domains
+- **Cleartext disabled** — `cleartextTrafficPermitted=false` in Android manifest
+- **Certificate Pinning** — *optional, not bundled*: add `CertificatePinningInterceptor` + Network Security Config when your backend requires it
 - **CSP**: Content-Security-Policy headers on API responses (backend responsibility)
 
 ### Token Storage
@@ -68,16 +67,15 @@ We aim to acknowledge within 48 hours and provide a fix timeline within 7 days.
 ### Dependency Security
 
 - `flutter pub outdated` — weekly check
-- `snyk test` / `dart run dependency_validator` — in CI
 - Pin versions in `pubspec.yaml` (no `^` or `any`)
 - Audit transitive deps before upgrading
 
 ### Incident Response
 
-1. **Detect** → Crashlytics alert / Sentry alert / log anomaly
+1. **Detect** → Log anomaly / test failure alert
 2. **Contain** → Feature Flag kill-switch (`featureFlags.isEnabled('payment_flow') = false`)
 3. **Investigate** → Structured logs + stack traces
-4. **Fix** → Hotfix branch → tag → Fastlane deploy
+4. **Fix** → Hotfix branch → tag → deploy
 5. **Post-mortem** → ADR with timeline, root cause, prevention
 
 ## Hardening Checklist for Your App
@@ -100,12 +98,9 @@ Before shipping to production, verify:
 ```
 lib/services/security/
   ├── secure_storage.dart          # Interface + encrypted impl + fake for tests
-  └── certificate_pinning_interceptor.dart  # Dio interceptor with pin verification
+  └── interceptors/                # Dio interceptors (retry, auth, logging)
 
-android/app/src/main/res/xml/
-  └── network_security_config.xml  # Cleartext disabled, pin-set per domain
-
-.github/workflows/main.yml         # CI: snyk test, dependency_validator
+.github/workflows/main.yml         # CI: format, analyze, test
 ```
 
 ## License

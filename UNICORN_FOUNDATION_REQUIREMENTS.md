@@ -23,10 +23,10 @@
 | Requirement | Implementation | Why |
 |-------------|---------------|-----|
 | **No secrets in code** | `--dart-define` only, CI secrets in GitHub Secrets | Key leaks = startup death. |
-| **Certificate Pinning** | Dio interceptor with SHA-256 fingerprints | MITM on public Wi-Fi is attack vector #1. |
 | **Encrypted Local Storage** | `flutter_secure_storage` for tokens, biometric auth | Tokens in SharedPreferences = instant compromise. |
 | **App Integrity** | Play Integrity / App Attest | Binary tampering / root detection. |
 | **Network Security Config** | Android `network_security_config.xml` | Cleartext traffic forbidden at OS level. |
+| **Certificate Pinning** | *Optional* — Dio interceptor with SHA-256 fingerprints (not bundled; add when backend requires) | MITM on public Wi-Fi is attack vector #1. |
 
 ---
 
@@ -59,9 +59,9 @@
 |-------|---------|------|
 | **Analyze** | `flutter analyze --fatal-infos` | 0 errors, 0 warnings (strict) |
 | **Format** | `dart format --set-exit-if-changed .` | No diff |
-| **Test** | `flutter test --coverage` | 100% unit coverage on domain, >80% overall |
+| **Test** | `flutter test` | All 119 tests pass (no coverage gate yet) |
 | **Build** | `flutter build apk --release` / `flutter build ios --release` | Artifacts built |
-| **Security** | `dart run dependency_validator` / `snyk test` | No critical CVEs |
+| **Security** | `flutter pub outdated` (weekly) | No critical CVEs |
 | **Deploy** | Fastlane → Play Console / TestFlight / Firebase App Distribution | Manual approve for PROD |
 
 ---
@@ -102,27 +102,34 @@
 
 ---
 
-## 9. WHAT IS ALREADY IN V3 (DONE ✅)
+## 9. WHAT IS ALREADY IN V1 (DONE ✅)
 
-- [x] Clean Architecture (data/domain/presentation) — 0 violations
+- [x] Clean Architecture (data/domain/presentation) — domain layer clean (data/presentation NOT imported by domain)
 - [x] Riverpod 3.4.1 + Notifier + AsyncNotifier
 - [x] GoRouter 16.3.0
 - [x] Freezed 3.2.5 + json_serializable
-- [x] Either&lt;T, R&gt; for functional error handling
+- [x] Either<T, R> for functional error handling
 - [x] Dio network layer with `NetworkService` abstraction
 - [x] Feature-first structure: `auth`, `dashboard`, `splash`
 - [x] Environment entrypoints: `main_dev.dart`, `main_staging.dart`, `main_prod.dart`
-- [x] 100/100 tests passing (unit + widget)
-- [x] `flutter analyze` = 0 errors
+- [x] 119 unit tests passing (unit + provider; no widget tests yet)
+- [x] `flutter analyze` = 0 issues (with `--fatal-infos`)
 - [x] GitHub Actions workflow (analyze, test, format)
-- [x] Git tags v1.0.0–v1.3.0
 - [x] README.md + ARCHITECTURE.md + CONTRIBUTING.md
 - [x] AGENTS.md — AI coding agent guide
 - [x] llms.txt — LLM-friendly project description
 - [x] check_secrets.sh — pre-commit secret guard
 - [x] make.bat + Makefile — quick setup
 - [x] SECURITY.md with threat model
-- [x] MIT-0 license
+- [x] Drift local relational DB (`lib/core/database/`) + in-memory test DB
+
+### Known gaps (honest status)
+- [ ] **Clean Architecture 0 violations**: presentation still imports datasources directly in 3 provider files (see `GAP_ANALYSIS.md`, M8)
+- [ ] **Certificate Pinning**: NOT bundled (interceptor absent; documented as optional in SECURITY.md)
+- [ ] **Widget tests**: 0 — only unit/provider tests
+- [ ] **Coverage gate**: not configured in CI (119 tests, coverage not measured)
+- [ ] **MIT-0 LICENSE file**: added in v1.0.0 (see `GAP_ANALYSIS.md`)
+- [ ] **Git tags**: none pushed yet at v1.0.0
 
 ---
 

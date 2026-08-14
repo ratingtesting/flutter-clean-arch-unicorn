@@ -2,7 +2,7 @@
 
 ## What is this project?
 
-A production-ready Flutter template built for startups. It provides Clean Architecture (feature-first), Riverpod 3, 100% test coverage, CI/CD, and security-by-default — so a solo founder can launch without hiring a senior engineer for architecture decisions.
+A production-ready Flutter template built for startups. It provides Clean Architecture (feature-first), Riverpod 3, 119 unit tests, CI/CD, and security-by-default — so a solo founder can launch without hiring a senior engineer for architecture decisions.
 
 ## Project Structure
 
@@ -21,13 +21,16 @@ flutter_clean_arch_unicorn/
 │   ├── routes/                # GoRouter (app_router.dart)
 │   ├── services/
 │   │   ├── observability/     # Logger, ErrorReporter, Analytics interfaces
-│   │   ├── security/          # SecureStorage, CertificatePinning
-│   │   ├── network/           # Dio interceptors (retry, auth, logging)
-│   │   └── database/          # Local SQLite cache
+│   │   ├── security/          # SecureStorage, interceptors
+│   │   ├── network/          # Dio interceptors (retry, auth, logging)
+│   │   └── user_cache_service/ # Local user cache (SharedPreferences + SecureStorage)
+│   ├── core/
+│   │   └── database/         # Drift local relational DB (typed tables)
 │   └── shared/                # Shared models, theme, exceptions, widgets
-├── test/                      # 100+ unit tests
+├── test/                      # 119 unit tests
 ├── scripts/                   # check_secrets.sh pre-commit hook
 ├── .github/workflows/         # GitHub Actions (format → analyze → test → build)
+├── tool/                      # new_feature.dart generator
 └── docs/adr/                  # Architecture Decision Records
 ```
 
@@ -42,7 +45,7 @@ flutter_clean_arch_unicorn/
 | Modify CI | `.github/workflows/main.yml` |
 | Add environment | Create `lib/main/main_<env>.dart`, add `--dart-define` config |
 | Change error handling | `lib/shared/mixins/exception_handler_mixin.dart` |
-| Add offline storage | `lib/services/database/` (sqflite) + implement cache in data layer |
+| Add offline storage | `lib/core/database/` (Drift) + implement cache in data layer |
 | Fix tests | `test/features/<name>/` — tests mirror the source structure |
 
 ## Conventions
@@ -66,7 +69,7 @@ flutter_clean_arch_unicorn/
 2. Create domain: repository interface, entities (Freezed), use cases
 3. Create data: repository implementation, data sources, DTOs
 4. Create presentation: Notifier, screens, widgets, route
-5. Add tests: unit for domain + data, widget for presentation
+5. Add tests: unit for domain + data, provider tests for presentation
 6. Register providers in feature's providers/ directory
 7. Add route in lib/routes/app_router.dart
 ```
@@ -85,7 +88,7 @@ expect(notifier.state, expectedState);
 ```bash
 make.bat check
 # or manually:
-flutter analyze lib/
+flutter analyze lib/ test/
 dart format --set-exit-if-changed .
 flutter test
 ```

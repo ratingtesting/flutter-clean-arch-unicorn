@@ -5,6 +5,6 @@ All agent instructions for this project live in [AGENTS.md](AGENTS.md). Read tha
 Quick facts:
 - Flutter + Riverpod 3, Clean Architecture, feature-first (`lib/features/{name}/{data,domain,presentation}`)
 - Dependency Rule: `domain` never imports `data` or `presentation`
-- Run tests: `flutter test` (100/100 must pass)
+- Run tests: `flutter test` (119 must pass)
 - Never hardcode secrets — use `--dart-define` and `SecureStorage`
 - Machine-readable project summary: [llms.txt](llms.txt)
