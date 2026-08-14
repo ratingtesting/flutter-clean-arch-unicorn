@@ -1,39 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/screens/login_screen.dart';
 import 'package:flutter_clean_arch_unicorn/routes/app_router.dart';
+import 'package:flutter_clean_arch_unicorn/services/user_cache_service/presentation/providers/current_user_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
-String routeLocation(RouteBase route) => route is GoRoute ? route.path : '';
-
 void main() {
-  group('AppRouter (GoRouter)', () {
-    late GoRouter router;
+  group('AppRouter auth guard', () {
+    testWidgets('redirects /dashboard to /login when not authenticated', (
+      tester,
+    ) async {
+      final router = GoRouter(
+        initialLocation: '/dashboard',
+        routes: appRouterRoutes,
+        redirect: appRouterRedirect,
+      );
 
-    setUp(() {
-      router = appRouter;
-    });
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            isAuthenticatedProvider.overrideWithValue(AsyncValue.data(false)),
+          ],
+          child: MaterialApp.router(routerConfig: router),
+        ),
+      );
+      // GoRouter resolves the redirect asynchronously; pump a few frames.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
 
-    test('declares the three core routes', () {
-      final locations = router.configuration.routes.map(routeLocation).toList();
-      expect(locations, contains('/'));
-      expect(locations, contains('/login'));
-      expect(locations, contains('/dashboard'));
-    });
-
-    test('initial route is splash (/)', () {
-      final first = router.configuration.routes.first;
-      expect(routeLocation(first), '/');
-    });
-
-    test('route locations are unique', () {
-      final locations = router.configuration.routes.map(routeLocation).toList();
-      final unique = locations.where((l) => l.isNotEmpty).toSet();
-      expect(unique.length, locations.where((l) => l.isNotEmpty).length);
-    });
-
-    test('core paths are absolute', () {
-      for (final path in const ['/', '/login', '/dashboard']) {
-        expect(path.startsWith('/'), isTrue);
-      }
+      // LoginScreen... no — LoginScreen AppBar title:
+      expect(find.text('TDD with Riverpod'), findsOneWidget);
+      expect(find.byType(LoginScreen), findsOneWidget);
     });
   });
 }
