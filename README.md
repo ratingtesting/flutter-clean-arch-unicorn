@@ -170,6 +170,15 @@ Semantic tags (`v1.4.0`, `v1.1.0`). Every change is a commit + tag. Current vers
 
 ---
 
+## 🦄 What you get at each stage
+
+| Stage | What you get |
+|-------|--------------|
+| **VibeCoder** | `clone` → `flutter pub get` → `flutter run`. Starter UI, auth flow, GoRouter, Riverpod 3, `tool/new_feature.dart` generator, SecureStorage, error handling, light/dark theme. Zero config needed. |
+| **MVP** | Drift local DB, Repository pattern, Freezed models, Dio networking, auth guard, environments (dev/staging/prod), 119 tests. Replace `Noop` services with real SDKs when needed. |
+| **Scale** | Feature boundaries enforced (CI boundary-check), shared/ discipline, caching (cache-then-remote), CI (format→analyze→test→build), observability contracts (Logger/ErrorReporter/Analytics/FeatureFlags/Performance). |
+| **Unicorn** | Package-ready features, vendor-independent architecture (Firebase/Supabase/Sentry swap via interfaces), performance extension point, AI-agent docs (AGENTS.md, llms.txt, docs/AI_DEVELOPMENT_RULES.md). |
+
 ## 🚀 Roadmap to Unicorn
 
 This template is your **Day 0 foundation**. Scale it as you grow:
@@ -178,7 +187,7 @@ This template is your **Day 0 foundation**. Scale it as you grow:
 |-------|-------|-------------|-----|
 | **Day 0** | 0-100 | ✅ Template as-is | Validate idea, zero cost |
 | **Month 1** | 100-1K | Firebase Analytics + Crashlytics | Know what breaks |
-| **Month 3** | 1K-10K | Offline-first (Drift/Hive) | Work without internet |
+| **Month 3** | 1K-10K | Offline-first (Drift) | Work without internet |
 | **Month 6** | 10K-100K | Push Notifications (FCM) | Re-engage users |
 | **Year 1** | 100K+ | Feature Flags (Firebase Remote Config) | Ship without deploying |
 | **Year 2** | 1M+ | BFF (Backend for Frontend) | Reduce API calls |
