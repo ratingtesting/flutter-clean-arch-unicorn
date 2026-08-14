@@ -5,7 +5,6 @@ import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/
 import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/providers/state/auth_notifier.dart';
 import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/providers/state/auth_state.dart';
 import 'package:flutter_clean_arch_unicorn/services/user_cache_service/presentation/providers/user_cache_provider.dart';
-import 'package:flutter_clean_arch_unicorn/services/user_cache_service/domain/repositories/user_cache_repository.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/models.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';

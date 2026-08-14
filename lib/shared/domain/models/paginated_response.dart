@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls
 const int PER_PAGE_LIMIT = 20;
 
 class PaginatedResponse<T> {

@@ -61,7 +61,7 @@ class DashboardState extends Equatable {
 
   @override
   String toString() {
-    return 'DashboardState(isLoading:${isLoading}, productLength: ${productList.length},total:$total page: $page, hasData: $hasData, state: $state, message: $message)';
+    return 'DashboardState(isLoading:$isLoading, productLength: ${productList.length}, total:$total, page: $page, hasData: $hasData, state: $state, message: $message)';
   }
 
   @override

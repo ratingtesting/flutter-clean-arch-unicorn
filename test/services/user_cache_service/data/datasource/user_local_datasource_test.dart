@@ -77,7 +77,7 @@ void main() {
       when(
         () => secureStorage.write(any(), any()),
       ).thenAnswer(
-        (invocation) async => null,
+        (_) async {},
       );
 
       // act
@@ -114,7 +114,7 @@ void main() {
       when(
         () => secureStorage.delete(any()),
       ).thenAnswer(
-        (invocation) async => null,
+        (_) async {},
       );
 
       // act

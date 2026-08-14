@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls
 import 'package:flutter_clean_arch_unicorn/shared/data/remote/remote.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/paginated_response.dart';

@@ -1,3 +1,5 @@
+import 'package:flutter_clean_arch_unicorn/core/database/database_connection.dart';
+import 'package:flutter_clean_arch_unicorn/core/database/database_provider.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/data/datasource/dashboard_remote_datasource.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/providers/dashboard_providers.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/repositories/dashboard_repository.dart';
@@ -6,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final providerContainer = ProviderContainer();
+  final providerContainer = ProviderContainer(overrides: [
+    appDatabaseProvider.overrideWithValue(openTestDatabase()),
+  ]);
   late dynamic networkService;
   late dynamic dashboardDataSource;
   late dynamic dashboardRespository;
@@ -14,7 +18,7 @@ void main() {
     () {
       networkService = providerContainer.read(networkServiceProvider);
       dashboardDataSource =
-          providerContainer.read(dashboardDatasourceProvider(networkService));
+          providerContainer.read(dashboardRemoteDatasourceProvider(networkService));
       dashboardRespository =
           providerContainer.read(dashboardRepositoryProvider);
     },

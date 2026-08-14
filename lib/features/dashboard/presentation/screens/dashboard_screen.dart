@@ -129,7 +129,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 itemCount: state.productList.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final product = state.productList[index];
                   return ProductCard(product: product);

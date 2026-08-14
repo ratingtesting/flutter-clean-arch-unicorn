@@ -16,7 +16,7 @@ void main() {
 
       expect(
         dashboardState.toString(),
-        'DashboardState(isLoading:${dashboardState.isLoading}, productLength: ${dashboardState.productList.length},total:${dashboardState.total} page: ${dashboardState.page}, hasData: ${dashboardState.hasData}, state: ${dashboardState.state}, message: ${dashboardState.message})',
+        'DashboardState(isLoading:${dashboardState.isLoading}, productLength: ${dashboardState.productList.length}, total:${dashboardState.total}, page: ${dashboardState.page}, hasData: ${dashboardState.hasData}, state: ${dashboardState.state}, message: ${dashboardState.message})',
       );
     });
   });

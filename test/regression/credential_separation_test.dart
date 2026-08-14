@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/user/user_model.dart';
 import 'package:flutter_clean_arch_unicorn/features/authentication/domain/use_cases/login_use_case.dart';
@@ -8,8 +9,8 @@ import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart
 
 /// Fake auth repository for testing credential separation
 class FakeAuthRepository implements AuthenticationRepository {
-  final Either<AppException, User> result;
   FakeAuthRepository(this.result);
+  final Either<AppException, User> result;
 
   @override
   Future<Either<AppException, User>> loginUser({required User user}) async {
@@ -19,8 +20,8 @@ class FakeAuthRepository implements AuthenticationRepository {
 
 /// Fake user cache repository for testing
 class FakeUserCacheRepository implements UserRepository {
+  const FakeUserCacheRepository(this.saveResult);
   final bool saveResult;
-  FakeUserCacheRepository(this.saveResult);
 
   @override
   Future<bool> saveUser({required User user}) async => saveResult;
@@ -100,7 +101,7 @@ void main() {
 
       final useCase = LoginUseCase(
         FakeAuthRepository(Right(expectedUser)),
-        FakeUserCacheRepository(true),
+        const FakeUserCacheRepository(true),
       );
 
       final result = await useCase(username: 'testuser', password: 'secret123');

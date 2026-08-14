@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_clean_arch_unicorn/core/database/database_provider.dart';
 import 'package:flutter_clean_arch_unicorn/main/app.dart';
 import 'package:flutter_clean_arch_unicorn/main/app_env.dart';
 import 'package:flutter_clean_arch_unicorn/main/observers.dart'
@@ -23,6 +24,10 @@ Future<void> mainCommon(AppEnvironment environment) async {
 
   EnvInfo.initialize(environment);
 
+  // Open the local Drift database (on-disk). Override `appDatabaseProvider`
+  // with `openTestDatabase()` in widget/integration tests.
+  final appDatabase = await openAppDatabase();
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.black,
@@ -30,10 +35,15 @@ Future<void> mainCommon(AppEnvironment environment) async {
     ),
   );
 
-  runApp(ProviderScope(
-    observers: [
-      main_observers.Observers(),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    ProviderScope(
+      overrides: [
+        appDatabaseProvider.overrideWithValue(appDatabase),
+      ],
+      observers: [
+        main_observers.Observers(),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }

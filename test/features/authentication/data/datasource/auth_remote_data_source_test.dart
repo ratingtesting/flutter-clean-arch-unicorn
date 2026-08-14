@@ -1,5 +1,6 @@
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/features/authentication/data/datasource/auth_remote_data_source.dart';
+import 'package:flutter_clean_arch_unicorn/services/security/secure_storage.dart';
 import 'package:flutter_clean_arch_unicorn/shared/data/remote/remote.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/response.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
@@ -14,7 +15,10 @@ void main() {
   setUpAll(
     () {
       mockNetworkService = MockNetworkService();
-      loginUserRemoteDataSource = LoginUserRemoteDataSource(mockNetworkService);
+      loginUserRemoteDataSource = LoginUserRemoteDataSource(
+        mockNetworkService,
+        MockSecureStorage(),
+      );
     },
   );
   group(
@@ -73,3 +77,5 @@ void main() {
 }
 
 class MockNetworkService extends Mock implements NetworkService {}
+
+class MockSecureStorage extends Mock implements SecureStorage {}

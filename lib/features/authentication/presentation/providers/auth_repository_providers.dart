@@ -12,7 +12,10 @@ import 'package:flutter_clean_arch_unicorn/services/service_providers.dart';
 /// is infrastructure — never inside `domain/`.
 final authDataSourceProvider =
     Provider.family<LoginUserDataSource, NetworkService>(
-  (_, networkService) => LoginUserRemoteDataSource(networkService),
+  (ref, networkService) => LoginUserRemoteDataSource(
+    networkService,
+    ref.watch(secureStorageProvider),
+  ),
 );
 
 final authRepositoryProvider = Provider<AuthenticationRepository>(

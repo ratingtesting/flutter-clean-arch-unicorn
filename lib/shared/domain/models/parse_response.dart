@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls
 // To parse this JSON data, do
 //
 //     final parseResponse = parseResponseFromMap(jsonString);

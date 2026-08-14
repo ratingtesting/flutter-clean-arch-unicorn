@@ -12,12 +12,45 @@ class LoggingInterceptor extends Interceptor {
 
   final AppLogger logger;
 
+  static const _redactedKeys = {
+    'password',
+    'token',
+    'authorization',
+    'secret',
+    'apikey',
+    'api_key',
+    'access_token',
+    'refresh_token',
+  };
+
+  /// Returns true if the key matches a sensitive field that must never be logged.
+  static bool _isSensitive(String key) =>
+      _redactedKeys.contains(key.toLowerCase());
+
+  /// Masks the values of sensitive keys in a request body before logging.
+  ///
+  /// Only objects shaped like maps are inspected; everything else is logged
+  /// as-is (already truncated). This prevents credentials leaking to logs.
+  String _redactBody(dynamic data) {
+    if (data is Map) {
+      final redacted = <String, dynamic>{};
+      data.forEach((key, value) {
+        final k = key is String ? key : key.toString();
+        redacted[k] = _isSensitive(k) ? '***' : value;
+      });
+      return redacted.toString();
+    }
+    return data?.toString() ?? '';
+  }
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.extra['request_start'] = DateTime.now().millisecondsSinceEpoch;
+    final body =
+        options.data != null ? _redactBody(options.data) : null;
     logger.info(
       '→ ${options.method} ${options.uri}'
-      '${options.data != null ? ' | body: ${_truncate(options.data.toString(), 200)}' : ''}',
+      '${body != null ? ' | body: ${_truncate(body, 200)}' : ''}',
     );
     handler.next(options);
   }

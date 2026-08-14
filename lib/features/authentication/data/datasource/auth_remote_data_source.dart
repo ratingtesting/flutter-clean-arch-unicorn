@@ -1,3 +1,4 @@
+import 'package:flutter_clean_arch_unicorn/services/security/secure_storage.dart';
 import 'package:flutter_clean_arch_unicorn/shared/data/remote/remote.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/models.dart';
@@ -8,24 +9,29 @@ abstract class LoginUserDataSource {
 }
 
 class LoginUserRemoteDataSource implements LoginUserDataSource {
-  final NetworkService networkService;
+  LoginUserRemoteDataSource(this.networkService, this.secureStorage);
 
-  LoginUserRemoteDataSource(this.networkService);
+  final NetworkService networkService;
+  final SecureStorage secureStorage;
 
   @override
   Future<Either<AppException, User>> loginUser({required User user}) async {
     try {
       final eitherType = await networkService.post(
         '/auth/login',
-        data: user.toJson(),
+        data: user.toLoginJson(),
       );
       return eitherType.fold(
         (exception) {
           return Left(exception);
         },
-        (response) {
+        (response) async {
           final user = User.fromJson(response.data);
-          // update the token for requests
+          // Persist the token so it survives app restarts (encrypted storage).
+          if (user.token.isNotEmpty) {
+            await secureStorage.write(SecureStorageKeys.authToken, user.token);
+          }
+          // update the token for subsequent requests
           networkService.updateHeader(
             {'Authorization': user.token},
           );
