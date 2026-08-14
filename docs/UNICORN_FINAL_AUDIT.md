@@ -31,7 +31,7 @@
 - [x] caching extension — Drift cache-then-remote паттерн
 - [x] CI — format → analyze → test → build (green)
 - [x] environments — dev/staging/prod через `--dart-define`
-- [x] observability — Logger/ErrorReporter/Analytics/FeatureFlags (Noop)
+- [x] observability — Logger/CrashReportingService/Analytics/FeatureFlags (Noop)
 - [x] security — SecureStorage, redact логов, no secrets in code
 
 ### UNICORN
@@ -40,8 +40,8 @@
 - [x] Riverpod DI — инфра через `ref.watch`
 - [x] feature flags — `FeatureFlags` контракт
 - [x] analytics abstraction — `AnalyticsTracker` (Noop)
-- [x] crash reporting abstraction — `ErrorReporter` (Noop)
-- [ ] performance extension — `PerformanceMonitor` контракт (P1, добавлен после аудита)
+- [x] crash reporting abstraction — `CrashReportingService` (Noop)
+- [x] performance extension — `PerformanceMonitor` контракт (PRESENT в v1.5.0)
 - [x] vendor independence — Firebase/Sentry заменяемы через интерфейсы
 - [x] AI-agent compatibility — AGENTS.md / llms.txt / CLAUDE.md / GEMINI.md
 
@@ -50,7 +50,7 @@
 - [x] GitHub description optimized — "119 tests", нет "100%"
 - [x] Topics optimized — flutter, riverpod, drift, scalable, vibe-coding, ai-coding
 - [x] Quick Start — README
-- [ ] Architecture diagram — mermaid (P1, пока нет)
+- [x] Architecture diagram — mermaid в README (PRESENT в v1.5.0)
 - [x] feature matrix — README / ARCHITECTURE
 - [x] contributing — CONTRIBUTING.md
 - [x] changelog — CHANGELOG.md
@@ -106,9 +106,22 @@
 - [x] Shared mutable Dio fixed
 - [x] Service providers консолидированы
 
+### M9 — §5 Seven-Role Audit (v1.5.0)
+- [x] 7 ролей (architecture/riverpod/database/testing/security/ai-devex/oss-growth) созданы через `agentic-skill-authoring` + keelwright Web Guard (PASS), запушены в `github.com/ratingtesting/agent-roles`
+- [x] §15: route guard → live `authStateNotifierProvider` (`isAuthenticatedProvider`)
+- [x] §10: `user_model`→`features/authentication/domain`, `product_model`→`features/dashboard/domain`, `globals.dart`→`constants.dart`
+- [x] §18: откат Freezed → Equatable (Freezed ломал security `toJson` + 12 тестов; 119 tests green)
+- [x] §20: `DashboardDriftRepository` cache-then-remote
+- [x] §24: `ErrorReporter` → `CrashReportingService` (Noop/impl)
+- [x] §27: observability через `AppLogger` (analytics/error_reporter/performance/feature_flags)
+- [x] §30: `AI_DEVELOPMENT_RULES.md` дополнен Provider/Route creation
+- [x] §31: убран stale mermaid claim в `OPEN_SOURCE_GROWTH_AUDIT.md`
+- [x] `flutter analyze` clean, `flutter test` 119/119 passing
+- [x] GitHub release `v1.5.0` (commit `3757077`)
+
 ### CI / Build
 - [x] Workflow trigger на master, build_runner шаг, Gradle 8.14.2 / AGP 8.11.1 / Kotlin 2.2.20 / heap 4g — CI green
-- [x] GitHub release `v1.4.0`
+- [x] GitHub release `v1.5.0`
 
 ## Честный вердикт
 

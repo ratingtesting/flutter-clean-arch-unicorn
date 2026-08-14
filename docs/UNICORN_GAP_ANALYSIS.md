@@ -91,7 +91,7 @@
 | Сервис | Статус | Комментарий |
 |--------|--------|--------------|
 | LoggerService | PRESENT | `AppLogger` интерфейс + `ConsoleLogger`/`NoopLogger` |
-| CrashReportingService | PRESENT (Noop) | `ErrorReporter` + `NoopErrorReporter` |
+| CrashReportingService | PRESENT | `CrashReportingService` интерфейс + `NoopCrashReportingService`/`CrashlyticsReportingService` (переименован из `ErrorReporter` в v1.5.0, §24) |
 | FeatureFlagService | PRESENT | `FeatureFlags` + `StaticFeatureFlags` |
 | AnalyticsService | PRESENT (Noop) | `AnalyticsTracker` + `NoopAnalyticsTracker` |
 | StorageService | PRESENT | `SecureStorage` интерфейс + impl |
@@ -101,7 +101,7 @@
 
 | Ось | Статус | Комментарий |
 |-----|--------|--------------|
-| Unicorn | MISSING | Нет `PerformanceMonitor` интерфейса (добавлено в этой работе — см. `lib/services/observability/performance.dart`) |
+| Unicorn | PRESENT | `PerformanceMonitor` интерфейс + `NoopPerformanceMonitor` (`lib/services/observability/performance.dart`) |
 
 ## 13. Open Source / GitHub Adoption (§31)
 
@@ -112,9 +112,25 @@
 | GitHub Topics | PRESENT | + scalable, vibe-coding, ai-coding, drift |
 | PR template | PRESENT | `.github/pull_request_template.md` |
 | Issue templates | PARTIAL | есть базовые, не все типы |
-| Architecture diagram | MISSING | нет mermaid в README |
+| Architecture diagram | PRESENT | mermaid diagram в README (§32, ~строка 201) — добавлено в v1.5.0 |
 | Changelog | PRESENT | `CHANGELOG.md` |
 | Docs (GAP/ROADMAP/AI_RULES/PACKAGE/FINAL_AUDIT) | PRESENT | `docs/` |
+
+## 15. §5 Seven-Role Audit (v1.5.0)
+
+Независимый аудит 7 ролями (architecture/riverpod/database/testing/security/ai-devex/oss-growth) через subagents (agentic-skill-authoring + keelwright Web Guard PASS). Результаты и применённые правки:
+
+| Роль | Находки | Статус после v1.5.0 |
+|------|---------|---------------------|
+| Architecture | §9/§11/§12/§19 PRESENT; §10 WRONG (domain-модели в shared) | ИСПРАВЛЕНО: `user_model`→`features/authentication/domain`, `product_model`→`features/dashboard/domain`, `globals.dart`→`constants.dart` |
+| Riverpod | §14/§7/§17 PRESENT; §15 WRONG (route guard persisted `hasUser()`) | ИСПРАВЛЕНО: `isAuthenticatedProvider` (live `authStateNotifierProvider` + persisted fallback) |
+| Database | §16/§26 PRESENT; §20 PARTIAL (remote-first) | ИСПРАВЛЕНО: cache-then-remote в `DashboardDriftRepository` |
+| Testing/QA | §28/§29/§37 PRESENT (119 tests) | БЕЗ ИЗМЕНЕНИЙ (green) |
+| Security/Prod | §27/§13 PRESENT; §24 PARTIAL (`ErrorReporter`) | ИСПРАВЛЕНО: `CrashReportingService` интерфейс; observability через `AppLogger` (§27) |
+| AI-DevEx | §4 PRESENT; §30 PARTIAL (нет Provider/Route creation) | ИСПРАВЛЕНО: `AI_DEVELOPMENT_RULES.md` дополнен |
+| OSS-Growth | §31/§32/§33 PRESENT; stale mermaid claim | ИСПРАВЛЕНО: убран stale claim в `OPEN_SOURCE_GROWTH_AUDIT.md` |
+
+**Trade-off §18:** Freezed для `User`/`DashboardState` НЕ применён — Freezed ломал security-контракт (`toJson` должен исключать password/token) и 12 тестов. Оставлен Equatable (работает, 119 tests green).
 
 ## 14. Исправленные WRONG (история)
 

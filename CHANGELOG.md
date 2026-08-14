@@ -18,6 +18,26 @@ and semantic versioning.
   (`password`, `token`, `authorization`, …) before logging.
 - `ProviderObserver` no longer logs provider state in release / production builds.
 - `SecureStorageImpl` now uses `encryptedSharedPreferences` on Android.
+
+## [1.5.0] — 2026-08-14
+
+### Added
+- `isAuthenticatedProvider` — live auth guard combining `authStateNotifierProvider` + persisted `hasUser()` fallback (§15).
+- `CrashReportingService` interface (`NoopCrashReportingService`, `CrashlyticsReportingService`) replacing `ErrorReporter` (§24).
+- Observability services (analytics/error_reporter/performance/feature_flags) now route through `AppLogger` (§27).
+- `docs/UNICORN_GAP_ANALYSIS.md` §15 — §5 seven-role audit results.
+- ADR `2026-08-14-shared-models-relocation.md`.
+
+### Changed
+- **§10:** `user_model` → `features/authentication/domain/models/`, `product_model` → `features/dashboard/domain/models/`, `globals.dart` → `constants.dart`.
+- **§18:** `User`/`DashboardState` kept on `Equatable` (Freezed reverted — broke security `toJson` + 12 tests).
+- **§20:** `DashboardDriftRepository` now cache-then-remote (instant cache, background refresh).
+- **§30:** `AI_DEVELOPMENT_RULES.md` documents Provider/Route creation.
+- **§31:** removed stale mermaid MISSING claim from `OPEN_SOURCE_GROWTH_AUDIT.md`.
+- README/CHANGELOG version → 1.5.0.
+
+### Verified
+- `flutter analyze` clean, `flutter test` 119/119 passing.
 - Auth login persists the returned token to `SecureStorage` (survives restart).
 
 ### Added
