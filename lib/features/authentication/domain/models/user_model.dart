@@ -56,10 +56,7 @@ class User extends Equatable {
 
   /// Login payload — includes credentials.
   Map<String, dynamic> toLoginJson() {
-    return {
-      'username': username,
-      'password': password,
-    };
+    return {'username': username, 'password': password};
   }
 
   User copyWith({
@@ -88,12 +85,12 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        username,
-        email,
-        firstName,
-        lastName,
-        gender,
-        image,
-      ];
+    id,
+    username,
+    email,
+    firstName,
+    lastName,
+    gender,
+    image,
+  ];
 }

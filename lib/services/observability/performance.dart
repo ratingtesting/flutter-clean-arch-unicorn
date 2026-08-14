@@ -32,7 +32,10 @@ class NoopPerformanceMonitor implements PerformanceMonitor {
   @override
   void recordMetric(String name, double value, {String? unit}) {
     if (kDebugMode) {
-      _logger.log(LogLevel.debug, '[PerformanceMonitor] $name: $value${unit ?? ''}');
+      _logger.log(
+        LogLevel.debug,
+        '[PerformanceMonitor] $name: $value${unit ?? ''}',
+      );
     }
   }
 

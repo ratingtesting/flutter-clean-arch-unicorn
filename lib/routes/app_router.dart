@@ -17,8 +17,7 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   redirect: (BuildContext context, GoRouterState state) async {
     final container = ProviderScope.containerOf(context);
-    final loggedIn = await container
-        .read(isAuthenticatedProvider.future);
+    final loggedIn = await container.read(isAuthenticatedProvider.future);
     final isLoggingIn = state.matchedLocation == '/login';
 
     if (!loggedIn && !isLoggingIn && state.matchedLocation == '/dashboard') {

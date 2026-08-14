@@ -25,22 +25,31 @@ class DashboardDriftRepository extends DashboardRepository {
     required int skip,
   }) async {
     final cached = await localDatasource.readCachedProducts();
-    return cached.fold((cacheFailure) async {
-      // Cache empty/unavailable → go straight to network.
-      return _fetchFromRemote(skip);
-    }, (products) async {
-      if (products.isNotEmpty) {
-        // Instant serve from cache, then refresh in background.
-        _refreshInBackground(skip);
-        return Right(
-          PaginatedResponse(total: products.length, skip: skip, data: products),
-        );
-      }
-      return _fetchFromRemote(skip);
-    });
+    return cached.fold(
+      (cacheFailure) async {
+        // Cache empty/unavailable → go straight to network.
+        return _fetchFromRemote(skip);
+      },
+      (products) async {
+        if (products.isNotEmpty) {
+          // Instant serve from cache, then refresh in background.
+          _refreshInBackground(skip);
+          return Right(
+            PaginatedResponse(
+              total: products.length,
+              skip: skip,
+              data: products,
+            ),
+          );
+        }
+        return _fetchFromRemote(skip);
+      },
+    );
   }
 
-  Future<Either<AppException, PaginatedResponse>> _fetchFromRemote(int skip) async {
+  Future<Either<AppException, PaginatedResponse>> _fetchFromRemote(
+    int skip,
+  ) async {
     final remote = await remoteDatasource.fetchPaginatedProducts(skip: skip);
     return remote.fold((failure) => _fallbackToCache(failure), (
       response,
@@ -55,15 +64,12 @@ class DashboardDriftRepository extends DashboardRepository {
 
   void _refreshInBackground(int skip) {
     remoteDatasource.fetchPaginatedProducts(skip: skip).then((remote) {
-      remote.fold(
-        (_) {},
-        (response) async {
-          final products = response.data
-              .map((e) => Product.fromJson(e))
-              .toList(growable: false);
-          await localDatasource.cacheProducts(products);
-        },
-      );
+      remote.fold((_) {}, (response) async {
+        final products = response.data
+            .map((e) => Product.fromJson(e))
+            .toList(growable: false);
+        await localDatasource.cacheProducts(products);
+      });
     });
   }
 

@@ -64,12 +64,18 @@ class CrashlyticsReportingService extends CrashReportingService {
     String? reason,
     Map<String, dynamic>? metadata,
   }) async {
-    _logger.log(LogLevel.debug, '[CrashlyticsReportingService] recordError: $error');
+    _logger.log(
+      LogLevel.debug,
+      '[CrashlyticsReportingService] recordError: $error',
+    );
   }
 
   @override
   Future<void> recordMessage(String message, {bool fatal = false}) async {
-    _logger.log(LogLevel.debug, '[CrashlyticsReportingService] recordMessage: $message');
+    _logger.log(
+      LogLevel.debug,
+      '[CrashlyticsReportingService] recordMessage: $message',
+    );
   }
 
   @override

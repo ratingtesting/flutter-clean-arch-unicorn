@@ -56,12 +56,18 @@ class FirebaseAnalyticsTracker extends AnalyticsTracker {
     String eventName, {
     Map<String, dynamic>? properties,
   }) async {
-    _logger.log(LogLevel.debug, '[Analytics] track: $eventName, properties: $properties');
+    _logger.log(
+      LogLevel.debug,
+      '[Analytics] track: $eventName, properties: $properties',
+    );
   }
 
   @override
   Future<void> trackScreen(String screenName, {String? screenClass}) async {
-    _logger.log(LogLevel.debug, '[Analytics] trackScreen: $screenName, class: $screenClass');
+    _logger.log(
+      LogLevel.debug,
+      '[Analytics] trackScreen: $screenName, class: $screenClass',
+    );
   }
 
   @override
