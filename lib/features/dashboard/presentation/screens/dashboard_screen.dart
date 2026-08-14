@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/providers/dashboard_state_provider.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/providers/state/dashboard_state.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/widgets/dashboard_drawer.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/product/product_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/models/product_model.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});

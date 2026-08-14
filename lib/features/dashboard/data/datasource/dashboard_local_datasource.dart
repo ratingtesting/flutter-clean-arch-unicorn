@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_clean_arch_unicorn/core/database/database.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/product/product_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/models/product_model.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
 
 /// Local (offline) data source for the dashboard, backed by Drift.

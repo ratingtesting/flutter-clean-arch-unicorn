@@ -6,7 +6,7 @@ import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/provi
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/providers/state/dashboard_notifier.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/providers/state/dashboard_state.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
-import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
+import 'package:flutter_clean_arch_unicorn/shared/constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

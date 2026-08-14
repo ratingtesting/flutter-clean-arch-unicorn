@@ -1,4 +1,4 @@
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/product/product_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/models/product_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../fixtures/dashboard/dummy_productlist.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_clean_arch_unicorn/core/database/database.dart';
 import 'package:flutter_clean_arch_unicorn/core/database/database_connection.dart';
 import 'package:flutter_clean_arch_unicorn/features/dashboard/data/datasource/dashboard_local_datasource.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/product/product_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/models/product_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

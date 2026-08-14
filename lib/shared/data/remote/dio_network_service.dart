@@ -5,7 +5,7 @@ import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/response.dart'
     as response;
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
-import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
+import 'package:flutter_clean_arch_unicorn/shared/constants.dart';
 import 'package:flutter_clean_arch_unicorn/shared/mixins/exception_handler_mixin.dart';
 
 class DioNetworkService extends NetworkService with ExceptionHandlerMixin {

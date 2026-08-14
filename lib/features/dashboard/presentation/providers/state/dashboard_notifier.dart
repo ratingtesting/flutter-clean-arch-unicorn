@@ -4,9 +4,9 @@ import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/provi
 import 'package:flutter_clean_arch_unicorn/features/dashboard/presentation/providers/state/dashboard_state.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/paginated_response.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/product/product_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/models/product_model.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
-import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
+import 'package:flutter_clean_arch_unicorn/shared/constants.dart';
 
 class DashboardNotifier extends Notifier<DashboardState> {
   late final DashboardRepository dashboardRepository;

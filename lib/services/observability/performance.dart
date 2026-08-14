@@ -1,4 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_clean_arch_unicorn/services/observability/logger.dart';
+
+final _logger = ConsoleLogger();
 
 /// Contract for performance monitoring.
 ///
@@ -29,7 +32,7 @@ class NoopPerformanceMonitor implements PerformanceMonitor {
   @override
   void recordMetric(String name, double value, {String? unit}) {
     if (kDebugMode) {
-      debugPrint('[PerformanceMonitor] $name: $value${unit ?? ''}');
+      _logger.log(LogLevel.debug, '[PerformanceMonitor] $name: $value${unit ?? ''}');
     }
   }
 

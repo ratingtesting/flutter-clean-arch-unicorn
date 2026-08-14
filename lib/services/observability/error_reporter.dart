@@ -1,13 +1,14 @@
 library;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter_clean_arch_unicorn/services/observability/logger.dart';
+
+final _logger = ConsoleLogger();
 
 /// Crash reporting abstraction.
 ///
 /// Wraps Firebase Crashlytics / Sentry behind a single interface.
 /// Never let a crash go unreported in production.
-
-abstract class ErrorReporter {
+abstract class CrashReportingService {
   Future<void> initialize();
   Future<void> recordError(
     Object error,
@@ -22,7 +23,7 @@ abstract class ErrorReporter {
 }
 
 /// No-op for testing (zero side effects).
-class NoopErrorReporter extends ErrorReporter {
+class NoopCrashReportingService extends CrashReportingService {
   @override
   Future<void> initialize() async {}
 
@@ -49,9 +50,9 @@ class NoopErrorReporter extends ErrorReporter {
 
 /// Production implementation using Firebase Crashlytics.
 /// This class is only used when Firebase is configured.
-/// See firebase_error_reporter.dart for the actual implementation.
-class CrashlyticsReporter extends ErrorReporter {
-  CrashlyticsReporter();
+/// See firebase_crash_reporting_service.dart for the actual implementation.
+class CrashlyticsReportingService extends CrashReportingService {
+  CrashlyticsReportingService();
 
   @override
   Future<void> initialize() async {}
@@ -63,12 +64,12 @@ class CrashlyticsReporter extends ErrorReporter {
     String? reason,
     Map<String, dynamic>? metadata,
   }) async {
-    debugPrint('[CrashlyticsReporter] recordError: $error');
+    _logger.log(LogLevel.debug, '[CrashlyticsReportingService] recordError: $error');
   }
 
   @override
   Future<void> recordMessage(String message, {bool fatal = false}) async {
-    debugPrint('[CrashlyticsReporter] recordMessage: $message');
+    _logger.log(LogLevel.debug, '[CrashlyticsReportingService] recordMessage: $message');
   }
 
   @override
@@ -79,6 +80,6 @@ class CrashlyticsReporter extends ErrorReporter {
 
   @override
   Future<void> log(String message) async {
-    debugPrint('[CrashlyticsReporter] log: $message');
+    _logger.log(LogLevel.debug, '[CrashlyticsReportingService] log: $message');
   }
 }

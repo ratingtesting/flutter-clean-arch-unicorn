@@ -18,8 +18,8 @@ final loggerProvider = Provider<AppLogger>((ref) {
 });
 
 /// Error reporter provider — no-op by default, replace with Crashlytics in prod.
-final errorReporterProvider = Provider<ErrorReporter>((ref) {
-  return NoopErrorReporter();
+final crashReportingServiceProvider = Provider<CrashReportingService>((ref) {
+  return NoopCrashReportingService();
 });
 
 /// Analytics tracker provider — no-op by default, replace with Firebase Analytics in prod.

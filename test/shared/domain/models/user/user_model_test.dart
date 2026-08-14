@@ -1,4 +1,4 @@
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/user/user_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/authentication/domain/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../fixtures/data/user_map.dart';

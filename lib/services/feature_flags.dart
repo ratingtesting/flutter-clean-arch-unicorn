@@ -1,6 +1,8 @@
 library;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter_clean_arch_unicorn/services/observability/logger.dart';
+
+final _logger = ConsoleLogger();
 
 /// Feature flags abstraction.
 ///
@@ -52,25 +54,25 @@ class RemoteConfigFeatureFlags extends FeatureFlags {
 
   @override
   bool isEnabled(String flag, {bool defaultValue = false}) {
-    debugPrint('[RemoteConfig] getBool: $flag');
+    _logger.log(LogLevel.debug, '[RemoteConfig] getBool: $flag');
     return defaultValue;
   }
 
   @override
   String getString(String flag, {String defaultValue = ''}) {
-    debugPrint('[RemoteConfig] getString: $flag');
+    _logger.log(LogLevel.debug, '[RemoteConfig] getString: $flag');
     return defaultValue;
   }
 
   @override
   int getInt(String flag, {int defaultValue = 0}) {
-    debugPrint('[RemoteConfig] getInt: $flag');
+    _logger.log(LogLevel.debug, '[RemoteConfig] getInt: $flag');
     return defaultValue;
   }
 
   @override
   double getDouble(String flag, {double defaultValue = 0.0}) {
-    debugPrint('[RemoteConfig] getDouble: $flag');
+    _logger.log(LogLevel.debug, '[RemoteConfig] getDouble: $flag');
     return defaultValue;
   }
 }

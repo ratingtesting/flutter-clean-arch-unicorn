@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 /// Local cache of catalog products.
 ///
-/// Mirrors the network `Product` model (lib/shared/domain/models/product/).
+/// Mirrors the network `Product` model (lib/features/dashboard/domain/models/).
 /// The dashboard feature caches products here so the app works offline and
 /// renders instantly on the next launch.
 class CachedProducts extends Table {

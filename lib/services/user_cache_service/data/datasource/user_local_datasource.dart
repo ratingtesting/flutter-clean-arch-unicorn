@@ -1,7 +1,7 @@
 import 'package:flutter_clean_arch_unicorn/shared/data/local/shared_prefs_storage_service.dart';
 import 'package:flutter_clean_arch_unicorn/services/security/secure_storage.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/user/user_model.dart';
+import 'package:flutter_clean_arch_unicorn/features/authentication/domain/models/user_model.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
 
 abstract class UserDataSource {
@@ -26,7 +26,7 @@ class UserLocalDataSource implements UserDataSource {
       if (userMap != null) {
         // Restore token from secure storage
         final token = await _secureStorage.read(SecureStorageKeys.authToken);
-        final user = User.fromJson(userMap).copyWith(token: token);
+        final user = User.fromJson(userMap).copyWith(token: token ?? '');
         return Right(user);
       }
       return Left(

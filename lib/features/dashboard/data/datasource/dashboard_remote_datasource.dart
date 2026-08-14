@@ -3,7 +3,7 @@ import 'package:flutter_clean_arch_unicorn/shared/data/remote/remote.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/paginated_response.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
-import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
+import 'package:flutter_clean_arch_unicorn/shared/constants.dart';
 
 abstract class DashboardDatasource {
   Future<Either<AppException, PaginatedResponse>> fetchPaginatedProducts({

@@ -34,10 +34,27 @@
 
 ## 5. Генерация фич
 
+### 5.1 Feature creation
 ```bash
 dart run tool/new_feature.dart <feature_name>
 ```
 Создаёт `data/domain/presentation` + тесты. НЕ пиши фичу руками — используй генератор.
+
+### 5.2 Repository creation
+- Интерфейс репозитория → `lib/features/<name>/domain/repositories/<name>_repository.dart`.
+- Реализация → `lib/features/<name>/data/repositories/<name>_repository_impl.dart`.
+- Datasource (remote/local) → `lib/features/<name>/data/datasource/`.
+- Никаких Dio/БД импортов в `presentation/` (Repository Law).
+
+### 5.3 Provider creation
+- Все Riverpod-провайдеры фичи → `lib/features/<name>/presentation/providers/` (или `domain/providers/` для domain-логики).
+- Используй `NotifierProvider` / `AsyncNotifierProvider` (Riverpod 3). НЕ `StateNotifier`, НЕ `GetIt`.
+- DI-wiring (Dio, БД) → провайдеры в `core/providers/` или `data/providers/`, НЕ в `shared/presentation/providers/`.
+
+### 5.4 Route creation
+- Новый экран → добавь `GoRoute` в `lib/routes/app_router.dart`.
+- Auth guard (`/dashboard`) читает live `authStateNotifierProvider` (через `isAuthenticatedProvider`), НЕ persisted `hasUser()`.
+- Имя маршрута = путь экрана (kebab-case: `/feature-name`).
 
 ## 6. Честность документации
 

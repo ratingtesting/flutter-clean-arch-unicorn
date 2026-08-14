@@ -196,6 +196,30 @@ This template is your **Day 0 foundation**. Scale it as you grow:
 
 ---
 
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    UI[Presentation / Widgets] -->|ref.watch| PROV[Riverpod Providers]
+    PROV -->|Repository Interface| REPO[Repository Impl]
+    REPO --> DS[Data Sources]
+    DS --> LOCAL[Drift Local DB]
+    DS --> REMOTE[Dio Remote API]
+    PROV --> SVC[Services Contracts]
+    SVC --> NOOP[Noop impls / swap to Firebase, Sentry, Supabase]
+    subgraph features [features/ — feature-first, autonomous]
+        AUTH[authentication] --> DASH[dashboard]
+    end
+    UI --> features
+    classDef contract fill:#e1f5ff,stroke:#01579b;
+    class SVC,NOOP,REPO contract;
+```
+
+Key rules: Widgets never import Dio/DB directly (§12). Feature A never imports
+Feature B internals (§11). Infrastructure injected via Riverpod (§14).
+
+---
+
 ## 📖 Further Reading
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — deep dive into the architecture

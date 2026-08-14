@@ -1,4 +1,4 @@
-import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
+import 'package:flutter_clean_arch_unicorn/shared/constants.dart';
 
 Map<String, dynamic> productListMap({int? skip}) => {
   "products": List.generate(PRODUCTS_PER_PAGE, (index) => productMap),

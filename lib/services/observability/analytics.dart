@@ -1,6 +1,8 @@
 library;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter_clean_arch_unicorn/services/observability/logger.dart';
+
+final _logger = ConsoleLogger();
 
 /// Analytics tracking abstraction.
 ///
@@ -54,26 +56,26 @@ class FirebaseAnalyticsTracker extends AnalyticsTracker {
     String eventName, {
     Map<String, dynamic>? properties,
   }) async {
-    debugPrint('[Analytics] track: $eventName, properties: $properties');
+    _logger.log(LogLevel.debug, '[Analytics] track: $eventName, properties: $properties');
   }
 
   @override
   Future<void> trackScreen(String screenName, {String? screenClass}) async {
-    debugPrint('[Analytics] trackScreen: $screenName, class: $screenClass');
+    _logger.log(LogLevel.debug, '[Analytics] trackScreen: $screenName, class: $screenClass');
   }
 
   @override
   Future<void> setUserIdentifier(String id) async {
-    debugPrint('[Analytics] setUserId: $id');
+    _logger.log(LogLevel.debug, '[Analytics] setUserId: $id');
   }
 
   @override
   Future<void> setUserProperty(String name, String value) async {
-    debugPrint('[Analytics] setUserProperty: $name = $value');
+    _logger.log(LogLevel.debug, '[Analytics] setUserProperty: $name = $value');
   }
 
   @override
   Future<void> reset() async {
-    debugPrint('[Analytics] reset');
+    _logger.log(LogLevel.debug, '[Analytics] reset');
   }
 }

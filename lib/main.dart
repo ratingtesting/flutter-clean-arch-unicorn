@@ -15,7 +15,7 @@ Future<void> mainCommon(AppEnvironment environment) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize error reporting (no-op by default, replace with Crashlytics in prod)
-  final errorReporter = NoopErrorReporter();
+  final errorReporter = NoopCrashReportingService();
   await errorReporter.initialize();
 
   // Initialize feature flags (static by default, replace with RemoteConfig in prod)

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_clean_arch_unicorn/shared/data/local/storage_service.dart';
 import 'package:flutter_clean_arch_unicorn/shared/presentation/providers/shared_preferences_storage_service_provider.dart';
-import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
+import 'package:flutter_clean_arch_unicorn/shared/constants.dart';
 import 'package:flutter_clean_arch_unicorn/shared/theme/app_colors.dart';
 import 'package:flutter_clean_arch_unicorn/shared/theme/test_styles.dart';
 import 'package:flutter_clean_arch_unicorn/shared/theme/text_theme.dart';
