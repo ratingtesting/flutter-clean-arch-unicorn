@@ -14,7 +14,7 @@ flutter analyze lib/ test/   # 0 issues (--fatal-infos)
 
 ## Git Flow
 
-- `master` — stable branch, release tags only (`v1.0.0`, `v1.1.0`...)
+- `master` — stable branch, release tags only (`v1.4.0`, `v1.1.0`...)
 - Feature branches: `feat/<short-description>` (e.g., `feat/offline-sync`)
 - Bugfix branches: `fix/<short-description>` (e.g., `fix/pagination-edge-case`)
 - PR into `master` → mandatory CI (analyze, format, test)

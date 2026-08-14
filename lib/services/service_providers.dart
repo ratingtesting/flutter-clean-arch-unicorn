@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_clean_arch_unicorn/services/observability/logger.dart';
 import 'package:flutter_clean_arch_unicorn/services/observability/error_reporter.dart';
 import 'package:flutter_clean_arch_unicorn/services/observability/analytics.dart';
+import 'package:flutter_clean_arch_unicorn/services/observability/performance.dart';
 import 'package:flutter_clean_arch_unicorn/services/feature_flags.dart';
 import 'package:flutter_clean_arch_unicorn/services/security/secure_storage.dart';
 
@@ -34,4 +35,10 @@ final featureFlagsProvider = Provider<FeatureFlags>((ref) {
 /// Secure storage provider — encrypted token storage.
 final secureStorageProvider = Provider<SecureStorage>((ref) {
   return SecureStorageImpl();
+});
+
+/// Performance monitoring provider — Noop by default, replace with Firebase
+/// Performance / custom tracer in prod (see docs/adr/performance-monitoring.md).
+final performanceMonitorProvider = Provider<PerformanceMonitor>((ref) {
+  return NoopPerformanceMonitor();
 });

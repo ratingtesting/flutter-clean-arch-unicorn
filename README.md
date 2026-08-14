@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 119 unit tests · v1.0.0**
+> **Clean Architecture · Riverpod 3 · 119 unit tests · v1.4.0**
 
 **The foundation for a startup that will become a unicorn.**
 
@@ -166,7 +166,7 @@ GitHub Actions on every PR:
 
 ## Versioning
 
-Semantic tags (`v1.0.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.0.0**.
+Semantic tags (`v1.4.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.0.0**.
 
 ---
 

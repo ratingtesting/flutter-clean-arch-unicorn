@@ -30,6 +30,9 @@ jobs:
       - name: Static analysis
         run: flutter analyze --fatal-infos lib/
 
+      - name: Boundary check
+        run: dart run tool/check_boundaries.dart
+
       - name: Run tests
         run: flutter test --coverage
 

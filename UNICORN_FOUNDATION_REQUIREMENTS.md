@@ -128,8 +128,8 @@
 - [ ] **Certificate Pinning**: NOT bundled (interceptor absent; documented as optional in SECURITY.md)
 - [ ] **Widget tests**: 0 — only unit/provider tests
 - [ ] **Coverage gate**: not configured in CI (119 tests, coverage not measured)
-- [ ] **MIT-0 LICENSE file**: added in v1.0.0 (see `GAP_ANALYSIS.md`)
-- [ ] **Git tags**: none pushed yet at v1.0.0
+- [ ] **MIT-0 LICENSE file**: added in v1.4.0 (see `GAP_ANALYSIS.md`)
+- [ ] **Git tags**: none pushed yet at v1.4.0
 
 ---
 
