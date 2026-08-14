@@ -46,11 +46,14 @@
 
 ## Что НЕ сделано (открытые пункты)
 
-### M5 — GitHub adoption (частично)
-- [ ] `LICENSE` файл — **создать** (MIT-0; бейдж в README ведёт на него)
-- [ ] GitHub topics — добавить `scalable`, `vibe-coding`, `ai-coding`
-- [ ] PR template — создать `.github/pull_request_template.md`
-- [ ] Repo description — поправить (убрать «100% tests»)
+### M7 — GitHub release (частично)
+- [x] 3 milestone-коммита запушены в `origin/master` (M1-M3/M6, M4/M5, M8)
+- [x] GitHub release `v1.0.0` создан
+- [ ] **CI не запускался при пуше** — workflow `.github/workflows/main.yml` настроен на `push: branches: [main]`, а наш branch — `master`
+- [ ] **Блокер пуша workflow**: токен `gh` (OAuth App) не имеет `workflow` scope → GitHub отклоняет пуш изменений в `.github/workflows/`
+  - Правка готова локально (`branches: [master, main]`), но НЕ закоммичена/запушена
+  - Нужен токен с `workflow` scope или `gh auth refresh -s workflow` в интерактивном терминале
+  - Пока CI на master НЕ работает (analyze/test не проверяются автоматически после пуша)
 
 ### M8 — Архитектурный закон (НЕ сделано)
 - [ ] Убрать `presentation → data` bypass (3 файла провайдеров)
