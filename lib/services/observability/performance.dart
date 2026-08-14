@@ -35,6 +35,10 @@ class NoopPerformanceMonitor implements PerformanceMonitor {
 
   @override
   void recordStartupTime(Duration duration) {
-    recordMetric('startup_time', duration.inMilliseconds.toDouble(), unit: 'ms');
+    recordMetric(
+      'startup_time',
+      duration.inMilliseconds.toDouble(),
+      unit: 'ms',
+    );
   }
 }

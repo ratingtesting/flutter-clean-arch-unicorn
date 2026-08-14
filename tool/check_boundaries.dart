@@ -33,7 +33,8 @@ void scan(Directory dir, String currentFeature) {
 
     for (var i = 0; i < lines.length; i++) {
       final line = lines[i];
-      if (!line.contains("import 'package:flutter_clean_arch_unicorn/")) continue;
+      if (!line.contains("import 'package:flutter_clean_arch_unicorn/"))
+        continue;
 
       final match = RegExp(
         r"import 'package:flutter_clean_arch_unicorn/(.+?)[';]",
@@ -48,9 +49,7 @@ void scan(Directory dir, String currentFeature) {
         final barrel =
             'features/${featMatch.group(1)}/${featMatch.group(1)}.dart';
         if (target != barrel) {
-          violations.add(
-            '${rel}:${i + 1} cross-feature import -> $target',
-          );
+          violations.add('${rel}:${i + 1} cross-feature import -> $target');
         }
       }
     }
@@ -65,9 +64,7 @@ void main() {
 
   for (final featureDir in featuresDir.listSync()) {
     if (featureDir is! Directory) continue;
-    final name = featureDir.uri.pathSegments
-        .where((s) => s.isNotEmpty)
-        .last;
+    final name = featureDir.uri.pathSegments.where((s) => s.isNotEmpty).last;
     scan(featureDir, name);
   }
 
