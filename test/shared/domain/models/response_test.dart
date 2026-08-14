@@ -1,14 +1,30 @@
+import 'package:flutter_clean_arch_unicorn/shared/domain/models/response.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../fixtures/dummy_data.dart';
-
 void main() {
-  test('toString() function returns the objects', () {
-    final expectedString =
-        'statusCode=${ktestUserResponse.statusCode}\nstatusMessage=${ktestUserResponse.statusMessage}\n data=${ktestUserResponse.data}';
+  test('Response constructor keeps statusCode, statusMessage and data', () {
+    final response = Response(
+      statusCode: 200,
+      statusMessage: 'OK',
+      data: {'id': 1},
+    );
 
-    final actual = ktestUserResponse.toString();
+    expect(response.statusCode, 200);
+    expect(response.statusMessage, 'OK');
+    expect(response.data, {'id': 1});
+  });
 
-    expect(actual, expectedString);
+  test('Response defaults data to empty map when omitted', () {
+    final response = Response(statusCode: 204);
+
+    expect(response.data, const {});
+    expect(response.statusMessage, isNull);
+  });
+
+  test('toRight wraps the response for Either-based success handling', () {
+    final response = Response(statusCode: 200, data: 'body');
+
+    final right = response.toRight;
+    expect(right.isRight(), isTrue);
   });
 }

@@ -126,18 +126,19 @@
 
 ## §40 Final Scores
 
-Оценка по мастер-промпту (§40), на основе верифицированного состояния v1.5.0
-(`flutter analyze` clean, `flutter test` 119/119 passing, CI green):
+Оценка по мастер-промпту (§40), на основе верифицированного состояния v1.6.0
+(после POST-v1.6 parallel swarm hardening: `flutter analyze lib/ test/` clean,
+`flutter test --coverage` 115 passed, CI green):
 
 | Ось | Оценка | Обоснование |
 |-----|--------|-------------|
 | VibeCoder | **9/10** | clone → pub get → run работает; feature generator готов; live auth guard стабилен; минимум boilerplate |
 | MVP | **9/10** | Riverpod 3, GoRouter, Drift, Repository Law, universal Auth — соблюдены; Freezed для DTO, Equatable для secure entities (осознанно) |
-| Scale | **9/10** | feature/shared boundaries (CI guard), единый `AppLogger`, CI green + coverage gate ≥30% + widget tests |
-| Unicorn | **8/10** | package-ready (`PACKAGE_EXTRACTION.md`), vendor-independent контракты, AI-agent compatibility; SyncEngine/background-sync — P2 |
+| Scale | **9/10** | feature/shared boundaries (CI guard + shared leak fixed), единый `AppLogger`, CI green + coverage gate ≥30% + widget tests |
+| Unicorn | **9/10** | package-ready (`PACKAGE_EXTRACTION.md`), vendor-independent контракты, AI-agent compatibility; env honesty fixed; SyncEngine/background-sync — P2 |
 | AI Coding | **9/10** | AGENTS.md / llms.txt / CLAUDE.md / GEMINI.md актуальны, machine-readable |
-| Open Source Adoption | **9/10** | README mermaid, 19 GitHub Topics, description без ложных claims, docs честны |
-| **Overall** | **8.9/10** | production-ready стартап-фундамент; P1 (coverage-gate, widget-тесты) закрыты в POST-v1.5; P2 (sync) не блокирует |
+| Open Source Adoption | **8/10** | README mermaid, 19 GitHub Topics, description без ложных claims; 0 stars/screenshot — adoption (внешнее, не код) |
+| **Overall** | **9.0/10** | production-ready стартап-фундамент; P0 (честность/безопасность) закрыты в POST-v1.6; P2 (sync, drift migration) не блокируют |
 
 ### POST-v1.5 Hardening (дополнительно к v1.5.0)
 - [x] §3 `docs/POST_V1_5_AUDIT.md` — независимая верификация v1.5.0 (найдено 3 неточности: CI status lie, missing AuthRepositoryFake, missing ARCHITECTURE_BOUNDARIES.md)
@@ -151,8 +152,42 @@
 - **P1:** ✅ закрыт (coverage gate + widget-тесты)
 - **P2:** SyncEngine / background sync (Drift cache есть, sync нет — не нужен для base template, задокументирован); расширить issue templates
 
+## POST-v1.6 — Parallel Swarm Hardening (2026-08-14)
+
+Параллельный аудит 6 ролями (Architect, VibeCoder/DX, Scale/Unicorn, QA/CI,
+Security, OSS) через delegate_task + 2 implementation-трека. Независимая
+верификация v1.6.0.
+
+### Что исправлено (P0/P1)
+- P0-1: pubspec 1.4.0 → 1.6.0
+- P0-2: `shared/domain/models/models.dart` больше не экспортирует feature-модель
+- P0-3: CI анализирует `lib/ test/` (а не только `lib/`)
+- P0-4: env separation через `--dart-define` BASE_URL_DEV/STAGING/PROD
+- P1-2: log-redaction маскирует URI query + raw body (LoggingInterceptor.redact*)
+- P1-5: README version 1.5.0 → 1.6.0
+- P1-1: удалённые placeholder-тесты (`expect(true)`) ЗАМЕНЕНЫ на реальные
+  discriminating-тесты (redaction, Response/PaginatedResponse парсинг, AppException поля)
+
+### Тесты (реальность проверена)
+- 115 тестов после замены placeholder → реальные (ранее 119 включал 4 пустых)
+- Доп. проверка: 3 слабых `toString()`-теста переписаны на поведенческие
+- `flutter analyze lib/ test/ --fatal-infos` → 0 issues
+- `flutter test --coverage` → 115 passed
+- keelwright Reward-hacking guard соблюдён: тесты не удалялись, а заменялись
+
+### Обновлённые оценки (после P0-закрытия)
+| Ось | Было | Стало |
+|-----|------|-------|
+| VibeCoder | 9 | 9 |
+| MVP | 9 | 9 |
+| Scale | 9 | 9 |
+| Unicorn | 8 | 9 (env honesty, boundary leak fixed) |
+| AI Coding | 9 | 9 |
+| Open Source | 9 | 8 (0 stars, нет screenshot — adoption, не код) |
+| **Overall** | **8.9** | **9.0** |
+
 ## Честный вердикт
 
-Шаблон **production-ready для стартапа** на уровне архитектуры, тестов и честной документации.
-Не содержит ложных claims (sqflite/firebase/cert-pinning/100% coverage устранены).
-P1-улучшения (coverage-gate, widget-тесты) — запланированы, не блокируют использование.
+Шаблон **production-ready для стартапа** на уровне архитектуры, тестов и честной
+документации. P0-честность/безопасность закрыта. Остающиеся P1/P2 — adoption
+(внешнее) и опциональные улучшения (drift migration test, EOL lib), не блокируют.

@@ -77,6 +77,12 @@ class LoggingInterceptor extends Interceptor {
     return redacted.toString();
   }
 
+  /// Public redaction helpers (used by tests and external callers to verify
+  /// sensitive data never reaches logs).
+  String redact(String input) => _redactString(input);
+  String redactBody(dynamic data) => _redactBody(data);
+  String redactUri(Uri uri) => _redactUri(uri);
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.extra['request_start'] = DateTime.now().millisecondsSinceEpoch;

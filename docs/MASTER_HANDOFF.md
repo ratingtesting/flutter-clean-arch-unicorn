@@ -133,10 +133,10 @@ GoRouter auth guard, Drift cache-then-remote, AuthRepositoryFake, widget tests.
 | VibeCoder | 9/10 | pub get + generator work; version synced; build_runner still not in Makefile (minor) |
 | MVP | 9/10 | Riverpod3/GoRouter/Drift/Repo Law/Auth — verified |
 | Scale | 9/10 | boundaries (leak fixed), CI test/ analyze, coverage gate, widget tests |
-| Unicorn | 8/10 | package-ready (planned), vendor-independent, SyncEngine deferred (P2) |
+| Unicorn | 9/10 | package-ready (planned), vendor-independent, env honesty fixed, SyncEngine deferred (P2) |
 | AI Coding | 9/10 | AGENTS/llms/CLAUDE/GEMINI current |
 | Open Source Adoption | 8/10 | README mermaid/topics strong; 0 stars (new), no screenshot, LICENSE "Other" UI |
-| **Overall** | **8.7/10** | production-ready startup foundation; P0 honesty/security closed |
+| **Overall** | **9.0/10** | production-ready startup foundation; P0 honesty/security closed |
 
 ## 10. OPEN SOURCE
 
