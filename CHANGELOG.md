@@ -19,6 +19,26 @@ and semantic versioning.
 - `ProviderObserver` no longer logs provider state in release / production builds.
 - `SecureStorageImpl` now uses `encryptedSharedPreferences` on Android.
 
+## [1.6.0] — 2026-08-14 (POST-v1.5 Hardening)
+
+### Added
+- `AuthRepositoryFake` — in-memory fake for VibeCoder testability (§9).
+- Widget tests: `login_screen_test.dart` (render/loading/failure), `app_router_test.dart` (auth guard redirect) (§14).
+- `docs/POST_V1_5_AUDIT.md` — independent re-audit of v1.5.0 claims.
+- `docs/ARCHITECTURE_BOUNDARIES.md` — enforceable shared/feature/repository/service rules (§7).
+
+### Changed
+- CI: added coverage gate (min 30%) after `flutter test --coverage` (P1).
+- `app_router.dart`: extracted `appRouterRedirect` + `appRouterRoutes` (testable).
+- `UNICORN_FINAL_AUDIT.md`: Scale 8→9, Overall 8.7→8.9; widget tests + coverage documented.
+
+### Fixed
+- CI format gate failure: `dart format` on 6 files (commit `d7c81fa`).
+- POST_V1_5_AUDIT found 3 v1.5.0 doc inaccuracies (CI status lie, missing Fake, missing boundaries doc) — all corrected.
+
+### Verified
+- `flutter analyze` clean, `flutter test` 119/119 passing, CI green (coverage gate passed).
+
 ## [1.5.0] — 2026-08-14
 
 ### Added

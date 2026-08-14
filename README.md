@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 119 unit tests · v1.5.0**
+> **Clean Architecture · Riverpod 3 · 119 unit tests · v1.6.0**
 
 **The foundation for a startup that will become a unicorn.**
 
