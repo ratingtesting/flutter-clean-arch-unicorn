@@ -166,7 +166,7 @@ GitHub Actions on every PR:
 
 ## Versioning
 
-Semantic tags (`v1.5.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.5.0**.
+Semantic tags (`v1.5.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.6.0**.
 
 ---
 

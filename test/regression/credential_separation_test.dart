@@ -114,20 +114,6 @@ void main() {
     });
   });
 
-  group('Startup without Firebase tests', () {
-    test('AppLogger can be instantiated without Firebase', () {
-      // This verifies no Firebase initialization is required for core services
-      expect(
-        true,
-        isTrue,
-      ); // Placeholder - actual test would verify AppLogger no-op
-    });
-
-    test('SecureStorage can be instantiated without Firebase', () {
-      expect(true, isTrue); // Placeholder
-    });
-  });
-
   group('Pagination tests', () {
     test('DashboardNotifier calculates skip correctly from page', () {
       // This verifies the pagination logic matches v2 behavior
@@ -135,11 +121,6 @@ void main() {
       const page = 2;
       final expectedSkip = page * productsPerPage;
       expect(expectedSkip, equals(40));
-    });
-
-    test('Empty product list shows No products found message', () {
-      // Restore v2 behavior for empty state
-      expect(true, isTrue); // Placeholder for actual state test
     });
   });
 }

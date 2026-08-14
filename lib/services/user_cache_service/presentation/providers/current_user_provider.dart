@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_clean_arch_unicorn/services/user_cache_service/providers.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/models.dart';
+import 'package:flutter_clean_arch_unicorn/features/authentication/domain/models/user_model.dart';
 import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/providers/state/auth_state.dart';
 

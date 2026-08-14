@@ -1,54 +1,49 @@
-# POST_v1.5 AUDIT
+# POST_v1.5 AUDIT (Parallel Swarm Refresh — v1.6.0)
 
-> Независимая верификация утверждений `UNICORN_FINAL_AUDIT.md` (v1.5.0) на диске.
-> Цель §3 мастер-промпта: "Audit the Audit" — не доверять чекбоксам слепо.
-> Проверено: `flutter analyze` clean, `flutter test` 119/119, `gh run`, `grep` по исходникам, dry-run `tool/new_feature.dart`.
+> Независимая верификация v1.5.0/v1.6.0 claims через 6 параллельных read-only
+> аудиторов (Architect, VibeCoder/DX, Scale/Unicorn, QA/CI, Security, OSS).
+> Каждый аудитор только читал код (delegate_task, leaf role). Синтез — Hermes.
 
 ## Методология
+- 6 субагентов, параллельно, read-only (без правок).
+- Проверка claims из `UNICORN_FINAL_AUDIT.md` / `UNICORN_GAP_ANALYSIS.md` против `lib/`, `test/`, `.github/`, `pubspec.yaml`.
+- Не доверять чекбоксам слепо.
 
-Для каждого важного утверждения:
-1. `grep`/read реальных файлов (не читал только док, смотрел `lib/`)
-2. `flutter analyze lib/` → 0 issues
-3. `flutter test` → 119 passed
-4. `gh run list` → последний прогон ДО формат-фикса был `failure` (format gate), после `d7c81fa` — green
+## Синтез находок (P0 / P1 / P2)
 
-## Верифицированные утверждения (CORRECT — сохранены)
+### P0 — блокеры (честность / безопасность / закон границ)
+| № | Находка | Док- claim | Реальность | Источник |
+|---|---------|-----------|-----------|----------|
+| P0-1 | `pubspec.yaml version: 1.4.0+1` | v1.6.0 / README v1.6.0 | рассинхрон | VibeCoder |
+| P0-2 | `shared/domain/models/models.dart` экспортирует `features/authentication/domain/models/user_model.dart` | "shared только примитивы" (FINAL_AUDIT §29) | утечка границы, CI `check_boundaries.dart` не ловит (сканирует только features) | Architect |
+| P0-3 | CI `flutter analyze --fatal-infos lib/` (НЕ `test/`) | docs say `flutter analyze lib/ test/` | test/ не анализируется в CI | QA |
+| P0-4 | env separation DEV/STAGING/PROD читают один `BASE_URL` (placeholder) | "environments dev/staging/prod" | фейковое разделение | Security/Scale |
 
-| Утверждение | Проверка | Результат |
-|-------------|----------|-----------|
-| Feature-first (`features/`, не `data/domain/presentation` на верхнем уровне) | `ls lib/` | ✅ PRESENT |
-| Riverpod 3 (Notifier/AsyncNotifier, нет StateNotifier) | grep `StateNotifier` → 0 | ✅ PRESENT |
-| GoRouter declarative + auth guard | `app_router.dart` | ✅ PRESENT |
-| Freezed для DTO (`Product`, `AuthState`) | файлы `.freezed.dart` существуют | ✅ PRESENT |
-| Drift (`lib/core/database/`, cache-then-remote) | `dashboard_drift_repository.dart` | ✅ PRESENT |
-| Repository Law (нет dio/drift в presentation/domain) | grep `package:dio\|package:drift` в presentation/domain → пусто | ✅ PRESENT |
-| Services → contracts (CrashReportingService, Analytics, Flags, Logger, Storage, Auth) | интерфейсы + Noop в `services/` | ✅ PRESENT |
-| Universal Auth contract (`AuthRepository`) | `auth_repository.dart` интерфейс | ✅ PRESENT |
-| 119 tests passing | `flutter test` → 119/119 | ✅ PRESENT |
-| clean analyze | `flutter analyze lib/` → 0 issues | ✅ PRESENT |
-| CI (format→analyze→test→build) | `gh run` (после `d7c81fa`) | ✅ GREEN |
-| README mermaid diagram | `README.md` содержит mermaid | ✅ PRESENT |
-| 19 GitHub Topics, MIT-0 | GitHub metadata | ✅ PRESENT |
+### P1 — улучшения
+| № | Находка | Серьёзность | Источник |
+|---|---------|-----------|----------|
+| P1-1 | 4 placeholder-теста `expect(true,isTrue)` (credential_separation ×3, auth_local_datasource ×1) завышают счётчик | MEDIUM | QA |
+| P1-2 | Лог-маскировка неполная: URI query-параметры и non-Map тела не маскируются | MEDIUM | Security |
+| P1-3 | LICENSE MIT-0 распознаётся GitHub как "Other" (нет бейджа) | MEDIUM | OSS |
+| P1-4 | Нет screenshot/GIF запущенного приложения | HIGH (adoption) | OSS |
+| P1-5 | README L169 "Current version: 1.5.0" (факт 1.6.0) | LOW | OSS |
+| P1-6 | `FeatureFlags` ≠ `FeatureFlagService` (имя из спец) | LOW | Scale |
 
-## НЕТОЧНОСТИ В АУДИТЕ (DISCREPANCIES — исправлены в этой работе)
+### P2 — опционально
+| № | Находка | Источник |
+|---|---------|----------|
+| P2-1 | Нет drift migration-теста | QA |
+| P2-2 | coverage gate суммирует generated files (порог легко достижим) | QA |
+| P2-3 | `sqlite3_flutter_libs 0.6.0+eol` — EOL dep | Security |
+| P2-4 | PACKAGE_EXTRACTION.md честно "НЕ реализовано" — OK для шаблона | Scale |
 
-| № | Утверждение в v1.5.0 audit | Реальность | Статус |
-|---|----------------------------|-----------|--------|
-| 1 | "GitHub CI (last run) ✅ success" (FINAL_AUDIT §73) | Последние 3 прогона ДО `d7c81fa` были **failure** (format gate: 6 файлов не отформатированы) | ИСПРАВЛЕНО: `dart format .` + commit `d7c81fa`, CI green |
-| 2 | `AuthRepositoryFake` упомянут как "should be added if missing" (GAP §9) | В v1.5.0 **ОТСУТСТВОВАЛ** — только реальная impl + интерфейс | ИСПРАВЛЕНО: создан `auth_repository_fake.dart` (§9) |
-| 3 | `ARCHITECTURE_BOUNDARIES.md` в списке Required docs (мастер-промпт §19) | В v1.5.0 **ОТСУТСТВОВАЛ** | ИСПРАВЛЕНО: создан `docs/ARCHITECTURE_BOUNDARIES.md` (§7) |
-| 4 | `shared/` boundaries "controlled" | `shared/presentation/providers/` содержит DI-wiring (dio_network_service_provider, shared_preferences_storage_service_provider) — спорное место, но не нарушает Repository Law | ОСТАВЛЕНО: документировано в ARCHITECTURE_BOUNDARIES.md как "providers live in feature's providers/, shared/presentation/providers — cross-cutting only" |
+## Что подтверждено (CORRECT — не трогать)
+- Feature-first, Riverpod 3 (нет StateNotifier), GoRouter auth guard, Repository Law (dio/drift вне presentation/domain), services-as-contracts, Drift в core/database, AuthRepositoryFake, widget-тесты (login/router), CI coverage gate, 119 tests green (локально).
 
-## Что было правильно в v1.5.0 (сохранено)
+## Архитектурные решения (стабильны — НЕ менять)
+- Equatable для User/DashboardState (не Freezed) — security toJson + 119 tests.
+- cache-then-remote Drift паттерн.
+- CrashReportingService контракты (не Firebase напрямую).
 
-- Все 8 правок аудита §5 (§15/§10/§18/§20/§24/§27/§30/§31) — подтверждены в коде.
-- Equatable для `User`/`DashboardState` (не Freezed) — осознанное решение (security toJson + 119 tests).
-- Feature generator работает (dry-run создал корректную структуру, удалена после проверки).
-
-## Итог
-
-Аудит v1.5.0 **в целом точен**, за исключением 3 неточностей (CI status ложь, missing AuthRepositoryFake, missing ARCHITECTURE_BOUNDARIES.md). Все устранены в POST-v1.5 работе.
-
-Следующие шаги (PHASE 2-7 мастер-промпта):
-- P1: coverage gate в CI; widget-тесты (auth/routing/loading states)
-- P2: SyncEngine/background sync (documented, не реализован — не нужен для base template)
+## Следующий шаг
+Master Architect определяет направление. Оркестратор исправил P0 (version sync, shared leak, CI test/ analyze, env honesty) и P1 (placeholder-тесты, log redaction, LICENSE, screenshot) в рамках этого итерации, где безопасно.

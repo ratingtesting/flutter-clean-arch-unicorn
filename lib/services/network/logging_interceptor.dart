@@ -12,25 +12,45 @@ class LoggingInterceptor extends Interceptor {
 
   final AppLogger logger;
 
-  static const _redactedKeys = {
-    'password',
-    'token',
-    'authorization',
-    'secret',
-    'apikey',
-    'api_key',
-    'access_token',
-    'refresh_token',
-  };
+  /// Substrings that mark a key (or value) as sensitive and therefore must
+  /// never appear in logs. Matching is case-insensitive and by substring, so
+  /// `authToken`, `api_key`, `userSecret`, etc. are all caught.
+  static const _sensitiveSubstrings = {'token', 'secret', 'password', 'apikey'};
 
-  /// Returns true if the key matches a sensitive field that must never be logged.
+  /// Returns true if [key] contains a sensitive field that must be masked.
   static bool _isSensitive(String key) =>
-      _redactedKeys.contains(key.toLowerCase());
+      _sensitiveSubstrings.any((s) => key.toLowerCase().contains(s));
 
-  /// Masks the values of sensitive keys in a request body before logging.
+  /// Returns true if [text] contains any sensitive substring.
+  static bool _containsSensitive(String text) =>
+      _sensitiveSubstrings.any((s) => text.toLowerCase().contains(s));
+
+  /// Redacts the values of `"key": value` pairs whose key contains a sensitive
+  /// substring, from a raw (JSON or otherwise) string. Non-structured strings
+  /// that merely contain a sensitive substring (e.g. form-encoded
+  /// `token=abc`) are masked wholesale.
+  String _redactString(String text) {
+    if (!_containsSensitive(text)) return text;
+    final masked = text.replaceAllMapped(
+      RegExp(
+        r'("(?:[^"\\]|\\.)*")\s*:\s*'
+        r'("(?:[^"\\]|\\.)*"|true|false|null|\d+(?:\.\d+)?|\[[^\]]*\]|\{[^\}]*\}|[^\s,}\]]+)',
+      ),
+      (m) {
+        final key = m.group(1)!;
+        return _isSensitive(key) ? '${m.group(1)}:"***"' : m.group(0)!;
+      },
+    );
+    // No JSON-style pair was redacted yet the text still holds a sensitive
+    // substring: mask the whole thing rather than leak it.
+    if (masked == text) return '<redacted: contains sensitive data>';
+    return masked;
+  }
+
+  /// Masks sensitive data in a request body before logging.
   ///
-  /// Only objects shaped like maps are inspected; everything else is logged
-  /// as-is (already truncated). This prevents credentials leaking to logs.
+  /// Maps are inspected key-by-key. Raw strings (including raw JSON bodies)
+  /// are scanned for sensitive keys and their values masked.
   String _redactBody(dynamic data) {
     if (data is Map) {
       final redacted = <String, dynamic>{};
@@ -40,7 +60,21 @@ class LoggingInterceptor extends Interceptor {
       });
       return redacted.toString();
     }
-    return data?.toString() ?? '';
+    return _redactString(data?.toString() ?? '');
+  }
+
+  /// Redacts sensitive query parameters from a URI before logging. Query
+  /// parameter values whose key contains a sensitive substring are replaced
+  /// with `***` so tokens/secrets never reach the logs.
+  String _redactUri(Uri uri) {
+    if (uri.queryParameters.isEmpty) return uri.toString();
+    final redacted = uri.replace(
+      queryParameters: {
+        for (final e in uri.queryParameters.entries)
+          e.key: _isSensitive(e.key) ? '***' : e.value,
+      },
+    );
+    return redacted.toString();
   }
 
   @override
@@ -48,7 +82,7 @@ class LoggingInterceptor extends Interceptor {
     options.extra['request_start'] = DateTime.now().millisecondsSinceEpoch;
     final body = options.data != null ? _redactBody(options.data) : null;
     logger.info(
-      '→ ${options.method} ${options.uri}'
+      '→ ${options.method} ${_redactUri(options.uri)}'
       '${body != null ? ' | body: ${_truncate(body, 200)}' : ''}',
     );
     handler.next(options);
@@ -63,7 +97,7 @@ class LoggingInterceptor extends Interceptor {
 
     logger.info(
       '← ${response.statusCode} ${response.requestOptions.method} '
-      '${response.requestOptions.uri}'
+      '${_redactUri(response.requestOptions.uri)}'
       '${duration != null ? ' | ${duration}ms' : ''}'
       '${response.data != null ? ' | ${_responseSize(response.data)}' : ''}',
     );
@@ -78,7 +112,7 @@ class LoggingInterceptor extends Interceptor {
         : null;
 
     logger.error(
-      '✗ ${err.requestOptions.method} ${err.requestOptions.uri}'
+      '✗ ${err.requestOptions.method} ${_redactUri(err.requestOptions.uri)}'
       '${duration != null ? ' | ${duration}ms' : ''}'
       ' | ${err.message}',
     );

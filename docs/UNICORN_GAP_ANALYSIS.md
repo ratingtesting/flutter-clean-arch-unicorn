@@ -143,3 +143,33 @@
 | Snyk / dependency_validator в CI | `flutter pub outdated` (weekly) |
 | Версии v1.3.0 / v1.2.x | v1.4.0 (pubspec + docs + release) |
 | structure tree `services/database/` | `lib/core/database/` |
+
+## 15. POST-v1.6 Swarm Audit — P0/P1/P2 (2026-08-14)
+
+Параллельный аудит 6 ролями (Architect, VibeCoder/DX, Scale/Unicorn, QA/CI,
+Security, OSS) через delegate_task. Независимая верификация v1.6.0.
+
+### P0 — блокеры (честность / безопасность / границы)
+- **P0-1:** `pubspec.yaml` `version: 1.4.0+1` — рассинхрон с v1.6.0/README.
+- **P0-2:** `shared/domain/models/models.dart` экспортирует `features/authentication/domain/models/user_model.dart` — утечка границы (CI `check_boundaries.dart` не ловит, сканирует только `features/`).
+- **P0-3:** CI анализирует только `lib/` (`flutter analyze --fatal-infos lib/`), не `test/` — docs лгут о `lib/ test/`.
+- **P0-4:** env separation DEV/STAGING/PROD читают один `BASE_URL=https://api.example.com` — фейковое разделение.
+
+### P1 — улучшения
+- **P1-1:** 4 placeholder-теста `expect(true,isTrue)` завышают счётчик 119.
+- **P1-2:** лог-маскировка неполная (URI query / non-Map тела не маскируются).
+- **P1-3:** LICENSE MIT-0 → GitHub "Other" (нет бейджа).
+- **P1-4:** нет screenshot/GIF запущенного приложения (adoption).
+- **P1-5:** README L169 "Current version: 1.5.0" (факт 1.6.0).
+- **P1-6:** `FeatureFlags` ≠ `FeatureFlagService` (имя из спец).
+
+### P2 — опционально
+- **P2-1:** нет drift migration-теста.
+- **P2-2:** coverage gate суммирует generated files.
+- **P2-3:** `sqlite3_flutter_libs 0.6.0+eol` — EOL dependency.
+- **P2-4:** PACKAGE_EXTRACTION.md "НЕ реализовано" — допустимо для шаблона.
+
+### Что подтверждено (не трогать)
+Feature-first, Riverpod 3, GoRouter guard, Repository Law, services-contracts,
+Drift, AuthRepositoryFake, widget-тесты, CI coverage gate, 119 tests green.
+

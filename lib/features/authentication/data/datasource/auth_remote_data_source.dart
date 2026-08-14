@@ -1,7 +1,7 @@
 import 'package:flutter_clean_arch_unicorn/services/security/secure_storage.dart';
 import 'package:flutter_clean_arch_unicorn/shared/data/remote/remote.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
-import 'package:flutter_clean_arch_unicorn/shared/domain/models/models.dart';
+import 'package:flutter_clean_arch_unicorn/features/authentication/domain/models/user_model.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
 
 abstract class LoginUserDataSource {

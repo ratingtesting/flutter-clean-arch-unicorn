@@ -22,19 +22,22 @@ extension _EnvProperties on AppEnvironment {
     AppEnvironment.PROD: 'Q Flutter TDD',
   };
 
-  // Connection string is injected at build time via
-  // `--dart-define=BASE_URL=...` so it is never hardcoded in source.
+  // Connection string is injected at build time per environment via distinct
+  // `--dart-define` keys (BASE_URL_DEV / BASE_URL_STAGING / BASE_URL_PROD) so
+  // each environment reads a real, separate backend URL. They are never
+  // hardcoded in source. Defaults are placeholder endpoints so the template
+  // still compiles out of the box; wire them to real backends per environment.
   static const _connectionStrings = {
     AppEnvironment.DEV: String.fromEnvironment(
-      'BASE_URL',
-      defaultValue: 'https://api.example.com',
+      'BASE_URL_DEV',
+      defaultValue: 'https://dev.api.example.com',
     ),
     AppEnvironment.STAGING: String.fromEnvironment(
-      'BASE_URL',
-      defaultValue: 'https://api.example.com',
+      'BASE_URL_STAGING',
+      defaultValue: 'https://staging.api.example.com',
     ),
     AppEnvironment.PROD: String.fromEnvironment(
-      'BASE_URL',
+      'BASE_URL_PROD',
       defaultValue: 'https://api.example.com',
     ),
   };
