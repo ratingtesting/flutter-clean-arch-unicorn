@@ -26,11 +26,13 @@ class DashboardLocalDatasource {
       });
       return Right(products);
     } catch (e) {
-      return Left(AppException(
-        message: 'Failed to cache products: $e',
-        statusCode: 500,
-        identifier: 'DashboardLocalDatasource.cacheProducts',
-      ));
+      return Left(
+        AppException(
+          message: 'Failed to cache products: $e',
+          statusCode: 500,
+          identifier: 'DashboardLocalDatasource.cacheProducts',
+        ),
+      );
     }
   }
 
@@ -40,11 +42,13 @@ class DashboardLocalDatasource {
       final rows = await db.select(db.cachedProducts).get();
       return Right(rows.map(productFromDataClass).toList());
     } catch (e) {
-      return Left(AppException(
-        message: 'Failed to read cached products: $e',
-        statusCode: 500,
-        identifier: 'DashboardLocalDatasource.readCachedProducts',
-      ));
+      return Left(
+        AppException(
+          message: 'Failed to read cached products: $e',
+          statusCode: 500,
+          identifier: 'DashboardLocalDatasource.readCachedProducts',
+        ),
+      );
     }
   }
 
@@ -54,17 +58,20 @@ class DashboardLocalDatasource {
       await db.delete(db.cachedProducts).go();
       return const Right(true);
     } catch (e) {
-      return Left(AppException(
-        message: 'Failed to clear cache: $e',
-        statusCode: 500,
-        identifier: 'DashboardLocalDatasource.clearCache',
-      ));
+      return Left(
+        AppException(
+          message: 'Failed to clear cache: $e',
+          statusCode: 500,
+          identifier: 'DashboardLocalDatasource.clearCache',
+        ),
+      );
     }
   }
 }
 
 /// Maps a [Product] domain model to a Drift insert companion.
-CachedProductsCompanion productToCompanion(Product p) => CachedProductsCompanion.insert(
+CachedProductsCompanion productToCompanion(Product p) =>
+    CachedProductsCompanion.insert(
       id: Value(p.id),
       title: Value(p.title),
       description: Value(p.description),
@@ -79,14 +86,14 @@ CachedProductsCompanion productToCompanion(Product p) => CachedProductsCompanion
 
 /// Maps a Drift row back to a [Product] domain model.
 Product productFromDataClass(CachedProduct row) => Product(
-      id: row.id,
-      title: row.title,
-      description: row.description,
-      thumbnail: row.thumbnail,
-      brand: row.brand,
-      category: row.category,
-      rating: row.rating,
-      discountPercentage: row.discountPercentage,
-      stock: row.stock,
-      price: row.price,
-    );
+  id: row.id,
+  title: row.title,
+  description: row.description,
+  thumbnail: row.thumbnail,
+  brand: row.brand,
+  category: row.category,
+  rating: row.rating,
+  discountPercentage: row.discountPercentage,
+  stock: row.stock,
+  price: row.price,
+);

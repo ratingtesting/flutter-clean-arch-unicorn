@@ -25,12 +25,12 @@ class AppDatabase extends _$AppDatabase {
   /// you introduce the next migration (see docs/database.md).
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
-        onUpgrade: (m, from, to) async {
-          // Example for the next migration:
-          // if (from < 2) {
-          //   await m.addColumn(cachedProducts, cachedProducts.someNewColumn);
-          // }
-        },
-      );
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      // Example for the next migration:
+      // if (from < 2) {
+      //   await m.addColumn(cachedProducts, cachedProducts.someNewColumn);
+      // }
+    },
+  );
 }

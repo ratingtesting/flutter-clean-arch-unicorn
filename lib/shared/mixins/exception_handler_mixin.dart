@@ -12,9 +12,10 @@ import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart
 
 mixin ExceptionHandlerMixin on NetworkService {
   Future<Either<AppException, response.Response>>
-      handleException<T extends Object>(
-          Future<Response<dynamic>> Function() handler,
-          {String endpoint = ''}) async {
+  handleException<T extends Object>(
+    Future<Response<dynamic>> Function() handler, {
+    String endpoint = '',
+  }) async {
     try {
       final res = await handler();
       return Right(
@@ -37,7 +38,7 @@ mixin ExceptionHandlerMixin on NetworkService {
         case DioException _:
           message = e.response?.data is Map
               ? (e.response!.data!['message'] as String?) ??
-                  'Internal Error occurred'
+                    'Internal Error occurred'
               : 'Internal Error occurred';
           statusCode = 1;
           identifier = 'DioException ${e.message} \\nat  $endpoint';

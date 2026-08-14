@@ -12,68 +12,54 @@ import '../../../../fixtures/dummy_data.dart';
 void main() {
   late MockNetworkService mockNetworkService;
   late LoginUserRemoteDataSource loginUserRemoteDataSource;
-  setUpAll(
-    () {
-      mockNetworkService = MockNetworkService();
-      loginUserRemoteDataSource = LoginUserRemoteDataSource(
-        mockNetworkService,
-        MockSecureStorage(),
+  setUpAll(() {
+    mockNetworkService = MockNetworkService();
+    loginUserRemoteDataSource = LoginUserRemoteDataSource(
+      mockNetworkService,
+      MockSecureStorage(),
+    );
+  });
+  group('Authentication Remote DataSource Test\n', () {
+    test('login user returns UserModel on success', () async {
+      // arrange
+      when(
+        () => mockNetworkService.post(any(), data: any(named: 'data')),
+      ).thenAnswer(
+        (_) async => Right<AppException, Response>(
+          Response(statusCode: 200, data: ktestUserFromMap.toJson()),
+        ),
       );
-    },
-  );
-  group(
-    'Authentication Remote DataSource Test\n',
-    () {
-      test(
-        'login user returns UserModel on success',
-        () async {
-          // arrange
-          when(() => mockNetworkService.post(any(), data: any(named: 'data')))
-              .thenAnswer(
-            (_) async => Right<AppException, Response>(
-              Response(statusCode: 200, data: ktestUserFromMap.toJson()),
-            ),
-          );
-          // act
-          final response =
-              await loginUserRemoteDataSource.loginUser(user: ktestUserFromMap);
-
-          // assert
-          expect(response.isRight(), true);
-        },
+      // act
+      final response = await loginUserRemoteDataSource.loginUser(
+        user: ktestUserFromMap,
       );
-      test(
-        'login user returns AppException on failure',
-        () async {
-          when(
-            () => mockNetworkService.post(any(), data: any(named: 'data')),
-          ).thenAnswer(
-            (_) async => Left(ktestAppException),
-          );
 
-          final response =
-              await loginUserRemoteDataSource.loginUser(user: ktestUser);
+      // assert
+      expect(response.isRight(), true);
+    });
+    test('login user returns AppException on failure', () async {
+      when(
+        () => mockNetworkService.post(any(), data: any(named: 'data')),
+      ).thenAnswer((_) async => Left(ktestAppException));
 
-          expect(response.isLeft(), true);
-        },
+      final response = await loginUserRemoteDataSource.loginUser(
+        user: ktestUser,
       );
-      test(
-        'login user returns AppException on exceptions',
-        () async {
-          when(
-            () => mockNetworkService.post(any(), data: any(named: 'data')),
-          ).thenThrow(
-            (_) => Exception(),
-          );
 
-          final response =
-              await loginUserRemoteDataSource.loginUser(user: ktestUser);
+      expect(response.isLeft(), true);
+    });
+    test('login user returns AppException on exceptions', () async {
+      when(
+        () => mockNetworkService.post(any(), data: any(named: 'data')),
+      ).thenThrow((_) => Exception());
 
-          expect(response.isLeft(), true);
-        },
+      final response = await loginUserRemoteDataSource.loginUser(
+        user: ktestUser,
       );
-    },
-  );
+
+      expect(response.isLeft(), true);
+    });
+  });
 }
 
 class MockNetworkService extends Mock implements NetworkService {}

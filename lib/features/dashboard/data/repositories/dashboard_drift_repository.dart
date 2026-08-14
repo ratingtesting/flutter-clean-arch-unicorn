@@ -21,25 +21,27 @@ class DashboardDriftRepository extends DashboardRepository {
   final DashboardLocalDatasource localDatasource;
 
   @override
-  Future<Either<AppException, PaginatedResponse>> fetchProducts(
-      {required int skip}) async {
+  Future<Either<AppException, PaginatedResponse>> fetchProducts({
+    required int skip,
+  }) async {
     final remote = await remoteDatasource.fetchPaginatedProducts(skip: skip);
-    return remote.fold(
-      (failure) => _fallbackToCache(failure),
-      (response) async {
-        // Cache the freshly fetched page for offline rendering.
-        final products = response.data
-            .map((e) => Product.fromJson(e))
-            .toList(growable: false);
-        await localDatasource.cacheProducts(products);
-        return Right(response);
-      },
-    );
+    return remote.fold((failure) => _fallbackToCache(failure), (
+      response,
+    ) async {
+      // Cache the freshly fetched page for offline rendering.
+      final products = response.data
+          .map((e) => Product.fromJson(e))
+          .toList(growable: false);
+      await localDatasource.cacheProducts(products);
+      return Right(response);
+    });
   }
 
   @override
-  Future<Either<AppException, PaginatedResponse>> searchProducts(
-      {required int skip, required String query}) async {
+  Future<Either<AppException, PaginatedResponse>> searchProducts({
+    required int skip,
+    required String query,
+  }) async {
     // Search is network-only here; caching search results is a later extension.
     return remoteDatasource.searchPaginatedProducts(skip: skip, query: query);
   }
@@ -50,11 +52,9 @@ class DashboardDriftRepository extends DashboardRepository {
     final cached = await localDatasource.readCachedProducts();
     return cached.fold(
       (cacheFailure) => Left(failure),
-      (products) => Right(PaginatedResponse(
-        total: products.length,
-        skip: 0,
-        data: products,
-      )),
+      (products) => Right(
+        PaginatedResponse(total: products.length, skip: 0, data: products),
+      ),
     );
   }
 }

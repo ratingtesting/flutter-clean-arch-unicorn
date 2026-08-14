@@ -8,7 +8,7 @@ enum DashboardConcreteState {
   loaded,
   failure,
   fetchingMore,
-  fetchedAllProducts
+  fetchedAllProducts,
 }
 
 class DashboardState extends Equatable {

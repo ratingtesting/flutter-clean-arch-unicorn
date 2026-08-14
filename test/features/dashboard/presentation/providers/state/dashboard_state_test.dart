@@ -6,8 +6,9 @@ void main() {
     test('Should update concrete state', () {
       DashboardState dashboardState = const DashboardState();
 
-      dashboardState =
-          dashboardState.copyWith(message: 'DashboardConcreteState.loading');
+      dashboardState = dashboardState.copyWith(
+        message: 'DashboardConcreteState.loading',
+      );
 
       expect(dashboardState.message, equals('DashboardConcreteState.loading'));
     });

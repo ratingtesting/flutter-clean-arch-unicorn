@@ -25,14 +25,14 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        username,
-        email,
-        firstName,
-        lastName,
-        gender,
-        image,
-      ];
+    id,
+    username,
+    email,
+    firstName,
+    lastName,
+    gender,
+    image,
+  ];
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -54,16 +54,16 @@ class User extends Equatable {
   }
 
   factory User.fromJson(Map<String, dynamic> map) => User(
-        id: map['id'] ?? 0,
-        username: map['username'] ?? '',
-        password: map['password'] ?? '',
-        email: map['email'] ?? '',
-        firstName: map['firstName'] ?? '',
-        lastName: map['lastName'] ?? '',
-        gender: map['gender'] ?? '',
-        image: map['image'] ?? '',
-        token: map['token'] ?? '',
-      );
+    id: map['id'] ?? 0,
+    username: map['username'] ?? '',
+    password: map['password'] ?? '',
+    email: map['email'] ?? '',
+    firstName: map['firstName'] ?? '',
+    lastName: map['lastName'] ?? '',
+    gender: map['gender'] ?? '',
+    image: map['image'] ?? '',
+    token: map['token'] ?? '',
+  );
 
   User copyWith({
     int? id,

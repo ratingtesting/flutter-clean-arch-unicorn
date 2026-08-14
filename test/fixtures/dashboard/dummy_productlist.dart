@@ -8,11 +8,13 @@ Map<String, dynamic> ktestProductResponse = productListMap();
 
 PaginatedResponse ktestPaginatedResponse({int? skip}) =>
     PaginatedResponse.fromJson(
-        productListMap(skip: skip), productListMap(skip: skip)['products']);
+      productListMap(skip: skip),
+      productListMap(skip: skip)['products'],
+    );
 
 final ktestParseResponse = ktestPaginatedResponse().data.map(
-      (e) => ParseResponse<Product>.fromMap(e, modifier: Product.fromJson),
-    );
+  (e) => ParseResponse<Product>.fromMap(e, modifier: Product.fromJson),
+);
 final List<Product> ktestProductList = (productListMap()['products'] as List)
     .map((e) => Product.fromJson(e))
     .toList();

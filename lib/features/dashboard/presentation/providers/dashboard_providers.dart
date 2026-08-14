@@ -7,14 +7,16 @@ import 'package:flutter_clean_arch_unicorn/features/dashboard/domain/repositorie
 import 'package:flutter_clean_arch_unicorn/shared/data/remote/network_service.dart';
 import 'package:flutter_clean_arch_unicorn/shared/presentation/providers/dio_network_service_provider.dart';
 
-final dashboardLocalDatasourceProvider = Provider<DashboardLocalDatasource>((ref) {
+final dashboardLocalDatasourceProvider = Provider<DashboardLocalDatasource>((
+  ref,
+) {
   return DashboardLocalDatasource(ref.watch(appDatabaseProvider));
 });
 
 final dashboardRemoteDatasourceProvider =
     Provider.family<DashboardDatasource, NetworkService>(
-  (_, networkService) => DashboardRemoteDatasource(networkService),
-);
+      (_, networkService) => DashboardRemoteDatasource(networkService),
+    );
 
 /// Drift-backed repository (local cache + remote, offline-first).
 /// This is the recommended default. Swap for a pure-remote impl if you do not

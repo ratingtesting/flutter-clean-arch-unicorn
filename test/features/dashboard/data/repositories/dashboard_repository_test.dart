@@ -20,10 +20,11 @@ void main() {
   group('Dashboard Repository Test\n', () {
     test('Should return PaginatedResponse on success', () async {
       // arrange
-      when(() => dashboardDatasource.fetchPaginatedProducts(
-          skip: any(named: 'skip'))).thenAnswer(
-        (_) async => Right(PaginatedResponse.fromJson({}, [])),
-      );
+      when(
+        () => dashboardDatasource.fetchPaginatedProducts(
+          skip: any(named: 'skip'),
+        ),
+      ).thenAnswer((_) async => Right(PaginatedResponse.fromJson({}, [])));
 
       // assert
       final response = await dashboardRepository.fetchProducts(skip: 0);
@@ -31,55 +32,58 @@ void main() {
       // act
       expect(response.isRight(), true);
     });
-    test(
-      'Should return AppException on failure',
-      () async {
-        // arrange
-        when(() => dashboardDatasource.fetchPaginatedProducts(
-            skip: any(named: 'skip'))).thenAnswer(
-          (_) async => Left(ktestAppException),
-        );
+    test('Should return AppException on failure', () async {
+      // arrange
+      when(
+        () => dashboardDatasource.fetchPaginatedProducts(
+          skip: any(named: 'skip'),
+        ),
+      ).thenAnswer((_) async => Left(ktestAppException));
 
-        // assert
-        final response = await dashboardRepository.fetchProducts(skip: 1);
+      // assert
+      final response = await dashboardRepository.fetchProducts(skip: 1);
 
-        // act
-        expect(response.isLeft(), true);
-      },
-    );
+      // act
+      expect(response.isLeft(), true);
+    });
   });
   group('Dashboard Repository Test(Search)\n', () {
     test('Should return PaginatedResponse on success', () async {
       // arrange
-      when(() => dashboardDatasource.searchPaginatedProducts(
-          skip: any(named: 'skip'), query: any(named: 'query'))).thenAnswer(
-        (_) async => Right(PaginatedResponse.fromJson({}, [])),
-      );
+      when(
+        () => dashboardDatasource.searchPaginatedProducts(
+          skip: any(named: 'skip'),
+          query: any(named: 'query'),
+        ),
+      ).thenAnswer((_) async => Right(PaginatedResponse.fromJson({}, [])));
 
       // assert
-      final response =
-          await dashboardRepository.searchProducts(skip: 0, query: '');
+      final response = await dashboardRepository.searchProducts(
+        skip: 0,
+        query: '',
+      );
 
       // act
       expect(response.isRight(), true);
     });
-    test(
-      'Should return AppException on failure',
-      () async {
-        // arrange
-        when(() => dashboardDatasource.searchPaginatedProducts(
-            skip: any(named: 'skip'), query: any(named: 'query'))).thenAnswer(
-          (_) async => Left(ktestAppException),
-        );
+    test('Should return AppException on failure', () async {
+      // arrange
+      when(
+        () => dashboardDatasource.searchPaginatedProducts(
+          skip: any(named: 'skip'),
+          query: any(named: 'query'),
+        ),
+      ).thenAnswer((_) async => Left(ktestAppException));
 
-        // assert
-        final response =
-            await dashboardRepository.searchProducts(skip: 1, query: '');
+      // assert
+      final response = await dashboardRepository.searchProducts(
+        skip: 1,
+        query: '',
+      );
 
-        // act
-        expect(response.isLeft(), true);
-      },
-    );
+      // act
+      expect(response.isLeft(), true);
+    });
   });
 }
 

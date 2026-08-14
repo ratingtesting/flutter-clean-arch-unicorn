@@ -10,25 +10,16 @@ void main() {
   late dynamic networkService;
   late dynamic dataSource;
   late dynamic authRepository;
-  setUpAll(
-    () {
-      networkService = providerContainer.read(networkServiceProvider);
-      dataSource =
-          providerContainer.read(authDataSourceProvider(networkService));
-      authRepository = providerContainer.read(authRepositoryProvider);
-    },
-  );
+  setUpAll(() {
+    networkService = providerContainer.read(networkServiceProvider);
+    dataSource = providerContainer.read(authDataSourceProvider(networkService));
+    authRepository = providerContainer.read(authRepositoryProvider);
+  });
   test('dataSourceProvider is a LoginUserDataSource', () {
-    expect(
-      dataSource,
-      isA<LoginUserDataSource>(),
-    );
+    expect(dataSource, isA<LoginUserDataSource>());
   });
   test('authRepositoryProvider is a AuthenticationRepository', () {
-    expect(
-      authRepository,
-      isA<AuthenticationRepository>(),
-    );
+    expect(authRepository, isA<AuthenticationRepository>());
   });
   test('loginUserProvider returns a AuthenticationRepository', () {
     expect(

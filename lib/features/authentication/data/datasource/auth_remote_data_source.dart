@@ -32,9 +32,7 @@ class LoginUserRemoteDataSource implements LoginUserDataSource {
             await secureStorage.write(SecureStorageKeys.authToken, user.token);
           }
           // update the token for subsequent requests
-          networkService.updateHeader(
-            {'Authorization': user.token},
-          );
+          networkService.updateHeader({'Authorization': user.token});
 
           return Right(user);
         },

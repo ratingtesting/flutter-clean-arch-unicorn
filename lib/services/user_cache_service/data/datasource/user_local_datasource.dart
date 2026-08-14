@@ -29,17 +29,21 @@ class UserLocalDataSource implements UserDataSource {
         final user = User.fromJson(userMap).copyWith(token: token);
         return Right(user);
       }
-      return Left(AppException(
-        message: 'User not found',
-        statusCode: 404,
-        identifier: 'UserLocalDataSource.fetchUser',
-      ));
+      return Left(
+        AppException(
+          message: 'User not found',
+          statusCode: 404,
+          identifier: 'UserLocalDataSource.fetchUser',
+        ),
+      );
     } catch (e) {
-      return Left(AppException(
-        message: 'Failed to fetch cached user',
-        statusCode: 500,
-        identifier: '${e.toString()}\nUserLocalDataSource.fetchUser',
-      ));
+      return Left(
+        AppException(
+          message: 'Failed to fetch cached user',
+          statusCode: 500,
+          identifier: '${e.toString()}\nUserLocalDataSource.fetchUser',
+        ),
+      );
     }
   }
 

@@ -27,8 +27,9 @@ class FakeUserCacheRepository implements UserRepository {
   Future<bool> saveUser({required User user}) async => saveResult;
 
   @override
-  Future<Either<AppException, User>> fetchUser() async => Left(AppException(
-      message: 'Not implemented', statusCode: 1, identifier: 'test'));
+  Future<Either<AppException, User>> fetchUser() async => Left(
+    AppException(message: 'Not implemented', statusCode: 1, identifier: 'test'),
+  );
 
   @override
   Future<bool> deleteUser() async => true;
@@ -106,21 +107,20 @@ void main() {
 
       final result = await useCase(username: 'testuser', password: 'secret123');
 
-      result.fold(
-        (failure) => fail('Login should succeed'),
-        (user) {
-          expect(user.password, isEmpty);
-          expect(user.token, isEmpty);
-        },
-      );
+      result.fold((failure) => fail('Login should succeed'), (user) {
+        expect(user.password, isEmpty);
+        expect(user.token, isEmpty);
+      });
     });
   });
 
   group('Startup without Firebase tests', () {
     test('AppLogger can be instantiated without Firebase', () {
       // This verifies no Firebase initialization is required for core services
-      expect(true,
-          isTrue); // Placeholder - actual test would verify AppLogger no-op
+      expect(
+        true,
+        isTrue,
+      ); // Placeholder - actual test would verify AppLogger no-op
     });
 
     test('SecureStorage can be instantiated without Firebase', () {

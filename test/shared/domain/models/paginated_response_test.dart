@@ -7,7 +7,9 @@ void main() {
   test('Should calculate the page from the response data', () {
     final PaginatedResponse paginatedResponse = ktestPaginatedResponse();
 
-    expect(paginatedResponse.toString(),
-        'PaginatedResponse(total:${paginatedResponse.total}, skip:${paginatedResponse.skip}, data:${paginatedResponse.data.length})');
+    expect(
+      paginatedResponse.toString(),
+      'PaginatedResponse(total:${paginatedResponse.total}, skip:${paginatedResponse.skip}, data:${paginatedResponse.data.length})',
+    );
   });
 }

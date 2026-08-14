@@ -25,7 +25,9 @@ class AuthTokenInterceptor extends Interceptor {
 
   @override
   void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Skip auth for login/refresh endpoints
     if (options.path.contains('/auth/login') ||
         options.path.contains(refreshEndpoint)) {
@@ -47,8 +49,9 @@ class AuthTokenInterceptor extends Interceptor {
       _isRefreshing = true;
 
       try {
-        final refreshToken =
-            await secureStorage.read(SecureStorageKeys.refreshToken);
+        final refreshToken = await secureStorage.read(
+          SecureStorageKeys.refreshToken,
+        );
 
         if (refreshToken == null || refreshToken.isEmpty) {
           logger.warning('No refresh token available, forcing logout');

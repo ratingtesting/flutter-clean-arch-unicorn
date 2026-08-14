@@ -22,8 +22,10 @@ class NoopAnalyticsTracker extends AnalyticsTracker {
   Future<void> initialize() async {}
 
   @override
-  Future<void> track(String eventName,
-      {Map<String, dynamic>? properties}) async {}
+  Future<void> track(
+    String eventName, {
+    Map<String, dynamic>? properties,
+  }) async {}
 
   @override
   Future<void> trackScreen(String screenName, {String? screenClass}) async {}
@@ -48,8 +50,10 @@ class FirebaseAnalyticsTracker extends AnalyticsTracker {
   Future<void> initialize() async {}
 
   @override
-  Future<void> track(String eventName,
-      {Map<String, dynamic>? properties}) async {
+  Future<void> track(
+    String eventName, {
+    Map<String, dynamic>? properties,
+  }) async {
     debugPrint('[Analytics] track: $eventName, properties: $properties');
   }
 

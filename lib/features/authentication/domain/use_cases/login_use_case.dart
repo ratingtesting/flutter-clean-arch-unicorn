@@ -23,14 +23,13 @@ class LoginUseCase {
       user: User(username: username, password: password),
     );
 
-    return response.fold(
-      (failure) => Left<AppException, User>(failure),
-      (user) async {
-        final saved = await _userRepository.saveUser(user: user);
-        return saved
-            ? Right<AppException, User>(user)
-            : Left<AppException, User>(CacheFailureException());
-      },
-    );
+    return response.fold((failure) => Left<AppException, User>(failure), (
+      user,
+    ) async {
+      final saved = await _userRepository.saveUser(user: user);
+      return saved
+          ? Right<AppException, User>(user)
+          : Left<AppException, User>(CacheFailureException());
+    });
   }
 }

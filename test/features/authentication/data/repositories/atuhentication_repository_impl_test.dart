@@ -12,49 +12,40 @@ import '../../../../fixtures/dummy_data.dart';
 void main() {
   late LoginUserDataSource mockLoginUserDataSource;
   late AuthenticationRepository authenticationRepository;
-  setUpAll(
-    () {
-      registerFallbackValue(ktestUser);
-      mockLoginUserDataSource = MockLoginUserDataSource();
-      authenticationRepository =
-          AuthenticationRepositoryImpl(mockLoginUserDataSource);
-    },
-  );
-  group(
-    'Authentication Repository Test\n',
-    () {
-      test(
-        'login user should return User when the login is successful',
-        () async {
-          when(
-            () => mockLoginUserDataSource.loginUser(user: any(named: 'user')),
-          ).thenAnswer(
-            (_) async => Right<AppException, User>(ktestUser),
-          );
+  setUpAll(() {
+    registerFallbackValue(ktestUser);
+    mockLoginUserDataSource = MockLoginUserDataSource();
+    authenticationRepository = AuthenticationRepositoryImpl(
+      mockLoginUserDataSource,
+    );
+  });
+  group('Authentication Repository Test\n', () {
+    test(
+      'login user should return User when the login is successful',
+      () async {
+        when(
+          () => mockLoginUserDataSource.loginUser(user: any(named: 'user')),
+        ).thenAnswer((_) async => Right<AppException, User>(ktestUser));
 
-          final response =
-              await authenticationRepository.loginUser(user: ktestUser);
+        final response = await authenticationRepository.loginUser(
+          user: ktestUser,
+        );
 
-          expect(response.isRight(), true);
-        },
+        expect(response.isRight(), true);
+      },
+    );
+    test('login user should return AppException on Login failure', () async {
+      when(
+        () => mockLoginUserDataSource.loginUser(user: any(named: 'user')),
+      ).thenAnswer((_) async => Left<AppException, User>(ktestAppException));
+
+      final response = await authenticationRepository.loginUser(
+        user: ktestUser,
       );
-      test(
-        'login user should return AppException on Login failure',
-        () async {
-          when(
-            () => mockLoginUserDataSource.loginUser(user: any(named: 'user')),
-          ).thenAnswer(
-            (_) async => Left<AppException, User>(ktestAppException),
-          );
 
-          final response =
-              await authenticationRepository.loginUser(user: ktestUser);
-
-          expect(response.isLeft(), true);
-        },
-      );
-    },
-  );
+      expect(response.isLeft(), true);
+    });
+  });
 }
 
 class MockLoginUserDataSource extends Mock implements LoginUserDataSource {}

@@ -21,14 +21,16 @@ void main() {
   });
 
   test('saveUser delegates to datasource', () async {
-    when(() => datasource.saveUser(user: any(named: 'user')))
-        .thenAnswer((_) async => true);
+    when(
+      () => datasource.saveUser(user: any(named: 'user')),
+    ).thenAnswer((_) async => true);
     expect(await repository.saveUser(user: ktestUser), isTrue);
   });
 
   test('fetchUser returns user from datasource', () async {
-    when(() => datasource.fetchUser())
-        .thenAnswer((_) async => Right(ktestUser));
+    when(
+      () => datasource.fetchUser(),
+    ).thenAnswer((_) async => Right(ktestUser));
     final result = await repository.fetchUser();
     expect(result.isRight(), isTrue);
   });

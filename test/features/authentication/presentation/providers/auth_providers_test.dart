@@ -25,10 +25,12 @@ void main() {
   setUp(() {
     authRepository = MockAuthRepository();
     userRepository = MockUserRepository();
-    container = ProviderContainer(overrides: [
-      authRepositoryProvider.overrideWithValue(authRepository),
-      userLocalRepositoryProvider.overrideWithValue(userRepository),
-    ]);
+    container = ProviderContainer(
+      overrides: [
+        authRepositoryProvider.overrideWithValue(authRepository),
+        userLocalRepositoryProvider.overrideWithValue(userRepository),
+      ],
+    );
     notifier = container.read(authStateNotifierProvider.notifier);
     history.clear();
     container.listen<AuthState>(
@@ -45,31 +47,32 @@ void main() {
     test(
       'emits [AuthState.loading, AuthState.success] when login and cache is success',
       () async {
-        when(() => authRepository.loginUser(user: any(named: 'user')))
-            .thenAnswer(
+        when(
+          () => authRepository.loginUser(user: any(named: 'user')),
+        ).thenAnswer(
           (invocation) async => Right<AppException, User>(ktestUser),
         );
-        when(() => userRepository.saveUser(user: any(named: 'user')))
-            .thenAnswer((invocation) async => true);
+        when(
+          () => userRepository.saveUser(user: any(named: 'user')),
+        ).thenAnswer((invocation) async => true);
 
         await notifier.loginUser('', '');
 
-        expect(history, [
-          const AuthState.loading(),
-          const AuthState.success(),
-        ]);
+        expect(history, [const AuthState.loading(), const AuthState.success()]);
       },
     );
 
     test(
       'emits [AuthState.loading, AuthState.failure] when login is success but cache is fail',
       () async {
-        when(() => authRepository.loginUser(user: any(named: 'user')))
-            .thenAnswer(
+        when(
+          () => authRepository.loginUser(user: any(named: 'user')),
+        ).thenAnswer(
           (invocation) async => Right<AppException, User>(ktestUser),
         );
-        when(() => userRepository.saveUser(user: any(named: 'user')))
-            .thenAnswer((invocation) async => false);
+        when(
+          () => userRepository.saveUser(user: any(named: 'user')),
+        ).thenAnswer((invocation) async => false);
 
         await notifier.loginUser('', '');
 
@@ -80,30 +83,38 @@ void main() {
       },
     );
 
-    test('when the login fails then the saveUser method is not called',
-        () async {
-      when(() => authRepository.loginUser(user: any(named: 'user'))).thenAnswer(
-        (invocation) async => Left<AppException, User>(ktestAppException),
-      );
+    test(
+      'when the login fails then the saveUser method is not called',
+      () async {
+        when(
+          () => authRepository.loginUser(user: any(named: 'user')),
+        ).thenAnswer(
+          (invocation) async => Left<AppException, User>(ktestAppException),
+        );
 
-      await notifier.loginUser('', '');
+        await notifier.loginUser('', '');
 
-      verifyNever(() => userRepository.saveUser(user: ktestUser));
-    });
+        verifyNever(() => userRepository.saveUser(user: ktestUser));
+      },
+    );
 
-    test('emits [AuthState.loading, AuthState.failure] when login is fail',
-        () async {
-      when(() => authRepository.loginUser(user: any(named: 'user'))).thenAnswer(
-        (invocation) async => Left<AppException, User>(ktestAppException),
-      );
+    test(
+      'emits [AuthState.loading, AuthState.failure] when login is fail',
+      () async {
+        when(
+          () => authRepository.loginUser(user: any(named: 'user')),
+        ).thenAnswer(
+          (invocation) async => Left<AppException, User>(ktestAppException),
+        );
 
-      await notifier.loginUser('', '');
+        await notifier.loginUser('', '');
 
-      expect(history, [
-        const AuthState.loading(),
-        AuthState.failure(ktestAppException),
-      ]);
-    });
+        expect(history, [
+          const AuthState.loading(),
+          AuthState.failure(ktestAppException),
+        ]);
+      },
+    );
   });
 }
 

@@ -1,11 +1,11 @@
 import 'package:flutter_clean_arch_unicorn/shared/globals.dart';
 
 Map<String, dynamic> productListMap({int? skip}) => {
-      "products": List.generate(PRODUCTS_PER_PAGE, (index) => productMap),
-      "total": 100,
-      "skip": (skip ?? 0) + PRODUCTS_PER_PAGE,
-      "limit": PRODUCTS_PER_PAGE,
-    };
+  "products": List.generate(PRODUCTS_PER_PAGE, (index) => productMap),
+  "total": 100,
+  "skip": (skip ?? 0) + PRODUCTS_PER_PAGE,
+  "limit": PRODUCTS_PER_PAGE,
+};
 Map<String, dynamic> productMap = {
   "id": 1,
   "title": "iPhone 9",
@@ -17,5 +17,5 @@ Map<String, dynamic> productMap = {
   "brand": "Apple",
   "category": "smartphones",
   "thumbnail": "...",
-  "images": ["...", "...", "..."]
+  "images": ["...", "...", "..."],
 };

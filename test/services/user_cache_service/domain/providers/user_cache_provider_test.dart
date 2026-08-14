@@ -23,19 +23,22 @@ void main() {
       final container = ProviderContainer();
       // Shared prefs + secure storage providers are real here; this just
       // verifies the wiring does not throw and yields the right type.
-      expect(container.read(ucp.userLocalRepositoryProvider),
-          isA<UserRepository>());
+      expect(
+        container.read(ucp.userLocalRepositoryProvider),
+        isA<UserRepository>(),
+      );
       addTearDown(container.dispose);
     });
 
     test('repository delegates through the datasource (override)', () async {
       final datasource = MockUserDataSource();
-      when(() => datasource.fetchUser())
-          .thenAnswer((_) async => Right(ktestUser));
+      when(
+        () => datasource.fetchUser(),
+      ).thenAnswer((_) async => Right(ktestUser));
 
-      final container = ProviderContainer(overrides: [
-        ucp.userDatasourceProvider.overrideWithValue(datasource),
-      ]);
+      final container = ProviderContainer(
+        overrides: [ucp.userDatasourceProvider.overrideWithValue(datasource)],
+      );
       final repo = container.read(ucp.userLocalRepositoryProvider);
       final result = await repo.fetchUser();
       expect(result.isRight(), isTrue);

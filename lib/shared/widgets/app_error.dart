@@ -27,8 +27,8 @@ class AppError extends ConsumerWidget {
               child: Text(
                 'Error occurred',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                  color: Theme.of(context).colorScheme.error,
+                ),
               ),
             ),
           ],

@@ -2,8 +2,7 @@ import 'package:flutter_clean_arch_unicorn/routes/app_router.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
-String routeLocation(RouteBase route) =>
-    route is GoRoute ? route.path : '';
+String routeLocation(RouteBase route) => route is GoRoute ? route.path : '';
 
 void main() {
   group('AppRouter (GoRouter)', () {
@@ -14,8 +13,7 @@ void main() {
     });
 
     test('declares the three core routes', () {
-      final locations =
-          router.configuration.routes.map(routeLocation).toList();
+      final locations = router.configuration.routes.map(routeLocation).toList();
       expect(locations, contains('/'));
       expect(locations, contains('/login'));
       expect(locations, contains('/dashboard'));
@@ -27,11 +25,9 @@ void main() {
     });
 
     test('route locations are unique', () {
-      final locations =
-          router.configuration.routes.map(routeLocation).toList();
+      final locations = router.configuration.routes.map(routeLocation).toList();
       final unique = locations.where((l) => l.isNotEmpty).toSet();
-      expect(unique.length,
-          locations.where((l) => l.isNotEmpty).length);
+      expect(unique.length, locations.where((l) => l.isNotEmpty).length);
     });
 
     test('core paths are absolute', () {

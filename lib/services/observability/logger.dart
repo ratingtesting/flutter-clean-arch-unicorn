@@ -30,10 +30,10 @@ class ConsoleLogger extends AppLogger {
   final logger_pkg.Logger _logger;
 
   ConsoleLogger({logger_pkg.LogFilter? filter, logger_pkg.LogPrinter? printer})
-      : _logger = logger_pkg.Logger(
-          filter: filter ?? logger_pkg.DevelopmentFilter(),
-          printer: printer ?? logger_pkg.PrettyPrinter(colors: true),
-        );
+    : _logger = logger_pkg.Logger(
+        filter: filter ?? logger_pkg.DevelopmentFilter(),
+        printer: printer ?? logger_pkg.PrettyPrinter(colors: true),
+      );
 
   @override
   void debug(String message, [Object? error, StackTrace? stackTrace]) =>

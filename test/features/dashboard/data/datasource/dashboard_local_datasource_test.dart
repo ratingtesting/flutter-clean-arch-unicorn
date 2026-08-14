@@ -27,14 +27,11 @@ void main() {
       expect(cacheResult.isRight(), isTrue);
 
       final read = await datasource.readCachedProducts();
-      read.fold(
-        (l) => fail('expected cached products, got $l'),
-        (products) {
-          expect(products.length, 2);
-          expect(products.first.title, 'Widget');
-          expect(products.last.price, 19);
-        },
-      );
+      read.fold((l) => fail('expected cached products, got $l'), (products) {
+        expect(products.length, 2);
+        expect(products.first.title, 'Widget');
+        expect(products.last.price, 19);
+      });
     });
 
     test('clearCache empties the table', () async {
@@ -51,9 +48,7 @@ void main() {
 
     test('re-cache replaces previous entries (no duplicates)', () async {
       await datasource.cacheProducts(sample);
-      await datasource.cacheProducts([
-        Product(id: 3, title: 'Only', price: 1),
-      ]);
+      await datasource.cacheProducts([Product(id: 3, title: 'Only', price: 1)]);
 
       final read = await datasource.readCachedProducts();
       read.fold(

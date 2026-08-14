@@ -7,7 +7,7 @@ Map<String, dynamic> ktestUserMap = {
   "lastName": "Halvorson",
   "gender": "female",
   "image": "https://robohash.org/autquiaut.png?size=50x50&set=set1",
-  "token": "eyJhbG...xKhs"
+  "token": "eyJhbG...xKhs",
 };
 
 /// Expected output from User.toJson() - without password/token for security

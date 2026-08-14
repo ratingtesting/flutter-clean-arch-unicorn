@@ -19,9 +19,6 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> loginUser(String username, String password) async {
     state = const AuthState.loading();
     final result = await _loginUseCase(username: username, password: password);
-    state = result.fold(
-      AuthState.failure,
-      (_) => const AuthState.success(),
-    );
+    state = result.fold(AuthState.failure, (_) => const AuthState.success());
   }
 }

@@ -6,8 +6,10 @@ import '../../../fixtures/data/product_response.dart';
 
 void main() {
   test('Should parse response in correct format', () {
-    final response = ParseResponse<Product>.fromMap(productListMap(),
-        modifier: Product.fromJson);
+    final response = ParseResponse<Product>.fromMap(
+      productListMap(),
+      modifier: Product.fromJson,
+    );
 
     expect(response.data is Product, true);
   });

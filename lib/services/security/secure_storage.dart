@@ -16,12 +16,12 @@ abstract class SecureStorage {
 
 class SecureStorageImpl extends SecureStorage {
   SecureStorageImpl()
-      : _storage = const FlutterSecureStorage(
-          aOptions: AndroidOptions(),
-          iOptions: IOSOptions(
-            accessibility: KeychainAccessibility.first_unlock_this_device,
-          ),
-        );
+    : _storage = const FlutterSecureStorage(
+        aOptions: AndroidOptions(),
+        iOptions: IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
 
   final FlutterSecureStorage _storage;
 

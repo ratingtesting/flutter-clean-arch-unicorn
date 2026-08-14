@@ -21,9 +21,7 @@ class AuthField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(8.0),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
           ),
         ),
       ),

@@ -25,12 +25,18 @@ extension _EnvProperties on AppEnvironment {
   // Connection string is injected at build time via
   // `--dart-define=BASE_URL=...` so it is never hardcoded in source.
   static const _connectionStrings = {
-    AppEnvironment.DEV: String.fromEnvironment('BASE_URL',
-        defaultValue: 'https://api.example.com'),
-    AppEnvironment.STAGING: String.fromEnvironment('BASE_URL',
-        defaultValue: 'https://api.example.com'),
-    AppEnvironment.PROD: String.fromEnvironment('BASE_URL',
-        defaultValue: 'https://api.example.com'),
+    AppEnvironment.DEV: String.fromEnvironment(
+      'BASE_URL',
+      defaultValue: 'https://api.example.com',
+    ),
+    AppEnvironment.STAGING: String.fromEnvironment(
+      'BASE_URL',
+      defaultValue: 'https://api.example.com',
+    ),
+    AppEnvironment.PROD: String.fromEnvironment(
+      'BASE_URL',
+      defaultValue: 'https://api.example.com',
+    ),
   };
 
   static const _envs = {

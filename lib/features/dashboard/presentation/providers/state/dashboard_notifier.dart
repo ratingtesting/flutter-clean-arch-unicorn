@@ -64,7 +64,8 @@ class DashboardNotifier extends Notifier<DashboardState> {
   /// Shared helper to handle repository response.
   /// Eliminates duplication between fetchProducts and searchProducts.
   void _updateStateFromResponse(
-      Either<AppException, PaginatedResponse> response) {
+    Either<AppException, PaginatedResponse> response,
+  ) {
     response.fold(
       (failure) {
         state = state.copyWith(

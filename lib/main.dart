@@ -37,12 +37,8 @@ Future<void> mainCommon(AppEnvironment environment) async {
 
   runApp(
     ProviderScope(
-      overrides: [
-        appDatabaseProvider.overrideWithValue(appDatabase),
-      ],
-      observers: [
-        main_observers.Observers(),
-      ],
+      overrides: [appDatabaseProvider.overrideWithValue(appDatabase)],
+      observers: [main_observers.Observers()],
       child: const MyApp(),
     ),
   );

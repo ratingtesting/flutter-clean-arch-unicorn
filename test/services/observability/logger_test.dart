@@ -19,8 +19,10 @@ void main() {
 
     test('handles null error and stacktrace', () {
       expect(() => logger.debug('msg', null, null), returnsNormally);
-      expect(() => logger.info('msg', Exception('test'), StackTrace.current),
-          returnsNormally);
+      expect(
+        () => logger.info('msg', Exception('test'), StackTrace.current),
+        returnsNormally,
+      );
     });
 
     test('log() delegates to correct level method', () {

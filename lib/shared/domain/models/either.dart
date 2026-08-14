@@ -4,20 +4,20 @@ sealed class Either<L, R> {
   factory Either.right(R r) => Right(r);
 
   T fold<T>(T Function(L) left, T Function(R) right) => switch (this) {
-        Left(:final value) => left(value),
-        Right(:final value) => right(value),
-      };
+    Left(:final value) => left(value),
+    Right(:final value) => right(value),
+  };
   bool isLeft() => switch (this) {
-        Left() => true,
-        Right() => false,
-      };
+    Left() => true,
+    Right() => false,
+  };
   bool isRight() => !isLeft();
 
   /// Returns the right value if this is Right, otherwise throws the provided exception.
   R getOrElse(R Function() orElse) => switch (this) {
-        Left() => orElse(),
-        Right(:final value) => value,
-      };
+    Left() => orElse(),
+    Right(:final value) => value,
+  };
 }
 
 class Left<L, R> extends Either<L, R> {

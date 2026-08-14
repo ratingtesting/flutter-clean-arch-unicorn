@@ -9,15 +9,20 @@ class DashboardRepositoryImpl extends DashboardRepository {
   DashboardRepositoryImpl(this.dashboardDatasource);
 
   @override
-  Future<Either<AppException, PaginatedResponse>> fetchProducts(
-      {required int skip}) {
+  Future<Either<AppException, PaginatedResponse>> fetchProducts({
+    required int skip,
+  }) {
     return dashboardDatasource.fetchPaginatedProducts(skip: skip);
   }
 
   @override
-  Future<Either<AppException, PaginatedResponse>> searchProducts(
-      {required int skip, required String query}) {
+  Future<Either<AppException, PaginatedResponse>> searchProducts({
+    required int skip,
+    required String query,
+  }) {
     return dashboardDatasource.searchPaginatedProducts(
-        skip: skip, query: query);
+      skip: skip,
+      query: query,
+    );
   }
 }

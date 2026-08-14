@@ -46,8 +46,7 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.extra['request_start'] = DateTime.now().millisecondsSinceEpoch;
-    final body =
-        options.data != null ? _redactBody(options.data) : null;
+    final body = options.data != null ? _redactBody(options.data) : null;
     logger.info(
       '→ ${options.method} ${options.uri}'
       '${body != null ? ' | body: ${_truncate(body, 200)}' : ''}',
@@ -58,8 +57,9 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final start = response.requestOptions.extra['request_start'] as int?;
-    final duration =
-        start != null ? DateTime.now().millisecondsSinceEpoch - start : null;
+    final duration = start != null
+        ? DateTime.now().millisecondsSinceEpoch - start
+        : null;
 
     logger.info(
       '← ${response.statusCode} ${response.requestOptions.method} '
@@ -73,8 +73,9 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final start = err.requestOptions.extra['request_start'] as int?;
-    final duration =
-        start != null ? DateTime.now().millisecondsSinceEpoch - start : null;
+    final duration = start != null
+        ? DateTime.now().millisecondsSinceEpoch - start
+        : null;
 
     logger.error(
       '✗ ${err.requestOptions.method} ${err.requestOptions.uri}'

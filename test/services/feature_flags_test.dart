@@ -33,8 +33,10 @@ void main() {
 
     test('getString returns defaultValue for missing flag', () {
       expect(flags.getString('unknown'), equals(''));
-      expect(flags.getString('unknown', defaultValue: 'fallback'),
-          equals('fallback'));
+      expect(
+        flags.getString('unknown', defaultValue: 'fallback'),
+        equals('fallback'),
+      );
     });
 
     test('getInt returns value for int flag', () {

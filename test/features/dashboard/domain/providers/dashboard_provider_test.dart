@@ -8,32 +8,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final providerContainer = ProviderContainer(overrides: [
-    appDatabaseProvider.overrideWithValue(openTestDatabase()),
-  ]);
+  final providerContainer = ProviderContainer(
+    overrides: [appDatabaseProvider.overrideWithValue(openTestDatabase())],
+  );
   late dynamic networkService;
   late dynamic dashboardDataSource;
   late dynamic dashboardRespository;
-  setUpAll(
-    () {
-      networkService = providerContainer.read(networkServiceProvider);
-      dashboardDataSource =
-          providerContainer.read(dashboardRemoteDatasourceProvider(networkService));
-      dashboardRespository =
-          providerContainer.read(dashboardRepositoryProvider);
-    },
-  );
-  test('dashboardDatasourceProvider is a DashboardDatasource', () {
-    expect(
-      dashboardDataSource,
-      isA<DashboardDatasource>(),
+  setUpAll(() {
+    networkService = providerContainer.read(networkServiceProvider);
+    dashboardDataSource = providerContainer.read(
+      dashboardRemoteDatasourceProvider(networkService),
     );
+    dashboardRespository = providerContainer.read(dashboardRepositoryProvider);
+  });
+  test('dashboardDatasourceProvider is a DashboardDatasource', () {
+    expect(dashboardDataSource, isA<DashboardDatasource>());
   });
   test('dashboardRepositoryProvider is a DashboardRepository', () {
-    expect(
-      dashboardRespository,
-      isA<DashboardRepository>(),
-    );
+    expect(dashboardRespository, isA<DashboardRepository>());
   });
   test('dashboardRepositoryProvider returns a DashboardRepository', () {
     expect(

@@ -56,17 +56,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(dashboardNotifierProvider);
 
-    ref.listen(
-      dashboardNotifierProvider.select((value) => value),
-      ((DashboardState? previous, DashboardState next) {
-        if (next.state == DashboardConcreteState.fetchedAllProducts) {
-          if (next.message.isNotEmpty) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(next.message.toString())));
-          }
+    ref.listen(dashboardNotifierProvider.select((value) => value), ((
+      DashboardState? previous,
+      DashboardState next,
+    ) {
+      if (next.state == DashboardConcreteState.fetchedAllProducts) {
+        if (next.message.isNotEmpty) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(next.message.toString())));
         }
-      }),
-    );
+      }
+    }));
     return Scaffold(
       appBar: AppBar(
         title: isSearchActive
@@ -75,8 +76,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 decoration: InputDecoration(
                   hintText: 'Search here',
                   hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Theme.of(context).colorScheme.onSurface,
@@ -106,9 +107,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               }
               refreshScrollControllerListener();
             },
-            icon: Icon(
-              isSearchActive ? Icons.clear : Icons.search,
-            ),
+            icon: Icon(isSearchActive ? Icons.clear : Icons.search),
           ),
         ],
       ),
@@ -126,8 +125,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               },
               child: ListView.separated(
                 controller: scrollController,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
                 itemCount: state.productList.length,
                 separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
@@ -139,9 +140,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           }
 
           if (!state.hasData && state.productList.isEmpty) {
-            return const Center(
-              child: Text('No products available'),
-            );
+            return const Center(child: Text('No products available'));
           }
 
           return const SizedBox();

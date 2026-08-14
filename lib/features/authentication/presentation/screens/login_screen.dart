@@ -29,31 +29,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(authStateNotifierProvider);
 
-    ref.listen(
-      authStateNotifierProvider.select((value) => value),
-      ((previous, next) {
-        if (next is Failure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(next.exception.message.toString())),
-          );
-        } else if (next is Success) {
-          // ignore: use_build_context_synchronously
-          context.go('/dashboard');
-        }
-      }),
-    );
+    ref.listen(authStateNotifierProvider.select((value) => value), ((
+      previous,
+      next,
+    ) {
+      if (next is Failure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.exception.message.toString())),
+        );
+      } else if (next is Success) {
+        // ignore: use_build_context_synchronously
+        context.go('/dashboard');
+      }
+    }));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TDD with Riverpod'),
-      ),
+      appBar: AppBar(title: const Text('TDD with Riverpod')),
       body: SafeArea(
         child: Column(
           children: [
-            AuthField(
-              hintText: 'Username',
-              controller: usernameController,
-            ),
+            AuthField(hintText: 'Username', controller: usernameController),
             AuthField(
               hintText: 'Password',
               obscureText: true,
@@ -63,7 +58,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               loading: (_) => const Center(child: CircularProgressIndicator()),
               orElse: () => ElevatedButton(
                 onPressed: () {
-                  ref.read(authStateNotifierProvider.notifier).loginUser(
+                  ref
+                      .read(authStateNotifierProvider.notifier)
+                      .loginUser(
                         usernameController.text,
                         passwordController.text,
                       );

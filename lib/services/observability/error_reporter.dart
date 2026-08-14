@@ -9,8 +9,12 @@ import 'package:flutter/foundation.dart';
 
 abstract class ErrorReporter {
   Future<void> initialize();
-  Future<void> recordError(Object error, StackTrace stackTrace,
-      {String? reason, Map<String, dynamic>? metadata});
+  Future<void> recordError(
+    Object error,
+    StackTrace stackTrace, {
+    String? reason,
+    Map<String, dynamic>? metadata,
+  });
   Future<void> recordMessage(String message, {bool fatal = false});
   Future<void> setUserIdentifier(String id);
   Future<void> setCustomKey(String key, dynamic value);
@@ -23,8 +27,12 @@ class NoopErrorReporter extends ErrorReporter {
   Future<void> initialize() async {}
 
   @override
-  Future<void> recordError(Object error, StackTrace stackTrace,
-      {String? reason, Map<String, dynamic>? metadata}) async {}
+  Future<void> recordError(
+    Object error,
+    StackTrace stackTrace, {
+    String? reason,
+    Map<String, dynamic>? metadata,
+  }) async {}
 
   @override
   Future<void> recordMessage(String message, {bool fatal = false}) async {}
