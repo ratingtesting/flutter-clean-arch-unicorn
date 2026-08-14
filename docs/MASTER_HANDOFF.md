@@ -224,8 +224,8 @@ detection, Drift migration test, EOL lib upgrade.
 
 ## 18. GIT / RELEASE
 
-Latest commit: (integration commit — see repo)
-Commit message: POST-v1.5 parallel swarm hardening (P0/P1 fixes)
-Push status: PENDING at handoff (Integrator will push after CI green)
-CI status: PENDING (will run on push)
-Release created: v1.6.0 (prior milestone; this iteration is patch-level, no new tag unless Master Architect requests)
+Latest commit: 88942de
+Commit message: POST-v1.5 parallel swarm hardening: P0/P1 fixes (version, shared leak, CI test/, env, log redaction, placeholder tests)
+Push status: PUSHED (origin/master)
+CI status: ✅ SUCCESS (run 31823143743, 7m3s — format→analyze lib/ test/→boundary→test+coverage→android build)
+Release created: v1.6.0 (prior milestone). This iteration is patch-level hardening on top of v1.6.0 — no new tag (per §40: releases only for meaningful milestones).
