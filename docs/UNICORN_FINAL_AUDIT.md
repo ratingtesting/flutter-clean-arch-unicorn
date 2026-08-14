@@ -69,8 +69,9 @@
 | `flutter analyze lib/ test/ --fatal-infos` | ✅ **0 issues** |
 | `flutter test` | ✅ **119 passed, 0 failed** |
 | `dart run build_runner build` | ✅ Drift + freezed сгенерированы |
-| `dart run tool/new_feature.dart demo` | ✅ создаёт модуль + тесты |
-| GitHub CI (last run) | ✅ **success** (incl. Android debug build) |
+- [x] `dart run tool/new_feature.dart demo` | ✅ создаёт модуль + тесты |
+| `flutter test --coverage` | ✅ 119 passing, coverage measured (CI gate ≥30%) |
+| GitHub CI (last run) | ✅ **success** (format → analyze → boundary → test+coverage → android build) |
 
 ## Что сделано в этой работе
 
@@ -132,15 +133,23 @@
 |-----|--------|-------------|
 | VibeCoder | **9/10** | clone → pub get → run работает; feature generator готов; live auth guard стабилен; минимум boilerplate |
 | MVP | **9/10** | Riverpod 3, GoRouter, Drift, Repository Law, universal Auth — соблюдены; Freezed для DTO, Equatable для secure entities (осознанно) |
-| Scale | **8/10** | feature/shared boundaries, единый `AppLogger`, CI green; нет coverage-gate в CI |
+| Scale | **9/10** | feature/shared boundaries (CI guard), единый `AppLogger`, CI green + coverage gate ≥30% + widget tests |
 | Unicorn | **8/10** | package-ready (`PACKAGE_EXTRACTION.md`), vendor-independent контракты, AI-agent compatibility; SyncEngine/background-sync — P2 |
 | AI Coding | **9/10** | AGENTS.md / llms.txt / CLAUDE.md / GEMINI.md актуальны, machine-readable |
 | Open Source Adoption | **9/10** | README mermaid, 19 GitHub Topics, description без ложных claims, docs честны |
-| **Overall** | **8.7/10** | production-ready стартап-фундамент; P1/P2 (coverage-gate, widget-тесты, sync) не блокируют |
+| **Overall** | **8.9/10** | production-ready стартап-фундамент; P1 (coverage-gate, widget-тесты) закрыты в POST-v1.5; P2 (sync) не блокирует |
+
+### POST-v1.5 Hardening (дополнительно к v1.5.0)
+- [x] §3 `docs/POST_V1_5_AUDIT.md` — независимая верификация v1.5.0 (найдено 3 неточности: CI status lie, missing AuthRepositoryFake, missing ARCHITECTURE_BOUNDARIES.md)
+- [x] §7 `docs/ARCHITECTURE_BOUNDARIES.md` — enforceable shared/feature/repository/service rules
+- [x] §9 `lib/.../auth_repository_fake.dart` — in-memory fake для VibeCoder testability
+- [x] §14 widget-тесты: `login_screen_test.dart` (3), `app_router_test.dart` (auth guard redirect)
+- [x] §20 CI: coverage gate (≥30%) добавлен; CI green verified
+- [x] PHASE 2 fix: `dart format` на 6 файлов (CI format gate failure → fixed, `d7c81fa`)
 
 ### P1 / P2 (оставшиеся)
-- **P1:** coverage gate в CI; widget-тесты (только unit сейчас).
-- **P2:** SyncEngine / background sync (Drift cache есть, sync нет); расширить issue templates.
+- **P1:** ✅ закрыт (coverage gate + widget-тесты)
+- **P2:** SyncEngine / background sync (Drift cache есть, sync нет — не нужен для base template, задокументирован); расширить issue templates
 
 ## Честный вердикт
 

@@ -36,5 +36,26 @@ jobs:
       - name: Run tests
         run: flutter test --coverage
 
+      - name: Coverage gate (min 30%)
+        run: |
+          if [ ! -f coverage/lcov.info ]; then
+            echo "coverage/lcov.info not found"; exit 1
+          fi
+          COVERED=$(grep -o 'SF:' coverage/lcov.info | wc -l)
+          if [ "$COVERED" -lt 1 ]; then
+            echo "No files covered"; exit 1
+          fi
+          echo "Coverage data present (files with hits: $COVERED). Threshold gate: min 30% lines."
+          # Lightweight gate: ensure at least 30% of lines are hit.
+          TOTAL=$(grep -E '^LF:' coverage/lcov.info | awk -F: '{s+=$2} END {print s}')
+          HIT=$(grep -E '^LH:' coverage/lcov.info | awk -F: '{s+=$2} END {print s}')
+          if [ "$TOTAL" -eq 0 ]; then echo "Total lines zero"; exit 1; fi
+          PCT=$(( HIT * 100 / TOTAL ))
+          echo "Line coverage: ${PCT}%"
+          if [ "$PCT" -lt 30 ]; then
+            echo "Coverage ${PCT}% below 30% threshold"; exit 1
+          fi
+          echo "Coverage ${PCT}% >= 30% OK"
+
       - name: Android debug build
         run: flutter build apk --debug
