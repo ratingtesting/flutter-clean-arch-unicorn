@@ -2,7 +2,7 @@
 
 ## What is this project?
 
-A production-ready Flutter template built for startups. It provides Clean Architecture (feature-first), Riverpod 3, 119 unit tests, CI/CD, and security-by-default — so a solo founder can launch without hiring a senior engineer for architecture decisions.
+A production-ready Flutter template built for startups. It provides Clean Architecture (feature-first), Riverpod 3, 128 unit tests, CI/CD, and security-by-default — so a solo founder can launch without hiring a senior engineer for architecture decisions.
 
 ## Project Structure
 
@@ -27,7 +27,7 @@ flutter_clean_arch_unicorn/
 │   ├── core/
 │   │   └── database/         # Drift local relational DB (typed tables)
 │   └── shared/                # Shared models, theme, exceptions, widgets
-├── test/                      # 119 unit tests
+├── test/                      # 128 unit tests
 ├── scripts/                   # check_secrets.sh pre-commit hook
 ├── .github/workflows/         # GitHub Actions (format → analyze → test → build)
 ├── tool/                      # new_feature.dart generator

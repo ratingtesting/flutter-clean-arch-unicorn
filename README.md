@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 119 unit tests · v1.6.0**
+> **Clean Architecture · Riverpod 3 · 128 unit tests · v1.7.0**
 
 **The foundation for a startup that will become a unicorn.**
 
@@ -16,7 +16,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 - `make.bat setup` — install dependencies
 - `make.bat run-dev` — launch dev environment
 - Feature-first structure: `features/{name}/{data,domain,presentation}` — intuitive navigation
-- 119 unit tests verify nothing is broken
+- 128 unit tests verify nothing is broken
 
 ### 🔒 Secure
 **Secrets never leak into git. Tokens are encrypted.**
@@ -27,9 +27,9 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 - `Either<L,R>` — errors are handled, not thrown as exceptions
 
 ### 🛡️ Reliable
-**119 unit tests. CI/CD. Monitoring ready.**
+**128 unit tests. CI/CD. Monitoring ready.**
 
-- **119 unit tests** — 0 failures
+- **128 unit tests** — 0 failures
 - **GitHub Actions** — format → analyze → test → build in 2 minutes per PR
 - `ExceptionHandler` — centralized network error handling (Socket, Dio, timeouts)
 - `ErrorReporter` and `Analytics` interfaces — ready for Crashlytics / Sentry (not bundled)
@@ -144,7 +144,7 @@ flutter run --dart-define=BASE_URL=https://my-api.com
 ## Testing
 
 ```bash
-flutter test              # all tests (119)
+flutter test              # all tests (128)
 flutter test --coverage   # with coverage
 ```
 
@@ -175,7 +175,7 @@ Semantic tags (`v1.5.0`, `v1.1.0`). Every change is a commit + tag. Current vers
 | Stage | What you get |
 |-------|--------------|
 | **VibeCoder** | `clone` → `flutter pub get` → `flutter run`. Starter UI, auth flow, GoRouter, Riverpod 3, `tool/new_feature.dart` generator, SecureStorage, error handling, light/dark theme. Zero config needed. |
-| **MVP** | Drift local DB, Repository pattern, Freezed models, Dio networking, auth guard, environments (dev/staging/prod), 119 tests. Replace `Noop` services with real SDKs when needed. |
+| **MVP** | Drift local DB, Repository pattern, Freezed models, Dio networking, auth guard, environments (dev/staging/prod), 128 tests. Replace `Noop` services with real SDKs when needed. |
 | **Scale** | Feature boundaries enforced (CI boundary-check), shared/ discipline, caching (cache-then-remote), CI (format→analyze→test→build), observability contracts (Logger/ErrorReporter/Analytics/FeatureFlags/Performance). |
 | **Unicorn** | Package-ready features, vendor-independent architecture (Firebase/Supabase/Sentry swap via interfaces), performance extension point, AI-agent docs (AGENTS.md, llms.txt, docs/AI_DEVELOPMENT_RULES.md). |
 

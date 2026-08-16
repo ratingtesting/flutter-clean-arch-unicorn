@@ -7,7 +7,7 @@
 ## 1. PROJECT
 
 Repository: https://github.com/ratingtesting/flutter-clean-arch-unicorn
-Current version: v1.6.0
+Current version: v1.7.0
 Latest commit: (see git log — integration commit pending at handoff time)
 Branch: master
 Date: 2026-08-14
@@ -120,7 +120,7 @@ GoRouter auth guard, Drift cache-then-remote, AuthRepositoryFake, widget tests.
 
 ## 8. TESTING
 
-- Total tests: **115** (4 placeholder removed this iter; prior 119 included them).
+- Total tests: **128** (drift migration guard added this iter; prior 115 after placeholder removal; original 119 included 4 empty placeholders).
 - Levels: repository (auth/dashboard/user_cache), providers, auth (datasource/repo/providers/login), routing (app_router), feature-flags, generator, widget (login_screen, app_router), drift (in-memory).
 - New tests: none added (focus was removing inflation + fixing leaks).
 - Missing important tests: Drift migration/schema test (P2), more widget error-states.
@@ -145,7 +145,7 @@ GoRouter auth guard, Drift cache-then-remote, AuthRepositoryFake, widget tests.
 - Quick start / roadmap / feature matrix: ✅.
 - CONTRIBUTING / CHANGELOG / issue templates / PR template: ✅.
 - LICENSE: MIT-0 text present, but GitHub shows "Other" (detection quirk).
-- Releases: v1.6.0 published.
+- Releases: v1.7.0 published (tag v1.7.0, GitHub Release live).
 - **Discovery weaknesses:** 0 stars/forks (repo ~2 weeks); no screenshot/GIF; no social preview; not yet in awesome-flutter.
 - **Adoption weaknesses:** needs external promotion (Discord, awesome lists) — NOT a code problem.
 
@@ -228,4 +228,4 @@ Latest commit: 88942de
 Commit message: POST-v1.5 parallel swarm hardening: P0/P1 fixes (version, shared leak, CI test/, env, log redaction, placeholder tests)
 Push status: PUSHED (origin/master)
 CI status: ✅ SUCCESS (run 31823143743, 7m3s — format→analyze lib/ test/→boundary→test+coverage→android build)
-Release created: v1.6.0 (prior milestone). This iteration is patch-level hardening on top of v1.6.0 — no new tag (per §40: releases only for meaningful milestones).
+Release created: v1.7.0 (PRIMARY MILESTONE of this iteration — parallel swarm hardening + P1/P2 completion).
