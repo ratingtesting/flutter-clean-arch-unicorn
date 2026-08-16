@@ -1,6 +1,6 @@
 # Flutter Clean Arch Unicorn — Architecture
 
-> v1.4.0 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
+> v1.7.0 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
 
 ## Who is this for
 
@@ -15,7 +15,7 @@ This template is designed so that **editing and maintaining the project costs le
 |---|-------------|-----|----------------|
 | 1 | **Low change cost** | New features / fixes shouldn't be expensive | Feature-first Clean Architecture: each feature is isolated |
 | 2 | **Security by default** | Secrets, keys, configs — never in code | `--dart-define`, SecureStorage, interceptors |
-| 3 | **Testability** | Tests catch bugs before production | 119 tests (ProviderContainer + mocktail) |
+| 3 | **Testability** | Tests catch bugs before production | 128 tests (ProviderContainer + mocktail) |
 | 4 | **CI/CD out of the box** | Automatic checks on every PR | GitHub Actions: analyze + test + format |
 | 5 | **Scalability** | Startup grows → more features, more teams | Feature-first: new feature = new folder |
 | 6 | **Observability** | See crashes, analytics, logs in production | Logger, ErrorReporter, Analytics, FeatureFlags (Noop by default) |
@@ -129,7 +129,7 @@ if (flags.isEnabled('new_checkout_flow')) {
 ## Tests
 
 ```bash
-flutter test                      # all tests (119)
+flutter test                      # all tests (128)
 flutter test --coverage           # with coverage
 ```
 
@@ -155,10 +155,14 @@ test('should load data', () async {
 ## CI/CD (GitHub Actions)
 
 On every PR and push to master:
-1. `flutter pub get` — dependencies
-2. `dart format --set-exit-if-changed .` — formatting
-3. `flutter analyze lib/` — static analysis (0 errors)
-4. `flutter test` — all tests
+1. `flutter pub get`
+2. `dart run build_runner build --delete-conflicting-outputs` — generate freezed/drift code
+3. `dart format --set-exit-if-changed .` — formatting
+4. `flutter analyze --fatal-infos lib/ test/` — static analysis (0 issues)
+5. `dart run tool/check_boundaries.dart` — feature-boundary enforcement
+6. `flutter test --coverage` — all tests
+7. Coverage gate (min 30%, excluding generated files)
+8. `flutter build apk --debug` — Android build sanity
 
 Failure blocks the PR. Quality is guaranteed.
 

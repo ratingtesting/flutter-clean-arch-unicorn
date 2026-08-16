@@ -8,13 +8,13 @@ Thank you for wanting to improve this template! 🦄
 git clone https://github.com/ratingtesting/flutter-clean-arch-unicorn.git
 cd flutter_clean_arch_unicorn
 flutter pub get
-flutter test           # should be 119 passing
+flutter test           # should be 128 passing
 flutter analyze lib/ test/   # 0 issues (--fatal-infos)
 ```
 
 ## Git Flow
 
-- `master` — stable branch, release tags only (`v1.4.0`, `v1.1.0`...)
+- `master` — stable branch, release tags only (`v1.7.0`, `v1.6.0`...)
 - Feature branches: `feat/<short-description>` (e.g., `feat/offline-sync`)
 - Bugfix branches: `fix/<short-description>` (e.g., `fix/pagination-edge-case`)
 - PR into `master` → mandatory CI (analyze, format, test)
@@ -55,7 +55,7 @@ chore(ci): pin flutter 3.44.8 in workflow
 
 - [ ] `flutter analyze lib/ test/ --fatal-infos` — 0 issues
 - [ ] `dart format --set-exit-if-changed .` — no diff
-- [ ] `flutter test` — all tests pass (119)
+- [ ] `flutter test` — all tests pass (128)
 - [ ] Tests added for new logic (domain layer required)
 - [ ] Documentation updated (README, ARCHITECTURE.md, CHANGELOG.md if needed)
 - [ ] No hardcoded secrets / API keys / domains

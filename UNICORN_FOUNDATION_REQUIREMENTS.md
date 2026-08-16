@@ -59,7 +59,7 @@
 |-------|---------|------|
 | **Analyze** | `flutter analyze --fatal-infos` | 0 errors, 0 warnings (strict) |
 | **Format** | `dart format --set-exit-if-changed .` | No diff |
-| **Test** | `flutter test` | All 119 tests pass (no coverage gate yet) |
+| **Test** | `flutter test` | All 128 tests pass (coverage gate ≥30% in CI) |
 | **Build** | `flutter build apk --release` / `flutter build ios --release` | Artifacts built |
 | **Security** | `flutter pub outdated` (weekly) | No critical CVEs |
 | **Deploy** | Fastlane → Play Console / TestFlight / Firebase App Distribution | Manual approve for PROD |
@@ -112,7 +112,7 @@
 - [x] Dio network layer with `NetworkService` abstraction
 - [x] Feature-first structure: `auth`, `dashboard`, `splash`
 - [x] Environment entrypoints: `main_dev.dart`, `main_staging.dart`, `main_prod.dart`
-- [x] 119 unit tests passing (unit + provider; no widget tests yet)
+- [x] 128 tests passing (unit + provider + 2 widget tests)
 - [x] `flutter analyze` = 0 issues (with `--fatal-infos`)
 - [x] GitHub Actions workflow (analyze, test, format)
 - [x] README.md + ARCHITECTURE.md + CONTRIBUTING.md
@@ -127,7 +127,7 @@
 - [ ] **Clean Architecture 0 violations**: presentation still imports datasources directly in 3 provider files (see `GAP_ANALYSIS.md`, M8)
 - [ ] **Certificate Pinning**: NOT bundled (interceptor absent; documented as optional in SECURITY.md)
 - [ ] **Widget tests**: 0 — only unit/provider tests
-- [ ] **Coverage gate**: not configured in CI (119 tests, coverage not measured)
+- [ ] **Coverage gate**: configured in CI (≥30% lines; excludes generated files)
 - [ ] **MIT-0 LICENSE file**: added in v1.4.0 (see `GAP_ANALYSIS.md`)
 - [ ] **Git tags**: none pushed yet at v1.4.0
 

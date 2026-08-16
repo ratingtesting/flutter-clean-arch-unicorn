@@ -36,6 +36,6 @@
 ## Use this when you need to
 - Start a Flutter project with production-grade architecture
 - Avoid rewriting your codebase in 6-12 months
-- Ship a startup MVP that can scale to 1M+ users
+- Ship a startup MVP architected with a path to scale toward 1M+ users
 - Hire developers without spending 2 weeks on onboarding
 - Keep secrets and API keys out of your git history

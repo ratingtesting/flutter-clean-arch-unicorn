@@ -30,7 +30,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 **128 unit tests. CI/CD. Monitoring ready.**
 
 - **128 unit tests** — 0 failures
-- **GitHub Actions** — format → analyze → test → build in 2 minutes per PR
+- **GitHub Actions** — format → analyze → test → build in ~7 minutes per PR
 - `ExceptionHandler` — centralized network error handling (Socket, Dio, timeouts)
 - `ErrorReporter` and `Analytics` interfaces — ready for Crashlytics / Sentry (not bundled)
 
@@ -154,9 +154,13 @@ Pattern: `ProviderContainer` + `mocktail`, each provider tested in isolation.
 
 GitHub Actions on every PR:
 1. `flutter pub get`
-2. `dart format --set-exit-if-changed .`
-3. `flutter analyze lib/ test/ --fatal-infos` (0 issues)
-4. `flutter test`
+2. `dart run build_runner build --delete-conflicting-outputs` — generate freezed/drift code
+3. `dart format --set-exit-if-changed .`
+4. `flutter analyze lib/ test/ --fatal-infos` (0 issues)
+5. `dart run tool/check_boundaries.dart` — feature-boundary enforcement
+6. `flutter test --coverage`
+7. Coverage gate (min 30%, excluding generated files)
+8. `flutter build apk --debug`
 
 ## Requirements
 
@@ -166,7 +170,7 @@ GitHub Actions on every PR:
 
 ## Versioning
 
-Semantic tags (`v1.5.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.7.0**.
+Semantic tags (`v1.5.0`, `v1.3.0`). Every change is a commit + tag. Current version: **1.7.0**.
 
 ---
 

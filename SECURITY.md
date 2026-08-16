@@ -6,8 +6,8 @@ Only the latest tagged release receives security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| v1.0.x  | ✅ Yes             |
-| < v1.0  | ❌ No              |
+| v1.7.x  | ✅ Yes (latest)    |
+| < v1.7  | ❌ No              |
 
 ## Reporting a Vulnerability
 
@@ -67,7 +67,7 @@ We aim to acknowledge within 48 hours and provide a fix timeline within 7 days.
 ### Dependency Security
 
 - `flutter pub outdated` — weekly check
-- Pin versions in `pubspec.yaml` (no `^` or `any`)
+- Use caret (`^`) ranges for normal deps, but avoid unconstrained `any`; pin critical security-sensitive packages to a known-good version when needed
 - Audit transitive deps before upgrading
 
 ### Incident Response
@@ -98,9 +98,12 @@ Before shipping to production, verify:
 ```
 lib/services/security/
   ├── secure_storage.dart          # Interface + encrypted impl + fake for tests
+  └── (interceptors live in lib/services/network/)
+
+lib/services/network/
   └── interceptors/                # Dio interceptors (retry, auth, logging)
 
-.github/workflows/main.yml         # CI: format, analyze, test
+.github/workflows/main.yml         # CI: pub get, build_runner, format, analyze, boundary, test+coverage, coverage gate, apk build
 ```
 
 ## License

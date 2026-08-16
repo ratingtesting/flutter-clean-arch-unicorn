@@ -3,7 +3,7 @@ description: Flutter Clean Architecture starter with Riverpod 3.4.1, GoRouter, F
 
 publish_to: "none"
 
-version: 1.7.0+1
+version: 1.7.1+1
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
@@ -11,7 +11,7 @@ environment:
 dependencies:
   connectivity_plus: ^7.3.1
   cupertino_icons: ^1.0.2
-  dio: ^5.4.0
+  dio: ^5.11.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -27,7 +27,6 @@ dependencies:
   path_provider: ^2.1.0
   path: ^1.9.0
   drift: ^2.34.3
-  sqlite3_flutter_libs: ^0.6.0+eol
   sqlite3: ^3.5.1
 
 dev_dependencies:

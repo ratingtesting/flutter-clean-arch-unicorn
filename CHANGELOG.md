@@ -4,6 +4,22 @@ All notable changes to this template are documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/)
 and semantic versioning.
 
+## [1.7.1] — 2026-08-16 (Integrity & Documentation Consistency Pass)
+
+### Fixed
+- **LICENSE**: restored `SPDX-License-Identifier: MIT-0` (accidentally dropped after v1.7.0).
+- **Dependencies**: removed `sqlite3_flutter_libs: ^0.6.0+eol` (obsolete no-op once on `sqlite3` 3.x); `sqlite3: ^3.5.1` already bundles native libs. Drift + SQLite unchanged.
+- **dio**: pubspec constraint bumped to `^5.11.0` to match the resolved version.
+- **Test count**: reconciled to **128** across README, ARCHITECTURE, AGENTS, CLAUDE, GEMINI, llms.txt, CONTRIBUTING, UNICORN_FOUNDATION_REQUIREMENTS, `.cursor/rules`, copilot-instructions, PR template, and CHANGELOG (was 100/119/125/128 in various places).
+- **ARCHITECTURE.md**: version badge `v1.4.0` → `v1.7.0`; test count 119 → 128; CI steps now match the real workflow (build_runner, boundary check, coverage gate, apk build).
+- **SECURITY.md**: corrected false "no `^` pins" claim and interceptor path (`lib/services/network/`); supported-versions table now `v1.7.x`.
+- **README.md**: CI time "~7 minutes" (was "2 minutes"); full CI pipeline documented; semantic-tag example fixed.
+- **folder_structure.md**: regenerated from the actual `lib/` + `test/` tree.
+- Removed dead 1-byte stub `auth_local_data_source.dart`.
+
+### Verified
+- `flutter pub get` clean, `flutter analyze lib/ test/ --fatal-infos` 0 issues, `flutter test` 128 passed / 0 failed.
+
 ## [1.7.0] — 2026-08-14 (Parallel Swarm Hardening + Test Reality Pass)
 
 ### Added
@@ -23,7 +39,7 @@ and semantic versioning.
 - P1: placeholder tests (`expect(true)`) replaced with real discriminating tests; 3 weak `toString()` tests rewritten to behavioral; log-redaction masks URI query + raw body.
 
 ### Verified
-- `flutter analyze lib/ test/` clean, `flutter test --coverage` 125 passed, CI green.
+- `flutter analyze lib/ test/` clean, `flutter test --coverage` 128 passed, CI green.
 
 ## [Unreleased]
 
@@ -32,6 +48,8 @@ and semantic versioning.
   the repo did not use `sqflite` (only `shared_preferences`), had no
   certificate pinning in code, and did not have widget tests or "100% coverage".
   README/ARCHITECTURE/llms.txt now describe the real stack.
+  (Corrected in v1.7.0 follow-up: widget tests DO exist — added in 1.6.0 — and
+  the coverage gate is now wired in CI at ≥30%.)
 - Bumped SDK constraint to `>=3.8.0` so generated code matches the toolchain.
 
 ### Security
