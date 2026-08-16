@@ -166,7 +166,7 @@ GitHub Actions on every PR:
 
 ## Versioning
 
-Semantic tags (`v1.5.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.6.0**.
+Semantic tags (`v1.5.0`, `v1.1.0`). Every change is a commit + tag. Current version: **1.7.0**.
 
 ---
 
@@ -193,6 +193,14 @@ This template is your **Day 0 foundation**. Scale it as you grow:
 | **Year 2** | 1M+ | BFF (Backend for Frontend) | Reduce API calls |
 
 **Key principle:** Replace `Noop` implementations in `lib/services/` with real ones when needed. The interfaces are already there.
+
+---
+
+## 📸 Screenshots
+
+> Add real app screenshots here after running the template (emulator or device):
+> `screenshots/login.png`, `screenshots/dashboard.png`, `screenshots/products.png`.
+> This section is intentionally a placeholder — no fabricated images are shipped.
 
 ---
 

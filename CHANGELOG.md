@@ -4,6 +4,27 @@ All notable changes to this template are documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/)
 and semantic versioning.
 
+## [1.7.0] — 2026-08-14 (Parallel Swarm Hardening + Test Reality Pass)
+
+### Added
+- Parallel read-only audit wave (6 roles: Architect, VibeCoder/DX, Scale/Unicorn, QA/CI, Security, OSS) via subagent swarm.
+- `docs/MASTER_HANDOFF.md` — single handoff file for the external Master Architect.
+- `docs/KANBAN.md` — parallel-execution backlog.
+- `test/core/database/database_test.dart` — Drift schema/migration guard (write/read round-trip).
+
+### Changed
+- LICENSE: added `SPDX-License-Identifier: MIT-0` so GitHub recognizes the license.
+- CI: coverage gate now excludes generated files (`*.g.dart`, `*.freezed.dart`).
+- README: honest Screenshots placeholder (no fabricated images).
+- `UNICORN_FINAL_AUDIT.md` + `MASTER_HANDOFF.md`: scores → 9.0 (P0 honesty/security closed).
+
+### Fixed
+- P0: pubspec version 1.4.0 → 1.6.0; `shared/domain/models` no longer exports feature models; CI analyzes `lib/ test/`; env separation via `--dart-define` BASE_URL_DEV/STAGING/PROD.
+- P1: placeholder tests (`expect(true)`) replaced with real discriminating tests; 3 weak `toString()` tests rewritten to behavioral; log-redaction masks URI query + raw body.
+
+### Verified
+- `flutter analyze lib/ test/` clean, `flutter test --coverage` 125 passed, CI green.
+
 ## [Unreleased]
 
 ### Changed
