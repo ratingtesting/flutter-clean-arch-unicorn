@@ -1,10 +1,10 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 128 unit tests · v1.7.0**
+> **Clean Architecture · Riverpod 3 · 128 unit tests · v1.7.1**
 
 **The foundation for a startup that will become a unicorn.**
 
-This is not a "hello world" or a "quick prototype". It's a production-ready template engineered so that **you won't have to rewrite your code two years from now**.
+This is not a "hello world" or a "quick prototype". It's a production-ready foundation engineered so that **you won't have to rewrite your code two years from now**.
 
 ---
 
@@ -21,7 +21,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 ### 🔒 Secure
 **Secrets never leak into git. Tokens are encrypted.**
 
-- `scripts/check_secrets.sh` — blocks commits with API keys
+- `scripts/check_secrets.sh` — run it manually to catch API keys / secrets before committing (not wired as an auto-blocking hook)
 - `SecureStorage` — tokens stored in iOS Keychain / Android EncryptedSharedPreferences
 - `--dart-define` — BASE_URL and keys are build arguments, not hardcoded
 - `Either<L,R>` — errors are handled, not thrown as exceptions
@@ -43,7 +43,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready temp
 - **Minimal dependencies** — only what you actually need. No bloat
 
 ### 📈 Scalable
-**Clean Architecture. Branch-ready for 1M+ users.**
+**Clean Architecture. Architected with a path to scale toward 1M+ users.**
 
 - **Clean Architecture** — `domain` layer never imports `data`/`presentation`. Swap DB, API, or UI — business logic stays intact
 - **Riverpod 3 (compile-time DI)** — if a provider import is wrong, the code won't compile. Errors caught before deployment
@@ -170,7 +170,7 @@ GitHub Actions on every PR:
 
 ## Versioning
 
-Semantic tags (`v1.5.0`, `v1.3.0`). Every change is a commit + tag. Current version: **1.7.0**.
+Semantic tags (`v1.5.0`, `v1.7.0`). Every change is a commit + tag. Current version: **1.7.1**.
 
 ---
 
