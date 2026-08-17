@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_arch_unicorn/features/authentication/presentation/screens/login_screen.dart';
 import 'package:flutter_clean_arch_unicorn/routes/app_router.dart';
-import 'package:flutter_clean_arch_unicorn/services/user_cache_service/presentation/providers/current_user_provider.dart';
+import 'package:flutter_clean_arch_unicorn/routes/auth_guard_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';

@@ -1,4 +1,4 @@
-.PHONY: setup check run-dev build-apk build-ios clean help
+.PHONY: setup check boundary run-dev build-apk build-ios clean help
 
 # Flutter Clean Arch Unicorn
 # https://github.com/ratingtesting/flutter-clean-arch-unicorn
@@ -12,7 +12,13 @@ setup: ## Install dependencies and setup project
 	@echo "✅ Setup complete. Run 'make run-dev' to start."
 
 ## 🔍 Code Quality
-check: analyze test format ## Run all quality checks (analyze + test + format)
+check: analyze test format boundary ## Run all quality checks (analyze + test + format + boundaries)
+
+boundary: ## Run architecture boundary enforcer (fails on forbidden imports)
+	@echo "🧱 Checking architecture boundaries..."
+	$(FLUTTER) pub get >/dev/null 2>&1 || true
+	dart run tool/check_boundaries.dart
+	@echo "✅ Boundaries OK."
 
 analyze: ## Run static analysis
 	@echo "🔍 Analyzing code..."

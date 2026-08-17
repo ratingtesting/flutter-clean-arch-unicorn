@@ -51,6 +51,16 @@ flutter_clean_arch_unicorn/
 ## Conventions
 
 - **Architecture:** Clean Architecture — `domain` layer MUST NOT import `data` or `presentation` packages
+- **Architecture boundaries (enforced by `tool/check_boundaries.dart`):** before writing code, identify the module and layer, then respect these machine-checked rules:
+  1. `core/` MUST NOT depend on `features/` or `services/`
+  2. `shared/` MUST NOT depend on `features/`
+  3. `services/` MUST NOT depend on `features/` (any layer — move shared types to `shared/`, invert via a contract)
+  4. `feature A` MUST NOT import internals of `feature B` (allowed: public barrel `features/<b>/<b>.dart` or a contract)
+  5. `domain/` MUST NOT import `data/` or `presentation/`
+  6. `data/` MUST NOT import `presentation/`
+  7. `dio`/`drift`/`sqflite` are FORBIDDEN in `domain/` and `presentation/` screens/widgets (Repository Law — never bypass the repository). Allowed in `data/`, `core/database`, `services/`, and `presentation/providers/` (wiring layer).
+  Rules are declared once in `lib/tool/boundary_rules.dart`. Run `dart run tool/check_boundaries.dart` after any change.
+- **BEFORE WRITING CODE (mandatory):** (1) identify the feature, (2) identify the architectural layer, (3) identify allowed dependencies for that layer, (4) do NOT cross forbidden boundaries, (5) run `dart run tool/check_boundaries.dart` and fix any violation before finishing.
 - **State Management:** Riverpod 3 — use `Notifier`/`AsyncNotifier`, NOT `StateNotifier`
 - **Error Handling:** Use `Either<Failure, Success>` from `lib/shared/domain/models/either.dart`
 - **Models:** Use Freezed for immutable state/DTOs, json_serializable for JSON parsing
@@ -91,6 +101,7 @@ make.bat check
 flutter analyze lib/ test/
 dart format --set-exit-if-changed .
 flutter test
+dart run tool/check_boundaries.dart   # architecture boundary enforcement (CI runs this too)
 ```
 
 ## Notes for AI Agents

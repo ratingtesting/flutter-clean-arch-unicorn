@@ -1,26 +1,78 @@
 #!/usr/bin/env dart
+// @dart=3.2
+// ignore_for_file: avoid_print
+
 // tool/check_boundaries.dart
 //
-// Lightweight guard for architecture boundaries (§10 / §11).
+// Architecture boundary enforcer for the Flutter Clean Arch Unicorn template.
 //
-// Rules enforced:
-//   1. Feature A must NOT import internals of Feature B.
-//      Allowed: Feature -> Core, Feature -> Shared.
-//      Forbidden: features/<a>/... -> features/<b>/ (where a != b, and not
-//      through a public barrel `features/<b>/<b>.dart`).
-//   2. presentation/ must not import data/ of the SAME feature's datasources
-//      directly when a repository boundary exists (warns, non-fatal).
+// Scans every Dart file under the target root (default: `lib/`) and reports
+// forbidden cross-module / cross-layer dependencies using the rules declared
+// in `tool/boundary_rules.dart` (the single source of truth).
 //
-// Run:  dart run tool/check_boundaries.dart
-// Exit code 1 = violations found.
+// Run:
+//   dart run tool/check_boundaries.dart            # scan lib/
+//   dart run tool/check_boundaries.dart <dir>      # scan an isolated fixture
+//
+// Exit code 0 = no fatal violations; 1 = at least one fatal violation.
+// A non-fatal (warning) violation is printed but does NOT fail the run.
+//
+// The rule logic lives in `boundary_rules.dart` so it can be unit-tested
+// directly without launching a subprocess.
 
 import 'dart:io';
 
-final featuresDir = Directory('lib/features');
-final violations = <String>[];
+import 'package:flutter_clean_arch_unicorn/tool/boundary_rules.dart';
 
-void scan(Directory dir, String currentFeature) {
-  for (final entity in dir.listSync(recursive: true, followLinks: false)) {
+/// Package prefix that all first-party imports share.
+const _pkgPrefix = "package:flutter_clean_arch_unicorn/";
+
+/// Entry point. Accepts an optional scan root (defaults to `lib`).
+void main(List<String> args) {
+  final root = args.isNotEmpty ? args[0] : 'lib';
+  final rootDir = Directory(root);
+  if (!rootDir.existsSync()) {
+    stderr.writeln('No directory found at "$root".');
+    exit(0);
+  }
+
+  final violations = <BoundaryViolation>[];
+  final scanned = _scan(rootDir, violations);
+
+  if (violations.isEmpty) {
+    print('✅ Boundary check passed: '
+        'no architectural violations in $scanned file(s).');
+    exit(0);
+  }
+
+  final fatal =
+      violations.where((v) => v.fatal).toList(growable: false);
+  final warnings =
+      violations.where((v) => !v.fatal).toList(growable: false);
+
+  for (final v in warnings) {
+    stderr.writeln('⚠️  WARNING: $v');
+  }
+  if (fatal.isNotEmpty) {
+    stderr.writeln(
+        '❌ Boundary violations found (${fatal.length} fatal, '
+        '${warnings.length} warning):');
+    for (final v in fatal) {
+      stderr.writeln('  - $v');
+    }
+    exit(1);
+  }
+
+  // Only warnings: still a pass.
+  print('✅ Boundary check passed (warnings only) in $scanned file(s).');
+  exit(0);
+}
+
+/// Recursively scan [root]; collect violations. Returns file count scanned.
+int _scan(Directory root, List<BoundaryViolation> out) {
+  var count = 0;
+  for (final entity
+      in root.listSync(recursive: true, followLinks: false)) {
     if (entity is! File) continue;
     if (!entity.path.endsWith('.dart')) continue;
     if (entity.path.endsWith('.freezed.dart') ||
@@ -28,52 +80,85 @@ void scan(Directory dir, String currentFeature) {
       continue;
     }
 
-    final rel = entity.path.replaceAll('\\', '/');
-    final lines = entity.readAsLinesSync();
+    count++;
+    final rel = _libRelative(root.path, entity.path);
+    _checkFile(rel, entity.readAsLinesSync(), out);
+  }
+  return count;
+}
 
-    for (var i = 0; i < lines.length; i++) {
-      final line = lines[i];
-      if (!line.contains("import 'package:flutter_clean_arch_unicorn/"))
-        continue;
+/// Convert an absolute file path to a lib-relative path (forward slashes),
+/// computed against [rootPath], then normalised to the `lib/` convention.
+String _libRelative(String rootPath, String filePath) {
+  final root = rootPath.replaceAll('\\', '/').replaceAll(r'\', '/');
+  final file = filePath.replaceAll('\\', '/');
+  final rel = file.startsWith(root)
+      ? file.substring(root.length).replaceAll(RegExp(r'^/'), '')
+      : file;
+  // Treat the scan root as the source of truth: the path segments after the
+  // root are the lib-relative coordinates the rules operate on.
+  return rel;
+}
 
-      final match = RegExp(
-        r"import 'package:flutter_clean_arch_unicorn/(.+?)[';]",
-      ).firstMatch(line);
-      if (match == null) continue;
-      final target = match.group(1)!;
+/// Parse one file's imports and accumulate violations.
+void _checkFile(
+  String relPath,
+  List<String> lines,
+  List<BoundaryViolation> out,
+) {
+  // Directory of the importing file (for resolving relative imports),
+  // split into segments and stripped of the leading root marker.
+  final fromDirSegments =
+      relPath.split('/')..removeLast();
 
-      // Rule 1: cross-feature import (skip public barrel of same feature)
-      final featMatch = RegExp(r'features/([^/]+)/').firstMatch(target);
-      if (featMatch != null && featMatch.group(1) != currentFeature) {
-        // public barrel exception: features/<b>/<b>.dart
-        final barrel =
-            'features/${featMatch.group(1)}/${featMatch.group(1)}.dart';
-        if (target != barrel) {
-          violations.add('${rel}:${i + 1} cross-feature import -> $target');
-        }
+  for (final line in lines) {
+    if (!line.trim().startsWith("import ")) continue;
+
+    // package: first-party import
+    if (line.contains(_pkgPrefix)) {
+      final target = line
+          .substring(line.indexOf(_pkgPrefix) + _pkgPrefix.length);
+      final cut = RegExp(r"[';]").firstMatch(target)?.start ?? target.length;
+      final internal = target.substring(0, cut);
+      out.addAll(checkImport(relPath, internalTarget: internal));
+      continue;
+    }
+
+    // external package import (e.g. dio / drift) — for Repository Law
+    final ext = RegExp(
+      r"import 'package:([a-z0-9_]+)/",
+    ).firstMatch(line);
+    if (ext != null) {
+      out.addAll(checkImport(relPath, externalPackage: ext.group(1)));
+      continue;
+    }
+
+    // relative import: ../features/... or ./data/...
+    final rel = RegExp(r"import '(\.\.?/[^']*)'").firstMatch(line);
+    if (rel != null) {
+      final resolved = _resolveRelative(fromDirSegments, rel.group(1)!);
+      if (resolved != null) {
+        out.addAll(checkImport(relPath, internalTarget: resolved));
       }
     }
   }
 }
 
-void main() {
-  if (!featuresDir.existsSync()) {
-    stderr.writeln('No lib/features directory found.');
-    exit(0);
+/// Resolve a relative import path (may contain ../) against the importing
+/// file's directory segments. Returns a lib-relative target, or null if it
+/// escapes the known tree (treated as benign).
+String? _resolveRelative(List<String> fromDir, String relative) {
+  final segs = [...fromDir];
+  final parts = relative.split('/');
+  for (final p in parts) {
+    if (p == '..') {
+      if (segs.isEmpty) return null;
+      segs.removeLast();
+    } else if (p == '.') {
+      // no-op
+    } else {
+      segs.add(p);
+    }
   }
-
-  for (final featureDir in featuresDir.listSync()) {
-    if (featureDir is! Directory) continue;
-    final name = featureDir.uri.pathSegments.where((s) => s.isNotEmpty).last;
-    scan(featureDir, name);
-  }
-
-  if (violations.isEmpty) {
-    print('✅ Boundary check passed: no cross-feature imports.');
-    exit(0);
-  }
-
-  stderr.writeln('❌ Boundary violations found (${violations.length}):');
-  for (final v in violations) stderr.writeln('  - $v');
-  exit(1);
+  return segs.join('/');
 }

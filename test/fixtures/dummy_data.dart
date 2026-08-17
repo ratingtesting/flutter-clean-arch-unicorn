@@ -1,4 +1,4 @@
-import 'package:flutter_clean_arch_unicorn/features/authentication/domain/models/user_model.dart';
+import 'package:flutter_clean_arch_unicorn/shared/domain/models/user.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/response.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
 

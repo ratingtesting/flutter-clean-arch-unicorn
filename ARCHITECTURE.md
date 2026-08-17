@@ -159,10 +159,25 @@ On every PR and push to master:
 2. `dart run build_runner build --delete-conflicting-outputs` — generate freezed/drift code
 3. `dart format --set-exit-if-changed .` — formatting
 4. `flutter analyze --fatal-infos lib/ test/` — static analysis (0 issues)
-5. `dart run tool/check_boundaries.dart` — feature-boundary enforcement
+5. `dart run tool/check_boundaries.dart` — **architecture boundary enforcement** (blocking)
 6. `flutter test --coverage` — all tests
 7. Coverage gate (min 30%, excluding generated files)
 8. `flutter build apk --debug` — Android build sanity
+
+### Boundary Enforcement
+
+Architecture boundaries are **machine-enforced**, not just documented:
+
+- **Rules** live in one place: `lib/tool/boundary_rules.dart` (the single source of
+  truth). They cover `core`, `shared`, `services`, `feature`-isolation, internal layers
+  (`domain`/`data`/`presentation`), and the Repository Law (`dio`/`drift` must not appear
+  in `domain/` or `presentation/` screens/widgets).
+- **Enforcer:** `tool/check_boundaries.dart` scans **all of `lib/`**, detects forbidden
+  imports (package and relative), and exits non-zero on any violation.
+- **Local DX:** `dart run tool/check_boundaries.dart` (or `make boundary`).
+- **CI:** step 5 above — a violation fails the build, so architecture cannot silently degrade.
+- **Tests:** `test/tool/check_boundaries_test.dart` proves the enforcer works (valid
+  architecture passes, forbidden imports fail — including an end-to-end negative test).
 
 Failure blocks the PR. Quality is guaranteed.
 

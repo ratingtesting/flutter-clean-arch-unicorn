@@ -24,6 +24,15 @@
 - ExceptionHandler with retry interceptor
 - Observability interfaces (Logger, ErrorReporter, Analytics, FeatureFlags) — swap Noop for real implementations
 
+## Architecture Boundaries (machine-enforced)
+- `core/` MUST NOT depend on `features/` or `services/`
+- `shared/` MUST NOT depend on `features/`
+- `services/` MUST NOT depend on `features/` (any layer)
+- `feature A` MUST NOT import internals of `feature B` (public barrel or contract only)
+- `domain/` MUST NOT import `data/` or `presentation/`; `data/` MUST NOT import `presentation/`
+- `dio`/`drift`/`sqflite` FORBIDDEN in `domain/` and `presentation/` screens/widgets (Repository Law)
+- Rules declared in `lib/tool/boundary_rules.dart`. Enforced by `dart run tool/check_boundaries.dart` (run after every change; CI blocks on violation).
+
 ## Links
 - [GitHub](https://github.com/ratingtesting/flutter-clean-arch-unicorn)
 - [README](https://github.com/ratingtesting/flutter-clean-arch-unicorn/blob/master/README.md)

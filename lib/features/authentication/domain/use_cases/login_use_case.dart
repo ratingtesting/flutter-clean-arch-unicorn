@@ -1,7 +1,7 @@
 import 'package:flutter_clean_arch_unicorn/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:flutter_clean_arch_unicorn/services/user_cache_service/domain/repositories/user_cache_repository.dart';
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
-import 'package:flutter_clean_arch_unicorn/features/authentication/domain/models/user_model.dart';
+import 'package:flutter_clean_arch_unicorn/shared/domain/models/user.dart';
 import 'package:flutter_clean_arch_unicorn/shared/exceptions/http_exception.dart';
 
 /// Logs a user in and caches the session on success.

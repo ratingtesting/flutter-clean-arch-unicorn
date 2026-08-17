@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-/// Domain model for an authenticated user.
+/// Shared domain model for an authenticated user.
+///
+/// `User` is a cross-cutting model used by both the `authentication` feature
+/// and the `user_cache_service` service, so it lives in `shared/domain/models/`
+/// (see docs/ARCHITECTURE_BOUNDARIES.md § "Shared must be strict").
 ///
 /// `toJson` excludes `password` and `token` for security — never serialize
 /// credentials. Use [toLoginJson] only for the login request payload.
@@ -85,12 +89,12 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    username,
-    email,
-    firstName,
-    lastName,
-    gender,
-    image,
-  ];
+        id,
+        username,
+        email,
+        firstName,
+        lastName,
+        gender,
+        image,
+      ];
 }

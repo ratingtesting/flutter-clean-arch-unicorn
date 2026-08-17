@@ -78,6 +78,8 @@ void main(List<String> args) {
   print('  3. Register a provider in presentation/providers/');
   print('  4. Add a route in lib/routes/app_router.dart');
   print('  5. Run: dart run build_runner build --delete-conflicting-outputs');
+  print('  6. Run: dart run tool/check_boundaries.dart  (must pass — enforces');
+  print('     architecture boundaries; CI blocks on violation)');
 }
 
 void _generateFeature(String name) {

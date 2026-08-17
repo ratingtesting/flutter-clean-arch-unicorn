@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../features/authentication/presentation/screens/login_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
-import '../services/user_cache_service/presentation/providers/current_user_provider.dart';
+import '../routes/auth_guard_providers.dart';
 
 /// Auth guard: `/dashboard` requires a logged-in user. If none, redirect to
 /// `/login`. We read live auth state (authStateNotifierProvider, combined with
