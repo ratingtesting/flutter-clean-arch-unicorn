@@ -70,3 +70,6 @@ GoogleService-Info.plist
 PROGRESS.md
 autoresearch-lessons.md
 phoenix-log.md
+
+# graphify code-graph artifacts (regenerate locally with `graphify extract .` — do NOT commit)
+graphify-out/
