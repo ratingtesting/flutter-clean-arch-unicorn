@@ -110,3 +110,21 @@ dart run tool/check_boundaries.dart   # architecture boundary enforcement (CI ru
 - `avoid_dynamic_calls` warnings in `parse_response.dart` and `exception_handler_mixin.dart` are **intentional** (JSON API responses + dynamic exception handling)
 - The 3 example features (auth, dashboard, splash) are minimal — replace them with your own
 - `Noop*` implementations in `services/observability/` are placeholders. Replace with real implementations (Crashlytics, Sentry, Amplitude) when deploying to production
+
+## Code Graph (token economy — read this before searching code)
+
+This project ships a **graphify code graph** in `graphify-out/graph.json`. Its purpose is **token
+savings, not magic**: instead of loading whole files into context, query the graph to locate the
+2-3 relevant spots, then read only those. Graph-assisted lookup is cheaper than brute-force file reads.
+
+- **Graph exists?** `graphify-out/graph.json` (relative to project root). If present, use the
+  `graphify` skill (`/graphify`) to answer "how does X work / what calls Y / trace Z" questions —
+  it reads the graph first, loads files only when needed.
+- **Build the graph once per project** (not per session): `graphify extract .` (or `graphify-ds`
+  helper). Writes `./graphify-out/`. Model/backend are global in `~/.graphify/providers.json` — no
+  per-project init.
+- **Rebuild after big refactors:** `graphify update .` (no LLM re-scan needed for code-only changes).
+- **Isolation:** graphs are per-project (under each project's own `graphify-out/`). They NEVER mix
+  across projects unless `graphify merge-graphs` is run explicitly.
+- **Rule of thumb:** prefer graph queries for navigation; load file contents only to verify/edit.
+  This keeps token usage low on long tasks.
