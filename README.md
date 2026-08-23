@@ -227,9 +227,12 @@ This template is your **Day 0 foundation**. Scale it as you grow:
 
 ## 📸 Screenshots
 
-> Add real app screenshots here after running the template (emulator or device):
-> `screenshots/login.png`, `screenshots/dashboard.png`, `screenshots/products.png`.
-> This section is intentionally a placeholder — no fabricated images are shipped.
+> Screenshots are intentionally not shipped: the template has no `windows/`
+> platform and its web build is blocked by `dart:ffi` (native sqlite3 driver),
+> so no honest screenshots could be produced on this machine. Run the app on
+> your emulator/device (`make.bat run-dev`) and drop
+> `screenshots/login.png`, `screenshots/dashboard.png`, `screenshots/products.png`
+> here — three `<img>` tags, `width="280"`, in a row.
 
 ---
 
@@ -257,6 +260,16 @@ flowchart TD
 
 Key rules: Widgets never import Dio/DB directly (§12). Feature A never imports
 Feature B internals (§11). Infrastructure injected via Riverpod (§14).
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! Start with [CONTRIBUTING.md](./CONTRIBUTING.md) and
+[AGENTS.md](./AGENTS.md) for conventions.
+
+**New here? [Pick a `good first issue` →](https://github.com/ratingtesting/flutter-clean-arch-unicorn/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)**
+and say hi in [Discussion #1](https://github.com/ratingtesting/flutter-clean-arch-unicorn/discussions/1).
 
 ---
 

@@ -53,7 +53,7 @@ gh release create v1.7.2 --notes "Honesty & Small Fixes Pass: secret scan in CI,
 | flutter analyze --fatal-infos lib/ test/ | RC=0, **0 issues** (прогнан, README не в scope) |
 | flutter test | **154 passed** (из предыдущей задачи, код не менялся) |
 | mermaid рендер средой | **НЕВОЗМОЖНО в этой среде** (см. факт выше) |
-| grep '```mermaid' по всем *.md | 1 блок, целый, симптомы устранены |
+| mermaid-fence grep по всем *.md | 1 блок, целый, симптомы устранены |
 | diff scope | только README.md (mermaid-блок) |
 
 ## Git / Push Status
