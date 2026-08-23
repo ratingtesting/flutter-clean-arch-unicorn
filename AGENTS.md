@@ -45,7 +45,7 @@ flutter_clean_arch_unicorn/
 | Modify CI | `.github/workflows/main.yml` |
 | Add environment | Create `lib/main/main_<env>.dart`, add `--dart-define` config |
 | Change error handling | `lib/shared/mixins/exception_handler_mixin.dart` |
-| Add offline storage | `lib/core/database/` (Drift) + implement cache in data layer |
+| Add offline storage | `lib/core/database/` (Drift) + implement cache in data layer — see [docs/DRIFT_TABLE_GUIDE.md](docs/DRIFT_TABLE_GUIDE.md) |
 | Fix tests | `test/features/<name>/` — tests mirror the source structure |
 
 ## Conventions

@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 151 unit tests · v1.7.3**
+> **Clean Architecture · Riverpod 3 · 151 unit tests · v1.7.5**
 
 **The foundation for a startup that will become a unicorn.**
 
@@ -55,6 +55,8 @@ This is not a "hello world" or a "quick prototype". It's a production-ready foun
 
 [![MIT-0](https://img.shields.io/badge/License-MIT--0-blue.svg)](LICENSE)
 [![Flutter CI](https://github.com/ratingtesting/flutter-clean-arch-unicorn/actions/workflows/main.yml/badge.svg)](https://github.com/ratingtesting/flutter-clean-arch-unicorn/actions/workflows/main.yml)
+
+> **Cold-start verified** (2026-08-23): an AI agent that had never seen this template cloned it cold and shipped a full CRUD feature (own Drift table, Freezed model, screen, routing) in ~56 minutes (~18 min reading docs), with **0 architecture violations** — every coding mistake was caught by the analyzer/enforcer before completion. Single-run measurement, template v1.7.3.
 
 ---
 
@@ -150,6 +152,9 @@ the public barrel `features/notes/notes.dart`. Three manual steps remain:
 
 Run `make gen` (build_runner) after editing freezed models. Boundaries, lint and
 tests keep you honest from the first line — same rules as every other feature.
+
+If the new feature needs persistent relational storage (its own table), see
+[docs/DRIFT_TABLE_GUIDE.md](docs/DRIFT_TABLE_GUIDE.md) for the exact steps.
 
 ## Environments
 

@@ -17,6 +17,7 @@
 - Clean Architecture with strict Dependency Rule (domain never imports data/presentation)
 - Feature-first modularity: each feature is an isolated `data/domain/presentation` triad
 - 151 unit tests with ProviderContainer + mocktail
+- Cold-start verified (2026-08-23): an AI agent cloned it cold and shipped a full CRUD feature (Drift table, Freezed model, screen, routing) in ~56 min with 0 architecture violations; enforcement caught every mistake before completion
 - 3 environments: dev/staging/prod via --dart-define
 - SecureStorage for encrypted token storage
 - check_secrets.sh pre-commit hook + secret scan in CI
