@@ -54,6 +54,7 @@ This is not a "hello world" or a "quick prototype". It's a production-ready foun
 ---
 
 [![MIT-0](https://img.shields.io/badge/License-MIT--0-blue.svg)](LICENSE)
+[![Flutter CI](https://github.com/ratingtesting/flutter-clean-arch-unicorn/actions/workflows/main.yml/badge.svg)](https://github.com/ratingtesting/flutter-clean-arch-unicorn/actions/workflows/main.yml)
 
 ---
 
