@@ -16,10 +16,10 @@
 ## Features
 - Clean Architecture with strict Dependency Rule (domain never imports data/presentation)
 - Feature-first modularity: each feature is an isolated `data/domain/presentation` triad
-- 128 unit tests with ProviderContainer + mocktail
+- 151 unit tests with ProviderContainer + mocktail
 - 3 environments: dev/staging/prod via --dart-define
 - SecureStorage for encrypted token storage
-- check_secrets.sh pre-commit hook
+- check_secrets.sh pre-commit hook + secret scan in CI
 - Either&lt;L,R&gt; functional error handling
 - ExceptionHandler with retry interceptor
 - Observability interfaces (Logger, ErrorReporter, Analytics, FeatureFlags) — swap Noop for real implementations

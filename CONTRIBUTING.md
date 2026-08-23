@@ -8,7 +8,7 @@ Thank you for wanting to improve this template! 🦄
 git clone https://github.com/ratingtesting/flutter-clean-arch-unicorn.git
 cd flutter_clean_arch_unicorn
 flutter pub get
-flutter test           # should be 128 passing
+flutter test           # should be 151 passing
 flutter analyze lib/ test/   # 0 issues (--fatal-infos)
 ```
 
@@ -55,7 +55,7 @@ chore(ci): pin flutter 3.44.8 in workflow
 
 - [ ] `flutter analyze lib/ test/ --fatal-infos` — 0 issues
 - [ ] `dart format --set-exit-if-changed .` — no diff
-- [ ] `flutter test` — all tests pass (128)
+- [ ] `flutter test` — all tests pass (151)
 - [ ] Tests added for new logic (domain layer required)
 - [ ] Documentation updated (README, ARCHITECTURE.md, CHANGELOG.md if needed)
 - [ ] No hardcoded secrets / API keys / domains

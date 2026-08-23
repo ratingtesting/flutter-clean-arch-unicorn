@@ -49,7 +49,7 @@ flutter_clean_arch_unicorn/
 │       ├── mixins/              # exception_handler_mixin.dart
 │       ├── presentation/        # providers, theme, widgets
 │       └── theme/               # AppTheme
-├── test/                        # 128 tests (mirrors lib/), + fixtures, regression, tool
+├── test/                        # 151 tests (mirrors lib/), + fixtures, regression, tool
 ├── tool/                        # new_feature.dart generator, check_boundaries.dart
 ├── scripts/                     # check_secrets.sh pre-commit checker
 ├── docs/                        # ADRs, audits, handoffs

@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 128 unit tests · v1.7.1**
+> **Clean Architecture · Riverpod 3 · 151 unit tests · v1.7.2**
 
 **The foundation for a startup that will become a unicorn.**
 
@@ -14,9 +14,10 @@ This is not a "hello world" or a "quick prototype". It's a production-ready foun
 **A new developer is up and running in 3 minutes.**
 
 - `make.bat setup` — install dependencies
+- `make.bat gen` — generate freezed/drift code (**run before analyze/test**)
 - `make.bat run-dev` — launch dev environment
 - Feature-first structure: `features/{name}/{data,domain,presentation}` — intuitive navigation
-- 128 unit tests verify nothing is broken
+- 151 unit tests verify nothing is broken
 
 ### 🔒 Secure
 **Secrets never leak into git. Tokens are encrypted.**
@@ -27,9 +28,9 @@ This is not a "hello world" or a "quick prototype". It's a production-ready foun
 - `Either<L,R>` — errors are handled, not thrown as exceptions
 
 ### 🛡️ Reliable
-**128 unit tests. CI/CD. Monitoring ready.**
+**151 unit tests. CI/CD. Monitoring ready.**
 
-- **128 unit tests** — 0 failures
+- **151 unit tests** — 0 failures
 - **GitHub Actions** — format → analyze → test → build in ~7 minutes per PR
 - `ExceptionHandler` — centralized network error handling (Socket, Dio, timeouts)
 - `ErrorReporter` and `Analytics` interfaces — ready for Crashlytics / Sentry (not bundled)
@@ -144,7 +145,7 @@ flutter run --dart-define=BASE_URL=https://my-api.com
 ## Testing
 
 ```bash
-flutter test              # all tests (128)
+flutter test              # all tests (151)
 flutter test --coverage   # with coverage
 ```
 

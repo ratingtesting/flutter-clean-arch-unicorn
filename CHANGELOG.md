@@ -4,6 +4,26 @@ All notable changes to this template are documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/)
 and semantic versioning.
 
+## [1.7.2] — 2026-08-23 (Honesty & Small Fixes Pass)
+
+### Added
+- **Secret scan in CI**: `scripts/check_secrets.sh` now runs as a blocking step in GitHub Actions (was manual-only).
+- **Token refresh wiring example**: `docs/examples/token_refresh_wiring.md` — how to connect `AuthTokenInterceptor.onTokenRefresh` to a real backend.
+- **`make gen` / `make.bat gen` target** — generates freezed/drift code; documented as REQUIRED before analyze/test (without it newcomers saw ~58 false errors).
+
+### Changed
+- **Test count reconciled to 151** across README, ARCHITECTURE, CONTRIBUTING, llms.txt, folder_structure, UNICORN_FOUNDATION_REQUIREMENTS (was 128; agent-instruction files CLAUDE/GEMINI/AGENTS/copilot pending approval).
+- **R-INFRA package list** extracted to `_infrastructurePackages` constant with guidance to extend it for new infra packages (graphql/realm/etc.).
+- **Feature generator now creates the public barrel** `features/<name>/<name>.dart` (required by boundary rule R-FEATURE-1 for cross-feature access); generator test extended.
+
+### Fixed
+- **SECURITY.md STRIDE honesty**: removed claims of "rate limiting via Feature Flags" and "biometric" — neither exists in template code (documented as backend/app responsibilities instead).
+
+### Verification (2026-08-23)
+- `dart run tool/check_boundaries.dart` → pass (79 files)
+- `flutter analyze --fatal-infos lib/ test/` → 0 issues
+- Full suite + coverage gate → green
+
 ## [1.7.1] — 2026-08-16 (Integrity & Documentation Consistency Pass)
 
 ### Fixed

@@ -59,7 +59,7 @@
 |-------|---------|------|
 | **Analyze** | `flutter analyze --fatal-infos` | 0 errors, 0 warnings (strict) |
 | **Format** | `dart format --set-exit-if-changed .` | No diff |
-| **Test** | `flutter test` | All 128 tests pass (coverage gate ≥30% in CI) |
+| **Test** | `flutter test` | All 151 tests pass (coverage gate ≥30% in CI) |
 | **Build** | `flutter build apk --release` / `flutter build ios --release` | Artifacts built |
 | **Security** | `flutter pub outdated` (weekly) | No critical CVEs |
 | **Deploy** | Fastlane → Play Console / TestFlight / Firebase App Distribution | Manual approve for PROD |
@@ -112,7 +112,7 @@
 - [x] Dio network layer with `NetworkService` abstraction
 - [x] Feature-first structure: `auth`, `dashboard`, `splash`
 - [x] Environment entrypoints: `main_dev.dart`, `main_staging.dart`, `main_prod.dart`
-- [x] 128 tests passing (unit + provider + 2 widget tests)
+- [x] 151 tests passing (unit + provider + 4 widget tests)
 - [x] `flutter analyze` = 0 issues (with `--fatal-infos`)
 - [x] GitHub Actions workflow (analyze, test, format)
 - [x] README.md + ARCHITECTURE.md + CONTRIBUTING.md

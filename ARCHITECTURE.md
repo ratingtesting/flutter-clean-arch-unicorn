@@ -1,6 +1,6 @@
 # Flutter Clean Arch Unicorn — Architecture
 
-> v1.7.1 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
+> v1.7.2 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
 
 ## Who is this for
 
@@ -15,7 +15,7 @@ This template is designed so that **editing and maintaining the project costs le
 |---|-------------|-----|----------------|
 | 1 | **Low change cost** | New features / fixes shouldn't be expensive | Feature-first Clean Architecture: each feature is isolated |
 | 2 | **Security by default** | Secrets, keys, configs — never in code | `--dart-define`, SecureStorage, interceptors |
-| 3 | **Testability** | Tests catch bugs before production | 128 tests (ProviderContainer + mocktail) |
+| 3 | **Testability** | Tests catch bugs before production | 151 tests (ProviderContainer + mocktail) |
 | 4 | **CI/CD out of the box** | Automatic checks on every PR | GitHub Actions: analyze + test + format |
 | 5 | **Scalability** | Startup grows → more features, more teams | Feature-first: new feature = new folder |
 | 6 | **Observability** | See crashes, analytics, logs in production | Logger, ErrorReporter, Analytics, FeatureFlags (Noop by default) |
@@ -129,7 +129,7 @@ if (flags.isEnabled('new_checkout_flow')) {
 ## Tests
 
 ```bash
-flutter test                      # all tests (128)
+flutter test                      # all tests (151)
 flutter test --coverage           # with coverage
 ```
 
