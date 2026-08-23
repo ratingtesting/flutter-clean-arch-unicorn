@@ -15,7 +15,7 @@
 
 - [ ] `flutter analyze lib/ test/ --fatal-infos` — **0 issues**
 - [ ] `dart format --set-exit-if-changed .` — no diff
-- [ ] `flutter test` — **all 128 tests pass**
+- [ ] `flutter test` — **all 151 tests pass**
 - [ ] Tests added for new logic (domain layer required)
 - [ ] Documentation updated (README, ARCHITECTURE.md, CHANGELOG.md if needed)
 - [ ] No hardcoded secrets / API keys / domains

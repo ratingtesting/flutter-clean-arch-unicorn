@@ -7,6 +7,6 @@ Full agent guide: [AGENTS.md](../AGENTS.md). Machine-readable summary: [llms.txt
 - Architecture boundaries enforced by `tool/check_boundaries.dart` — run `dart run tool/check_boundaries.dart` after changes; `services/` must not depend on `features/`, `feature A` must not import `feature B` internals (see `lib/tool/boundary_rules.dart`)
 - State management: Riverpod 3 (compile-time DI). Navigation: GoRouter. Models: Freezed.
 - Error handling: return `Either<Failure, T>` from repositories — never throw raw exceptions across layers
-- Tests: `flutter test` — all 128 tests must pass before any commit
+- Tests: `flutter test` — all 151 tests must pass before any commit
 - Secrets: never hardcode. Use `--dart-define` for build-time config and `SecureStorage` for tokens
 - Environments: dev/staging/prod via `lib/main/main_{env}.dart`

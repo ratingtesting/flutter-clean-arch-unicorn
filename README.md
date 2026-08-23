@@ -1,6 +1,6 @@
 # 🦄 Flutter Clean Arch Unicorn
 
-> **Clean Architecture · Riverpod 3 · 151 unit tests · v1.7.2**
+> **Clean Architecture · Riverpod 3 · 151 unit tests · v1.7.3**
 
 **The foundation for a startup that will become a unicorn.**
 
@@ -180,7 +180,7 @@ Semantic tags (`v1.5.0`, `v1.7.0`). Every change is a commit + tag. Current vers
 | Stage | What you get |
 |-------|--------------|
 | **VibeCoder** | `clone` → `flutter pub get` → `flutter run`. Starter UI, auth flow, GoRouter, Riverpod 3, `tool/new_feature.dart` generator, SecureStorage, error handling, light/dark theme. Zero config needed. |
-| **MVP** | Drift local DB, Repository pattern, Freezed models, Dio networking, auth guard, environments (dev/staging/prod), 128 tests. Replace `Noop` services with real SDKs when needed. |
+| **MVP** | Drift local DB, Repository pattern, Freezed models, Dio networking, auth guard, environments (dev/staging/prod), 151 tests. Replace `Noop` services with real SDKs when needed. |
 | **Scale** | Feature boundaries enforced (CI boundary-check), shared/ discipline, caching (cache-then-remote), CI (format→analyze→test→build), observability contracts (Logger/ErrorReporter/Analytics/FeatureFlags/Performance). |
 | **Unicorn** | Package-ready features, vendor-independent architecture (Firebase/Supabase/Sentry swap via interfaces), performance extension point, AI-agent docs (AGENTS.md, llms.txt, docs/AI_DEVELOPMENT_RULES.md). |
 
