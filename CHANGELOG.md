@@ -4,6 +4,23 @@ All notable changes to this template are documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/)
 and semantic versioning.
 
+## [1.7.5] — 2026-08-23 (Cold-start Docs & Claim)
+
+### Added
+- **`docs/DRIFT_TABLE_GUIDE.md`** — exact steps to add a Drift table: `make gen`
+  first, table file in `lib/core/database/tables/`, registration in `database.dart`,
+  regenerate, use. Real-run FAQ from the cold-start agent build (Value() wrapping,
+  insert returns bool, Freezed `copyWith`, migration required on schemaVersion bump).
+- **Cold-start proof claim** in README and llms.txt: an AI agent cloned v1.7.3 cold
+  and shipped a full CRUD feature (own Drift table, Freezed model, screen, routing)
+  in ~56 min (~18 min reading docs) with **0 architecture violations**; analyzer/enforcer
+  caught every mistake before completion. Single-run measurement, documented verbatim.
+- Links to the Drift guide from README "Add your second feature" and AGENTS.md
+  "Add offline storage".
+
+### Changed
+- Version bump to `1.7.5+1`.
+
 ## [1.7.4] — 2026-08-23 (Final Polish Pass)
 
 ### Added
