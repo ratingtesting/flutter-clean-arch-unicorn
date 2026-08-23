@@ -181,6 +181,35 @@ Architecture boundaries are **machine-enforced**, not just documented:
 
 Failure blocks the PR. Quality is guaranteed.
 
+### Documented vs Enforced (honest matrix)
+
+Every violation message now ends with a short `Fix:` hint telling you HOW to
+correct the dependency. What each rule promises vs what the toolchain actually
+checks on every push:
+
+| Rule | Documented | Automated (checker) | CI Blocking | Fix hint |
+|---|---|---|---|---|
+| R-CORE-1 — core → features/services | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| R-SHARED-1 — shared → features | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| R-SERVICES-1 — services → features | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| R-FEATURE-1 — feature A → feature B internals | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| R-LAYER-DOMAIN — domain → data/presentation | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| R-LAYER-DATA — data → presentation | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| R-INFRA — dio/drift/sqflite outside infra layers | ✅ | ✅ `lib/` scan | ✅ fails build | ✅ |
+| Secret scan (`scripts/check_secrets.sh`) | ✅ | ✅ runs in CI | ✅ fails build | n/a (script output) |
+
+**Documented-but-not-enforced (honest exemptions):**
+
+- **`test/` is outside the default scan.** The enforcer scans `lib/`; running it
+  against `test/` reports false positives, because tests legitimately import
+  data-layer implementations of domain contracts to exercise them
+  (e.g. a domain use case test importing its repository implementation).
+  **Decision:** tests MAY import other features' internals for integration-style
+  scenarios; production code may not. If you want a stricter policy, run
+  `dart run tool/check_boundaries.dart test` locally and triage.
+- The checker sees **imports**, so logical coupling without an import statement
+  is not detectable (accepted limitation).
+
 ---
 
 ## Philosophy
