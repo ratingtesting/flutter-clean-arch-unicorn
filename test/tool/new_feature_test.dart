@@ -28,6 +28,7 @@ void main() {
 
       final base = p.join(root, 'lib', 'features', 'demo_widget');
       final expected = [
+        p.join(base, 'demo_widget.dart'),
         p.join(base, 'domain', 'repositories', 'demo_widget_repository.dart'),
         p.join(
           base,

@@ -29,6 +29,14 @@ class BoundaryViolation {
   String toString() => '[$ruleId] $message';
 }
 
+/// Infrastructure packages covered by the Repository Law (rule R-INFRA).
+///
+/// Direct imports are forbidden inside domain/ and presentation/ screens &
+/// widgets. When your project adds another infrastructure package (e.g.
+/// `graphql`, `realm`, `objectbox`), add it to this set so the boundary
+/// checker protects it too.
+const Set<String> _infrastructurePackages = {'dio', 'drift', 'sqflite'};
+
 /// Returns all boundary violations for one import statement.
 ///
 /// [fromRelPath] is the importing file's path relative to `lib/`.
@@ -54,12 +62,14 @@ List<BoundaryViolation> checkImport(
   // ---------------------------------------------------------------------------
   if (fromTop == 'core' &&
       (targetTop == 'features' || targetTop == 'services')) {
-    violations.add(const BoundaryViolation(
-      'R-CORE-1',
-      'core/ must not depend on features/ or services/ '
-      '(core is leaf infrastructure).',
-      true,
-    ));
+    violations.add(
+      const BoundaryViolation(
+        'R-CORE-1',
+        'core/ must not depend on features/ or services/ '
+            '(core is leaf infrastructure).',
+        true,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -68,12 +78,14 @@ List<BoundaryViolation> checkImport(
   // feature. (shared -> services is allowed: services are cross-cutting infra.)
   // ---------------------------------------------------------------------------
   if (fromTop == 'shared' && targetTop == 'features') {
-    violations.add(const BoundaryViolation(
-      'R-SHARED-1',
-      'shared/ must not depend on features/ '
-      '(shared is generic; feature code stays in the feature).',
-      true,
-    ));
+    violations.add(
+      const BoundaryViolation(
+        'R-SHARED-1',
+        'shared/ must not depend on features/ '
+            '(shared is generic; feature code stays in the feature).',
+        true,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -83,12 +95,14 @@ List<BoundaryViolation> checkImport(
   // inverts the dependency direction and couples infra to product code.
   // ---------------------------------------------------------------------------
   if (fromTop == 'services' && targetTop == 'features') {
-    violations.add(const BoundaryViolation(
-      'R-SERVICES-1',
-      'services/ must not depend on features/ (any layer). '
-      'Move shared types to shared/, or invert the dependency via a contract.',
-      true,
-    ));
+    violations.add(
+      const BoundaryViolation(
+        'R-SERVICES-1',
+        'services/ must not depend on features/ (any layer). '
+            'Move shared types to shared/, or invert the dependency via a contract.',
+        true,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -102,12 +116,14 @@ List<BoundaryViolation> checkImport(
   if (fromFeat != null && toFeat != null && fromFeat != toFeat) {
     final barrel = 'features/$toFeat/$toFeat.dart';
     if (target != barrel) {
-      violations.add(BoundaryViolation(
-        'R-FEATURE-1',
-        'feature "$fromFeat" must not import internals of feature "$toFeat" '
-        '($target). Depend on the public barrel or a contract instead.',
-        true,
-      ));
+      violations.add(
+        BoundaryViolation(
+          'R-FEATURE-1',
+          'feature "$fromFeat" must not import internals of feature "$toFeat" '
+              '($target). Depend on the public barrel or a contract instead.',
+          true,
+        ),
+      );
     }
   }
 
@@ -120,12 +136,14 @@ List<BoundaryViolation> checkImport(
   final toLayer = target == null ? null : _layerOf(target);
   if (fromLayer == 'domain' &&
       (toLayer == 'data' || toLayer == 'presentation')) {
-    violations.add(const BoundaryViolation(
-      'R-LAYER-DOMAIN',
-      'domain/ must not depend on data/ or presentation/ '
-      '(domain is the business core).',
-      true,
-    ));
+    violations.add(
+      const BoundaryViolation(
+        'R-LAYER-DOMAIN',
+        'domain/ must not depend on data/ or presentation/ '
+            '(domain is the business core).',
+        true,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -133,12 +151,14 @@ List<BoundaryViolation> checkImport(
   // data implements domain interfaces; it must never reach into UI.
   // ---------------------------------------------------------------------------
   if (fromLayer == 'data' && toLayer == 'presentation') {
-    violations.add(const BoundaryViolation(
-      'R-LAYER-DATA',
-      'data/ must not depend on presentation/ '
-      '(data implements domain, never the UI).',
-      true,
-    ));
+    violations.add(
+      const BoundaryViolation(
+        'R-LAYER-DATA',
+        'data/ must not depend on presentation/ '
+            '(data implements domain, never the UI).',
+        true,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -149,9 +169,7 @@ List<BoundaryViolation> checkImport(
   // Repository abstraction and is forbidden.
   // ---------------------------------------------------------------------------
   if (externalPackage != null &&
-      (externalPackage == 'dio' ||
-          externalPackage == 'drift' ||
-          externalPackage == 'sqflite')) {
+      _infrastructurePackages.contains(externalPackage)) {
     // Repository Law: infrastructure is only touched by infrastructure layers.
     // Forbidden inside business/UI layers: domain/, and presentation/ screens &
     // widgets (UI must never bypass the repository). The
@@ -159,16 +177,19 @@ List<BoundaryViolation> checkImport(
     // assembles infrastructure (Dio/Drift) into Riverpod providers — this
     // matches the repo's existing auth_repository_providers.dart pattern.
     final inProviderWiring = from.contains('/presentation/providers/');
-    final forbiddenLayer = fromLayer == 'domain' ||
+    final forbiddenLayer =
+        fromLayer == 'domain' ||
         (fromLayer == 'presentation' && !inProviderWiring);
     if (forbiddenLayer) {
-      violations.add(BoundaryViolation(
-        'R-INFRA',
-        'direct import of package:$externalPackage is forbidden inside '
-        'domain/ and presentation/ layers '
-        '(Repository Law: never bypass the repository).',
-        true,
-      ));
+      violations.add(
+        BoundaryViolation(
+          'R-INFRA',
+          'direct import of package:$externalPackage is forbidden inside '
+              'domain/ and presentation/ layers '
+              '(Repository Law: never bypass the repository).',
+          true,
+        ),
+      );
     }
   }
 

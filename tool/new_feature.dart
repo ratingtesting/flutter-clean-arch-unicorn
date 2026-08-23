@@ -85,6 +85,16 @@ void main(List<String> args) {
 void _generateFeature(String name) {
   final cap = _toPascalCase(name);
 
+  // features/<name>/<name>.dart — public barrel. Boundary rules (R-FEATURE-1)
+  // require other features to import this barrel instead of internals.
+  _write('lib/features/$name/$name.dart', '''
+/// Public API of the $name feature.
+///
+/// Other features may import ONLY this barrel (architecture rule R-FEATURE-1).
+/// Export contracts and models here as the feature grows.
+library;
+''');
+
   // domain/repositories/<name>_repository.dart
   _write('lib/features/$name/domain/repositories/${name}_repository.dart', '''
 import 'package:flutter_clean_arch_unicorn/shared/domain/models/either.dart';
