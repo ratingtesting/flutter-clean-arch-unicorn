@@ -73,3 +73,6 @@ phoenix-log.md
 
 # graphify code-graph artifacts (regenerate locally with `graphify extract .` — do NOT commit)
 graphify-out/
+# Master model constitution (never commit, never leak)
+MASTER_CONTEXT.md
+MASTER_HANDOFF_INBOX*
