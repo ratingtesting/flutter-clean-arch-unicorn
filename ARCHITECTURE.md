@@ -1,6 +1,6 @@
 # Flutter Clean Arch Unicorn — Architecture
 
-> v1.7.2 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
+> v1.7.3 | Flutter 3.44.8 | Riverpod 3.4.1 | GoRouter | Freezed 3.2.5
 
 ## Who is this for
 

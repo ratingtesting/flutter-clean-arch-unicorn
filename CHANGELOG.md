@@ -4,6 +4,21 @@ All notable changes to this template are documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/)
 and semantic versioning.
 
+## [1.7.3] — 2026-08-23 (Docs Sync Completion)
+
+### Changed
+- **Test count reconciled to 151 everywhere** (grep-recounted before editing): AGENTS.md ×2, CLAUDE.md, GEMINI.md, `.github/copilot-instructions.md`, `.github/pull_request_template.md`, README MVP table. Historical figures in `docs/` audits and old CHANGELOG entries left untouched (history stays history).
+- **`CrashlyticsReportingService` renamed to `ConsoleCrashReportingService`** — the class always was a console logger, not Firebase (the old doc comment referenced a non-existent `firebase_crash_reporting_service.dart`). Behavior unchanged, dependencies unchanged, no external usages existed.
+- Version bump `1.7.2+1` → `1.7.3+1`.
+
+### Verification (2026-08-23, full local CI cycle from scratch)
+- `build_runner build` → OK
+- `dart format --set-exit-if-changed .` → clean
+- `flutter analyze --fatal-infos lib/ test/` → **0 issues**
+- `dart run tool/check_boundaries.dart` → **0 violations** (79 files)
+- `flutter test --coverage` → **151 passed / 0 failed**, coverage gate ≥30% green
+- Repo grep: live claims contain no «128», no `CrashlyticsReportingService`
+
 ## [1.7.2] — 2026-08-23 (Honesty & Small Fixes Pass)
 
 ### Added
