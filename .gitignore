@@ -76,3 +76,5 @@ graphify-out/
 # Master model constitution (never commit, never leak)
 MASTER_CONTEXT.md
 MASTER_HANDOFF_INBOX*
+MASTER_HANDOFF*
+docs/MASTER_HANDOFF*
