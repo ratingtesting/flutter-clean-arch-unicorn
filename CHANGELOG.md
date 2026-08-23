@@ -4,6 +4,32 @@ All notable changes to this template are documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/)
 and semantic versioning.
 
+## [1.7.4] — 2026-08-23 (Final Polish Pass)
+
+### Added
+- **`Fix:` hints in boundary violations** — every rule in `lib/tool/boundary_rules.dart`
+  now carries a `fixHint`; the checker prints a short `Fix:` line under each violation
+  (Rule → Why → How). Unit tests cover all 7 hints; the E2E negative test asserts
+  the checker output contains `Fix:`.
+- **Documented vs Enforced matrix** in ARCHITECTURE.md — honest per-rule table
+  (Documented / Automated / CI Blocking / Fix hint) plus explicit exemptions.
+- **`test/` exemption documented** — factual finding: the enforcer scans `lib/`;
+  running it against `test/` yields false positives because tests legitimately
+  import data-layer implementations. Decision recorded in ARCHITECTURE.md:
+  tests MAY import other features' internals; production code may not.
+- **"Add your second feature in 10 minutes"** section in README Quick Start —
+  generator usage, what gets generated, and the 3 manual wiring steps.
+- **Deferred Triggers table** (UNICORN_FOUNDATION_REQUIREMENTS.md §13) — objective
+  triggers for package extraction and E2E suite, so future revisits are trigger-based.
+
+### Changed
+- Version bump to `1.7.4+1`.
+
+### Verification (2026-08-23)
+- `flutter analyze --fatal-infos lib/ test/` → 0 issues
+- `dart run tool/check_boundaries.dart` → 0 violations
+- Full test suite green (count fixed below); manual demo of Rule/Why/Fix output captured
+
 ## [1.7.3] — 2026-08-23 (Docs Sync Completion)
 
 ### Changed

@@ -182,4 +182,19 @@ When "you want to do it differently" — checklist:
 
 ---
 
+## 13. DEFERRED TRIGGERS (revisit when triggered, not before)
+
+Deferred decisions with objective triggers. When a trigger fires, revisit that
+single decision — do NOT re-argue the whole philosophy.
+
+| Deferred stage | Trigger (any one fires it) | First action on trigger |
+|---|---|---|
+| Package extraction (features → packages) | Second product built on the template OR second developer joins | Extract `authentication` first (most shared) |
+| Integration / E2E test suite | First real project ships on the template OR feature count > 10 | Add one golden-path E2E (login → dashboard), then per-critical-flow |
+
+Everything not listed here stays out of scope by design (see Intentional Non-Goals
+in the architecture audit).
+
+---
+
 *This document is alive. Every architectural decision is recorded in `docs/adr/YYYY-MM-DD-<slug>.md`.*
