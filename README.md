@@ -133,6 +133,24 @@ make check
 flutter run --dart-define=BASE_URL=https://my-api.com
 ```
 
+## Add your second feature in 10 minutes
+
+```bash
+dart run tool/new_feature.dart notes   # scaffolds the whole module
+```
+
+Generated: `lib/features/notes/{data,domain,presentation}` (repository contract,
+datasource, repository impl, Notifier + state, screen) plus two test files and
+the public barrel `features/notes/notes.dart`. Three manual steps remain:
+
+1. **Wire the repository provider** — open `notes_providers.dart` and replace
+   `throw UnimplementedError()` with a real `NotesRepositoryImpl(...)`.
+2. **Register the route** — add a `GoRoute` for `/notes` in `lib/routes/app_router.dart`.
+3. **Navigate to it** — push `/notes` from any screen or add it to a nav bar.
+
+Run `make gen` (build_runner) after editing freezed models. Boundaries, lint and
+tests keep you honest from the first line — same rules as every other feature.
+
 ## Environments
 
 | Entry point | Purpose |
