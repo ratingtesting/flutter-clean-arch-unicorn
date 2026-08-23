@@ -33,8 +33,8 @@ We aim to acknowledge within 48 hours and provide a fix timeline within 7 days.
 | **T**ampering | Network Security Config (cleartext blocked), signed builds |
 | **R**epudiation | Structured audit logs (AppLogger), immutable events |
 | **I**nformation Disclosure | Secrets in `--dart-define` / CI Secrets, SecureStorage for tokens |
-| **D**enial of Service | Retry interceptor with exponential backoff, rate limiting via Feature Flags |
-| **E**levation of Privilege | Feature Flags gate admin features, biometric for sensitive actions |
+| **D**enial of Service | Retry interceptor with exponential backoff (rate limiting is a backend responsibility) |
+| **E**levation of Privilege | Authorization boundaries belong to your backend; the template only guards routes client-side |
 
 ### Secrets Management
 
@@ -103,7 +103,7 @@ lib/services/security/
 lib/services/network/
   └── interceptors/                # Dio interceptors (retry, auth, logging)
 
-.github/workflows/main.yml         # CI: pub get, build_runner, format, analyze, boundary, test+coverage, coverage gate, apk build
+.github/workflows/main.yml         # CI: pub get, build_runner, format, analyze, secret scan, boundary, test+coverage, coverage gate, apk build
 ```
 
 ## License
