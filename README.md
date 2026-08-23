@@ -237,17 +237,20 @@ This template is your **Day 0 foundation**. Scale it as you grow:
 
 ```mermaid
 flowchart TD
-    UI[Presentation / Widgets] -->|ref.watch| PROV[Riverpod Providers]
-    PROV -->|Repository Interface| REPO[Repository Impl]
-    REPO --> DS[Data Sources]
-    DS --> LOCAL[Drift Local DB]
-    DS --> REMOTE[Dio Remote API]
-    PROV --> SVC[Services Contracts]
-    SVC --> NOOP[Noop impls / swap to Firebase, Sentry, Supabase]
-    subgraph features [features/ — feature-first, autonomous]
-        AUTH[authentication] --> DASH[dashboard]
-    end
-    UI --> features
+    UI["Presentation / Widgets"] -->|ref.watch| PROV["Riverpod Providers"]
+    PROV -->|"Repository Interface"| REPO["Repository Impl"]
+    REPO --> DS["Data Sources"]
+    DS --> LOCAL["Drift Local DB"]
+    DS --> REMOTE["Dio Remote API"]
+    PROV --> SVC["Services Contracts"]
+    SVC --> NOOP["Noop impls - swap to Firebase, Sentry, Supabase"]
+    FEAT["features/ (feature-first, autonomous)"]
+    AUTH["authentication"]
+    DASH["dashboard"]
+    SPLASH["splash"]
+    FEAT --- AUTH
+    FEAT --- DASH
+    FEAT --- SPLASH
     classDef contract fill:#e1f5ff,stroke:#01579b;
     class SVC,NOOP,REPO contract;
 ```
