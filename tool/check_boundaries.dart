@@ -45,17 +45,14 @@ void main(List<String> args) {
     exit(0);
   }
 
-  final fatal =
-      violations.where((v) => v.fatal).toList(growable: false);
-  final warnings =
-      violations.where((v) => !v.fatal).toList(growable: false);
+  final fatal = violations.where((v) => v.fatal).toList(growable: false);
+  final warnings = violations.where((v) => !v.fatal).toList(growable: false);
 
   for (final v in warnings) {
     stderr.writeln('⚠️  WARNING: $v');
   }
   if (fatal.isNotEmpty) {
-    stderr.writeln(
-        '❌ Boundary violations found (${fatal.length} fatal, '
+    stderr.writeln('❌ Boundary violations found (${fatal.length} fatal, '
         '${warnings.length} warning):');
     for (final v in fatal) {
       stderr.writeln('  - $v');
@@ -71,8 +68,7 @@ void main(List<String> args) {
 /// Recursively scan [root]; collect violations. Returns file count scanned.
 int _scan(Directory root, List<BoundaryViolation> out) {
   var count = 0;
-  for (final entity
-      in root.listSync(recursive: true, followLinks: false)) {
+  for (final entity in root.listSync(recursive: true, followLinks: false)) {
     if (entity is! File) continue;
     if (!entity.path.endsWith('.dart')) continue;
     if (entity.path.endsWith('.freezed.dart') ||
@@ -108,16 +104,15 @@ void _checkFile(
 ) {
   // Directory of the importing file (for resolving relative imports),
   // split into segments and stripped of the leading root marker.
-  final fromDirSegments =
-      relPath.split('/')..removeLast();
+  final fromDirSegments = relPath.split('/')..removeLast();
 
   for (final line in lines) {
     if (!line.trim().startsWith("import ")) continue;
 
     // package: first-party import
     if (line.contains(_pkgPrefix)) {
-      final target = line
-          .substring(line.indexOf(_pkgPrefix) + _pkgPrefix.length);
+      final target =
+          line.substring(line.indexOf(_pkgPrefix) + _pkgPrefix.length);
       final cut = RegExp(r"[';]").firstMatch(target)?.start ?? target.length;
       final internal = target.substring(0, cut);
       out.addAll(checkImport(relPath, internalTarget: internal));

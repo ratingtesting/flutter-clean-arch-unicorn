@@ -17,10 +17,7 @@ List<String> fatalFor({
     from,
     internalTarget: internalTarget,
     externalPackage: externalPackage,
-  )
-      .where((v) => v.fatal)
-      .map((v) => v.ruleId)
-      .toList();
+  ).where((v) => v.fatal).map((v) => v.ruleId).toList();
 }
 
 void main() {
@@ -28,7 +25,8 @@ void main() {
     test('1. valid: feature -> core', () {
       expect(
         fatalFor(
-          from: 'features/dashboard/presentation/providers/dashboard_providers.dart',
+          from:
+              'features/dashboard/presentation/providers/dashboard_providers.dart',
           internalTarget: 'core/database/database_provider.dart',
         ),
         isEmpty,
@@ -49,7 +47,8 @@ void main() {
       expect(
         fatalFor(
           from: 'features/auth/domain/use_cases/login_use_case.dart',
-          internalTarget: 'services/user_cache_service/domain/repositories/user_cache_repository.dart',
+          internalTarget:
+              'services/user_cache_service/domain/repositories/user_cache_repository.dart',
         ),
         isEmpty,
       );
@@ -58,8 +57,10 @@ void main() {
     test('4. valid: data -> domain (same feature)', () {
       expect(
         fatalFor(
-          from: 'features/auth/data/repositories/authentication_repository_impl.dart',
-          internalTarget: 'features/auth/domain/repositories/auth_repository.dart',
+          from:
+              'features/auth/data/repositories/authentication_repository_impl.dart',
+          internalTarget:
+              'features/auth/domain/repositories/auth_repository.dart',
         ),
         isEmpty,
       );
@@ -88,7 +89,8 @@ void main() {
     test('7. valid: services -> shared', () {
       expect(
         fatalFor(
-          from: 'services/user_cache_service/data/datasource/user_local_datasource.dart',
+          from:
+              'services/user_cache_service/data/datasource/user_local_datasource.dart',
           internalTarget: 'shared/domain/models/either.dart',
         ),
         isEmpty,
@@ -108,7 +110,8 @@ void main() {
     test('9. valid: dio inside presentation/providers wiring layer', () {
       expect(
         fatalFor(
-          from: 'shared/presentation/providers/dio_network_service_provider.dart',
+          from:
+              'shared/presentation/providers/dio_network_service_provider.dart',
           externalPackage: 'dio',
         ),
         isEmpty,
@@ -160,8 +163,10 @@ void main() {
     test('forbidden: services -> features/presentation', () {
       expect(
         fatalFor(
-          from: 'services/user_cache_service/presentation/providers/current_user_provider.dart',
-          internalTarget: 'features/authentication/presentation/providers/auth_providers.dart',
+          from:
+              'services/user_cache_service/presentation/providers/current_user_provider.dart',
+          internalTarget:
+              'features/authentication/presentation/providers/auth_providers.dart',
         ),
         contains('R-SERVICES-1'),
       );
@@ -170,7 +175,8 @@ void main() {
     test('forbidden: services -> features/domain', () {
       expect(
         fatalFor(
-          from: 'services/user_cache_service/data/datasource/user_local_datasource.dart',
+          from:
+              'services/user_cache_service/data/datasource/user_local_datasource.dart',
           internalTarget: 'features/authentication/domain/models/user.dart',
         ),
         contains('R-SERVICES-1'),
@@ -180,8 +186,10 @@ void main() {
     test('forbidden: feature A -> feature B internals', () {
       expect(
         fatalFor(
-          from: 'features/dashboard/presentation/providers/dashboard_providers.dart',
-          internalTarget: 'features/authentication/data/repositories/auth_repository_fake.dart',
+          from:
+              'features/dashboard/presentation/providers/dashboard_providers.dart',
+          internalTarget:
+              'features/authentication/data/repositories/auth_repository_fake.dart',
         ),
         contains('R-FEATURE-1'),
       );
@@ -191,7 +199,8 @@ void main() {
       expect(
         fatalFor(
           from: 'features/auth/domain/repositories/auth_repository.dart',
-          internalTarget: 'features/auth/data/repositories/authentication_repository_impl.dart',
+          internalTarget:
+              'features/auth/data/repositories/authentication_repository_impl.dart',
         ),
         contains('R-LAYER-DOMAIN'),
       );
@@ -201,7 +210,8 @@ void main() {
       expect(
         fatalFor(
           from: 'features/auth/domain/use_cases/login_use_case.dart',
-          internalTarget: 'features/auth/presentation/providers/auth_providers.dart',
+          internalTarget:
+              'features/auth/presentation/providers/auth_providers.dart',
         ),
         contains('R-LAYER-DOMAIN'),
       );
@@ -210,8 +220,10 @@ void main() {
     test('forbidden: data -> presentation', () {
       expect(
         fatalFor(
-          from: 'features/auth/data/repositories/authentication_repository_impl.dart',
-          internalTarget: 'features/auth/presentation/providers/auth_providers.dart',
+          from:
+              'features/auth/data/repositories/authentication_repository_impl.dart',
+          internalTarget:
+              'features/auth/presentation/providers/auth_providers.dart',
         ),
         contains('R-LAYER-DATA'),
       );
@@ -254,8 +266,7 @@ void main() {
   group('End-to-end enforcer', () {
     final subprocessSupported = !_dartExecutable.contains('flutter');
 
-    test('forbidden import in a fixture makes the checker exit non-zero',
-        () {
+    test('forbidden import in a fixture makes the checker exit non-zero', () {
       if (!subprocessSupported) {
         // Local Windows/flutter wrapper: skip (run on CI with direct dart).
         // Manual proof: add a forbidden import to lib/ and run the checker.
@@ -321,8 +332,7 @@ class CleanScreen extends StatelessWidget {
           workingDirectory: _repoRoot,
         );
 
-        expect(result.exitCode, 0,
-            reason: 'checker must PASS a clean fixture');
+        expect(result.exitCode, 0, reason: 'checker must PASS a clean fixture');
       } finally {
         if (tempDir.existsSync()) tempDir.deleteSync(recursive: true);
       }

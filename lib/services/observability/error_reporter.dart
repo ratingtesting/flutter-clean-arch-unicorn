@@ -48,11 +48,11 @@ class NoopCrashReportingService extends CrashReportingService {
   Future<void> log(String message) async {}
 }
 
-/// Production implementation using Firebase Crashlytics.
-/// This class is only used when Firebase is configured.
-/// See firebase_crash_reporting_service.dart for the actual implementation.
-class CrashlyticsReportingService extends CrashReportingService {
-  CrashlyticsReportingService();
+/// Console implementation: logs errors to the console via [AppLogger].
+/// A starter placeholder — swap for a real SDK (Sentry/Crashlytics) behind
+/// the same interface when you need production crash reporting.
+class ConsoleCrashReportingService extends CrashReportingService {
+  ConsoleCrashReportingService();
 
   @override
   Future<void> initialize() async {}
@@ -66,7 +66,7 @@ class CrashlyticsReportingService extends CrashReportingService {
   }) async {
     _logger.log(
       LogLevel.debug,
-      '[CrashlyticsReportingService] recordError: $error',
+      '[ConsoleCrashReportingService] recordError: $error',
     );
   }
 
@@ -74,7 +74,7 @@ class CrashlyticsReportingService extends CrashReportingService {
   Future<void> recordMessage(String message, {bool fatal = false}) async {
     _logger.log(
       LogLevel.debug,
-      '[CrashlyticsReportingService] recordMessage: $message',
+      '[ConsoleCrashReportingService] recordMessage: $message',
     );
   }
 
@@ -86,6 +86,6 @@ class CrashlyticsReportingService extends CrashReportingService {
 
   @override
   Future<void> log(String message) async {
-    _logger.log(LogLevel.debug, '[CrashlyticsReportingService] log: $message');
+    _logger.log(LogLevel.debug, '[ConsoleCrashReportingService] log: $message');
   }
 }
