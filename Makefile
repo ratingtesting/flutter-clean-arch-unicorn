@@ -1,4 +1,4 @@
-.PHONY: setup check boundary run-dev build-apk build-ios clean help
+.PHONY: setup gen check boundary run-dev build-apk build-ios clean help
 
 # Flutter Clean Arch Unicorn
 # https://github.com/ratingtesting/flutter-clean-arch-unicorn
@@ -11,8 +11,19 @@ setup: ## Install dependencies and setup project
 	$(FLUTTER) pub get
 	@echo "✅ Setup complete. Run 'make run-dev' to start."
 
+## ⚙️ Code Generation
+gen: ## Generate freezed/drift code (REQUIRED before analyze/test)
+	@echo "⚙️ Generating code (freezed, drift)..."
+	dart run build_runner build --delete-conflicting-outputs
+	@echo "✅ Generated. Now analyze/test see the full picture."
+
 ## 🔍 Code Quality
-check: analyze test format boundary ## Run all quality checks (analyze + test + format + boundaries)
+check: gen analyze test format boundary secrets ## Run all quality checks (gen + analyze + test + format + boundaries + secret scan)
+
+secrets: ## Scan for accidentally committed secrets
+	@echo "🔒 Scanning for secrets..."
+	bash scripts/check_secrets.sh
+	@echo "✅ No secrets found."
 
 boundary: ## Run architecture boundary enforcer (fails on forbidden imports)
 	@echo "🧱 Checking architecture boundaries..."

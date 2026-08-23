@@ -30,6 +30,9 @@ jobs:
       - name: Static analysis
         run: flutter analyze --fatal-infos lib/ test/
 
+      - name: Secret scan
+        run: bash scripts/check_secrets.sh
+
       - name: Boundary check
         run: dart run tool/check_boundaries.dart
 
