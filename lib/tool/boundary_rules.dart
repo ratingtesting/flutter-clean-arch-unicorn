@@ -19,11 +19,15 @@
 
 /// A single detected boundary violation.
 class BoundaryViolation {
-  const BoundaryViolation(this.ruleId, this.message, this.fatal);
+  const BoundaryViolation(this.ruleId, this.message, this.fatal, this.fixHint);
 
   final String ruleId;
   final String message;
   final bool fatal;
+
+  /// Short instruction telling the developer HOW to fix the violation
+  /// (printed by the checker as a `Fix:` line — a hint, not an essay).
+  final String fixHint;
 
   @override
   String toString() => '[$ruleId] $message';
@@ -68,6 +72,9 @@ List<BoundaryViolation> checkImport(
         'core/ must not depend on features/ or services/ '
             '(core is leaf infrastructure).',
         true,
+        'Move the feature/service-dependent code into the feature that uses '
+            'it, or invert the dependency: define a contract in core/ or '
+            'shared/ and implement it in features/services.',
       ),
     );
   }
@@ -84,6 +91,8 @@ List<BoundaryViolation> checkImport(
         'shared/ must not depend on features/ '
             '(shared is generic; feature code stays in the feature).',
         true,
+        'Move the model/widget into the feature that owns it, or generalise '
+            'it and keep it in shared/ without feature imports.',
       ),
     );
   }
@@ -101,6 +110,8 @@ List<BoundaryViolation> checkImport(
         'services/ must not depend on features/ (any layer). '
             'Move shared types to shared/, or invert the dependency via a contract.',
         true,
+        'Move the shared type to shared/ and import it from both sides, or '
+            'define a contract in services/ that the feature implements.',
       ),
     );
   }
@@ -122,6 +133,8 @@ List<BoundaryViolation> checkImport(
           'feature "$fromFeat" must not import internals of feature "$toFeat" '
               '($target). Depend on the public barrel or a contract instead.',
           true,
+          'Import the public barrel features/$toFeat/$toFeat.dart, or move '
+              'the shared type/contract to shared/ (or a service contract).',
         ),
       );
     }
@@ -142,6 +155,8 @@ List<BoundaryViolation> checkImport(
         'domain/ must not depend on data/ or presentation/ '
             '(domain is the business core).',
         true,
+        'Declare an abstract contract in domain/ and depend on that; the '
+            'implementation lives in data/ and is wired in presentation/providers/.',
       ),
     );
   }
@@ -157,6 +172,8 @@ List<BoundaryViolation> checkImport(
         'data/ must not depend on presentation/ '
             '(data implements domain, never the UI).',
         true,
+        'Return a domain model/Either from the repository and let the '
+            'presentation layer map it to UI state.',
       ),
     );
   }
@@ -188,6 +205,9 @@ List<BoundaryViolation> checkImport(
               'domain/ and presentation/ layers '
               '(Repository Law: never bypass the repository).',
           true,
+          'Go through the repository: inject a use case/repository via a '
+              'Riverpod provider (wiring lives in presentation/providers/), '
+              'or move the code to data/ if it is infrastructure by nature.',
         ),
       );
     }

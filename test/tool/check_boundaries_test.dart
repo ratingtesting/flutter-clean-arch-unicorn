@@ -250,6 +250,75 @@ void main() {
     });
   });
 
+  /// G1 — every rule must explain HOW to fix the problem.
+  /// The checker prints this as a `Fix:` line; hints stay short by design.
+  group('Boundary rules — fix hints (checker prints "Fix:")', () {
+    test('all 7 rules yield a short non-empty fixHint', () {
+      final samples = [
+        checkImport(
+          'core/database/database_provider.dart',
+          internalTarget: 'features/auth/domain/models/user.dart',
+        ),
+        checkImport(
+          'shared/widgets/app_error.dart',
+          internalTarget: 'features/auth/domain/models/user.dart',
+        ),
+        checkImport(
+          'services/user_cache_service/data/datasource/user_local_datasource.dart',
+          internalTarget: 'features/authentication/domain/models/user.dart',
+        ),
+        checkImport(
+          'features/dashboard/presentation/providers/dashboard_providers.dart',
+          internalTarget:
+              'features/authentication/data/repositories/auth_repository_fake.dart',
+        ),
+        checkImport(
+          'features/auth/domain/repositories/auth_repository.dart',
+          internalTarget:
+              'features/auth/data/repositories/authentication_repository_impl.dart',
+        ),
+        checkImport(
+          'features/auth/data/repositories/authentication_repository_impl.dart',
+          internalTarget:
+              'features/auth/presentation/providers/auth_providers.dart',
+        ),
+        checkImport(
+          'features/auth/presentation/screens/login_screen.dart',
+          externalPackage: 'dio',
+        ),
+      ];
+
+      expect(samples.length, 7);
+      for (final violations in samples) {
+        final fatal = violations.where((v) => v.fatal).toList();
+        expect(fatal, isNotEmpty);
+        for (final v in fatal) {
+          expect(v.fixHint.trim(), isNotEmpty,
+              reason: '${v.ruleId} must carry a Fix hint');
+          expect(v.fixHint.length, lessThan(220),
+              reason: '${v.ruleId}: a hint stays a hint, not an essay');
+        }
+      }
+    });
+
+    test('R-FEATURE-1 hint points to the public barrel', () {
+      final v = checkImport(
+        'features/dashboard/presentation/providers/dashboard_providers.dart',
+        internalTarget:
+            'features/authentication/data/repositories/auth_repository_fake.dart',
+      ).single;
+      expect(v.fixHint, contains('barrel'));
+    });
+
+    test('R-INFRA hint routes through repository/provider wiring', () {
+      final v = checkImport(
+        'features/auth/presentation/screens/login_screen.dart',
+        externalPackage: 'dio',
+      ).single;
+      expect(v.fixHint, contains('provider'));
+    });
+  });
+
   /// NEGATIVE TEST — proof that the protection actually works end-to-end.
   ///
   /// We create an isolated temp fixture with a forbidden import, run the
@@ -300,6 +369,8 @@ class LeakScreen extends StatelessWidget {
         expect(result.exitCode, isNonZero,
             reason: 'checker must FAIL on a forbidden cross-feature import');
         expect(result.stderr.toString(), contains('R-FEATURE-1'));
+        // G1: the checker must also tell HOW to fix it.
+        expect(result.stderr.toString(), contains('Fix:'));
       } finally {
         if (tempDir.existsSync()) tempDir.deleteSync(recursive: true);
       }

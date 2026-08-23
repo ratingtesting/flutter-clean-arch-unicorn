@@ -50,12 +50,14 @@ void main(List<String> args) {
 
   for (final v in warnings) {
     stderr.writeln('⚠️  WARNING: $v');
+    stderr.writeln('    Fix: ${v.fixHint}');
   }
   if (fatal.isNotEmpty) {
     stderr.writeln('❌ Boundary violations found (${fatal.length} fatal, '
         '${warnings.length} warning):');
     for (final v in fatal) {
       stderr.writeln('  - $v');
+      stderr.writeln('    Fix: ${v.fixHint}');
     }
     exit(1);
   }
